@@ -58,4 +58,5 @@ public class AplicacaoVacinaVO {
 			return "AplicacaoVacinaVO [idAplicacaoVacina=" + idAplicacaoVacina + ", pessoa=" + pessoa + ", vacina="
 					+ vacina + ", dataAplicacao=" + dataAplicacao + "]";
 		}
+		
 	}	
