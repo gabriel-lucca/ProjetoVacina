@@ -26,7 +26,9 @@ public class PessoaDAO {
 			ps.setString(6, novaPessoa.getCidade());
 			ps.setString(7, novaPessoa.getEstado());
 			ps.setString(8, novaPessoa.getEndereco());
-			ps.execute();
+			ps.executeUpdate();
+			
+			System.out.println("print"+ ps.toString());
 			rs = ps.getGeneratedKeys();
 			if(rs.next()) {
 				novaPessoa.setIdPessoa(rs.getInt(1));
@@ -36,6 +38,7 @@ public class PessoaDAO {
 		}finally {
 			Banco.closeConnection(conn);
 			Banco.closePreparedStatement(ps);
+			Banco.closeResultSet(rs);
 		}
 		return novaPessoa;
 	}
@@ -142,6 +145,23 @@ public class PessoaDAO {
 		return resposta;
 	}
 	public PessoaVO consultarPorCpf(String cpf) {
-		return consultarPorCpf(toString());
+		PessoaVO pessoaVacinaConsultada = null;
+		
+		String sql = "select * from pessoa where idPessoa = ?";
+
+		try (Connection conn = Banco.getConnection();
+				PreparedStatement stmt = Banco.getPreparedStatement(conn, sql);) {
+			stmt.setString(1, cpf);
+			
+			ResultSet resultadoConsulta = stmt.executeQuery();
+			
+			if (resultadoConsulta.next()) {
+				pessoaVacinaConsultada = this.construirDoResultSet(resultadoConsulta);
+				
+			}
+		} catch (SQLException e) {
+			System.out.println("Erro ao consultar pessoa por CPF: \n" + e.getMessage());
+		}
+		return pessoaVacinaConsultada;
 	}
 }

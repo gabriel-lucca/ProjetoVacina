@@ -16,6 +16,11 @@ private PessoaBO bo = new PessoaBO();
 		
 		return mensagem;
 	}
+
+	public void alteraInformacoes(PessoaVO pessoaAlterada) {
+		bo.alterarPessoa(pessoaAlterada);
+		
+	}
 	
 
 }

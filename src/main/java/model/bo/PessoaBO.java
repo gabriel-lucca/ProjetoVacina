@@ -1,5 +1,7 @@
 package model.bo;
 
+import javax.swing.JOptionPane;
+
 import model.dao.PessoaDAO;
 import model.vo.PessoaVO;
 
@@ -42,6 +44,11 @@ public class PessoaBO {
 			}
 			dao.cadastrar(pessoa);
 			return mensagem;
+		}
+		public void alterarPessoa(PessoaVO pessoaAlterada) {
+			System.out.println(pessoaAlterada);
+			JOptionPane.showMessageDialog(null, "Deu certo!");
+			
 		}
 		
 }
