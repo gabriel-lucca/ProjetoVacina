@@ -28,8 +28,8 @@ create table aplicacaoVacina(
     fkIdPessoa int not null,
     fkIdVacina int not null,
     dtAplicacao date not null,
-    foreign key(fkIdPessoa) references pessoa(idPessoa),
-    foreign key(fkIdVacina) references vacina(IdVacina)
+    CONSTRAINT foreign key(fkIdPessoa) references pessoa(idPessoa), 
+    CONSTRAINT foreign key(fkIdVacina) references vacina(IdVacina)
 );
 -- Inserts:
 insert into pessoa(nomePessoa, cpf, email, telefone, dtNascimento, cidade, estado, endereco) values("Bigodin Finin", "11111111111", "Dr.BigodinFinin@gmail.com", "21911111111", '1970-06-04', "Rio de Janeiro", "Rio de Janeiro", "Logo alí"); 
