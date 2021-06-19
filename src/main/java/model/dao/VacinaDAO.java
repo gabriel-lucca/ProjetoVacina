@@ -13,7 +13,7 @@ public class VacinaDAO  {
 		Connection conn = Banco.getConnection();
 		String sql = "insert into vacina(nomePesquisadorResponsavel, paisOrigem, nomeVacina, dtInicioPesquisa, quantidadeDoses, intervaloDoses)"
 				+ "values(?, ?, ?, ?, ?, ?)";
-		PreparedStatement ps = Banco.getPreparedStatement(conn, sql);
+		PreparedStatement ps = Banco.getPreparedStatementWithPk(conn, sql);
 		ResultSet rs = null;
 		try {
 			ps.setString(1, vacina.getNomePesquisadorResponsavel());

@@ -42,6 +42,7 @@ public class VacinaBO {
 			mensagem = "Vacina cadastrada com sucesso!";
 		}
 		
+		dao.cadastrar(vacina);
 		return mensagem;
 	}
 	
