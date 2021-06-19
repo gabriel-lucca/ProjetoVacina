@@ -15,7 +15,7 @@ public class PessoaDAO {
 		Connection conn = Banco.getConnection();
 		String sql = "insert into pessoa(nomePessoa, cpf, email, telefone, dtNascimento, cidade, estado, endereco)"
 				+ "values(?, ?, ?, ?, ?, ?, ?, ?)";
-		PreparedStatement ps = Banco.getPreparedStatement(conn, sql);
+		PreparedStatement ps = Banco.getPreparedStatementWithPk(conn, sql);
 		ResultSet rs = null;
 		try {
 			ps.setString(1, novaPessoa.getNome());
@@ -25,7 +25,7 @@ public class PessoaDAO {
 			ps.setDate(5, java.sql.Date.valueOf(novaPessoa.getDataNascimento()));
 			ps.setString(6, novaPessoa.getCidade());
 			ps.setString(7, novaPessoa.getEstado());
-			ps.setString(8, novaPessoa.getCidade());
+			ps.setString(8, novaPessoa.getEndereco());
 			ps.execute();
 			rs = ps.getGeneratedKeys();
 			if(rs.next()) {

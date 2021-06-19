@@ -40,7 +40,8 @@ public class PessoaBO {
 			if(mensagem.isEmpty()) {
 				mensagem = "Pessoa cadastrada com sucesso!";
 			}
-			
+			dao.cadastrar(pessoa);
 			return mensagem;
 		}
+		
 }
