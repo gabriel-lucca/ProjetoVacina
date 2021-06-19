@@ -37,6 +37,7 @@ public class TelaCadastroPessoa extends JFrame {
 	private JTextField txtDataNascimento;
 	private JComboBox cbxEstado;
 	private ControladoraPessoa controller = new ControladoraPessoa();
+	private MaskFormatter mascaraDtNascimento;
 
 
 
@@ -122,7 +123,7 @@ public class TelaCadastroPessoa extends JFrame {
 		lblEstado.setBounds(396, 274, 46, 14);
 		contentPane.add(lblEstado);
 		
-		MaskFormatter mascaraDtNascimento;
+	//	MaskFormatter mascaraDtNascimento;
 		try {
 			mascaraDtNascimento = new MaskFormatter("##/##/####");
 			txtDataNascimento = new JFormattedTextField(mascaraDtNascimento);
@@ -192,15 +193,68 @@ public class TelaCadastroPessoa extends JFrame {
 			
 			//Chamar o controller para cadastrar
 			controller.cadastrar(novaPessoa);
+			limparCampos();
 			System.out.println(novaPessoa);
-			int resposta = JOptionPane.showConfirmDialog(null, controller.validarCampos(novaPessoa), "Deseja corrigir as informações?", JOptionPane.OK_CANCEL_OPTION);
+			int resposta = JOptionPane.showConfirmDialog(null, null, "Deseja corrigir as informações?", JOptionPane.OK_CANCEL_OPTION);
 			if(resposta == JOptionPane.OK_OPTION) {
-				TelaCadastroVacina telaCadastroVacina = new TelaCadastroVacina();
-				telaCadastroVacina.setVisible(true);
+
+				preencherCapos(novaPessoa);	
+				
+				
+				PessoaVO pessoaAlterada = new PessoaVO();
+				pessoaAlterada.setCidade(txtCidade.getText());
+				pessoaAlterada.setCpf(txtCpf.getText());
+				pessoaAlterada.setDataNascimento(LocalDate.parse(txtDataNascimento.getText(), dataFormatter));
+				pessoaAlterada.setEmail(txtEmail.getText());
+				pessoaAlterada.setEndereco(txtEndereco.getText());
+				pessoaAlterada.setEstado(cbxEstado.getSelectedItem().toString());
+				pessoaAlterada.setNome(txtNome.getText());
+				pessoaAlterada.setTelefone(txtTelefone.getText());
+				
+				controller.alteraInformacoes(pessoaAlterada);
+				
 			} else {
 				TelaPrincipal telaPrincipal = new TelaPrincipal();
 				telaPrincipal.setVisible(true);
+				this.dispose();
 			}
+			int confirma = JOptionPane.showConfirmDialog(null, "Deseja ir cadastrar vacina?", "Deseja confirmar?", JOptionPane.OK_CANCEL_OPTION);
+			if(confirma == JOptionPane.OK_OPTION) {
+				this.dispose();
+				TelaCadastroVacina telaCadastroVacina = new TelaCadastroVacina();
+				telaCadastroVacina.setVisible(true);
+				
+			} else {
+				TelaCadastroPessoa telaCadastroPessoa = new TelaCadastroPessoa();
+				telaCadastroPessoa.setVisible(true);
+			}
+			
+		}
+
+		private void preencherCapos(PessoaVO novaPessoa) {
+			this.txtEmail.setText(novaPessoa.getEmail());
+			this.txtEndereco.setText(novaPessoa.getEndereco());
+			this.txtCidade.setText(novaPessoa.getCidade());
+			this.txtNome.setText(novaPessoa.getNome());
+			this.txtDataNascimento.setText(String.valueOf(novaPessoa.getDataNascimento()));
+			this.txtTelefone.setText(novaPessoa.getTelefone());
+			this.txtCpf.setText(novaPessoa.getCpf());
+			this.cbxEstado.setSelectedIndex(0);			
+		}
+
+		private void limparCampos() {
+			this.txtEmail.setText("");
+			this.txtEndereco.setText("");
+			this.txtCidade.setText("");
+			this.txtNome.setText("");
+//			try {
+//				mascaraDtNascimento = new MaskFormatter("##/##/####");
+//				txtDataNascimento = new JFormattedTextField(mascaraDtNascimento);
+//			} catch (ParseException e1) {
+//			}
+			this.txtTelefone.setText("");
+			this.txtCpf.setText("");
+			this.cbxEstado.setSelectedIndex(0);
 			
 		}
 	}

@@ -63,7 +63,7 @@ public class TelaPrincipal extends JFrame {
 		});
 		btnCadastroPessoa.setFont(new Font("Dialog", Font.PLAIN, 15));
 		btnCadastroPessoa.setBackground(Color.CYAN);
-		btnCadastroPessoa.setBounds(201, 86, 252, 76);
+		btnCadastroPessoa.setBounds(201, 28, 281, 76);
 		contentPane.add(btnCadastroPessoa);
 		
 		JButton btnCadastroVacina = new JButton("Cadastro de vacina");
@@ -77,7 +77,7 @@ public class TelaPrincipal extends JFrame {
 		btnCadastroVacina.setForeground(Color.BLACK);
 		btnCadastroVacina.setFont(new Font("Dialog", Font.PLAIN, 15));
 		btnCadastroVacina.setBackground(Color.CYAN);
-		btnCadastroVacina.setBounds(201, 194, 253, 76);
+		btnCadastroVacina.setBounds(201, 195, 281, 76);
 		contentPane.add(btnCadastroVacina);
 		
 		JButton btnAplicacaoVacina = new JButton("Aplica\u00E7\u00E3o Vacina");
@@ -91,7 +91,21 @@ public class TelaPrincipal extends JFrame {
 		btnAplicacaoVacina.setForeground(Color.BLACK);
 		btnAplicacaoVacina.setFont(new Font("Dialog", Font.PLAIN, 15));
 		btnAplicacaoVacina.setBackground(Color.CYAN);
-		btnAplicacaoVacina.setBounds(201, 298, 252, 73);
+		btnAplicacaoVacina.setBounds(201, 353, 281, 73);
 		contentPane.add(btnAplicacaoVacina);
+		
+		JButton btnNewButton = new JButton("Consultar Vacina");
+		btnNewButton.setForeground(Color.BLACK);
+		btnNewButton.setBackground(Color.CYAN);
+		btnNewButton.setFont(new Font("Dialog", Font.PLAIN, 13));
+		btnNewButton.setBounds(201, 282, 281, 60);
+		contentPane.add(btnNewButton);
+		
+		JButton btnNewButton_1 = new JButton("Consultar pessoa");
+		btnNewButton_1.setBackground(Color.CYAN);
+		btnNewButton_1.setForeground(Color.BLACK);
+		btnNewButton_1.setFont(new Font("Dialog", Font.PLAIN, 13));
+		btnNewButton_1.setBounds(201, 115, 281, 69);
+		contentPane.add(btnNewButton_1);
 	}
 }
