@@ -1,12 +1,12 @@
-drop database if exists dbProjetoVacina;
-create database dbProjetoVacina;
-use dbProjetoVacina;
+drop database if exists dbprojetoVacina;
+create database dbprojetoVacina;
+use dbprojetoVacina;
 
 -- Tabelas:
 create table pessoa(
 	idPessoa int not null auto_increment primary key,
     nomePessoa varchar(100) not null,
-    cpf varchar(11) not null unique,
+    cpf varchar(20) not null,
     email varchar(100),
     telefone varchar(15) not null,
     dtNascimento date not null,
