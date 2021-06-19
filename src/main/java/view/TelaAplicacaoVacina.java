@@ -84,8 +84,8 @@ public class TelaAplicacaoVacina extends JFrame {
 		JButton btnBuscar = new JButton("Buscar");
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//PessoaVO pessoaVO = pessoaDAO.consultarPessoaPorCpf(txtCpf.getText());
-				//nome = pessoaVO.getNome();
+				PessoaVO pessoaVO = pessoaDAO.consultarPorCpf(txtCpf.getText());
+				nome = pessoaVO.getNome();
 			}
 		});
 		btnBuscar.setBounds(378, 30, 99, 29);
@@ -114,7 +114,7 @@ public class TelaAplicacaoVacina extends JFrame {
 		
 		JButton btnVacinar = new JButton("Vacinar");
 		btnVacinar.setEnabled(false);
-		btnVacinar.setBounds(378, 359, 99, 51);
+		btnVacinar.setBounds(378, 352, 99, 51);
 		contentPane.add(btnVacinar);
 		
 		JLabel lblHistrico = new JLabel("Hist\u00F3rico:");
@@ -125,7 +125,7 @@ public class TelaAplicacaoVacina extends JFrame {
 		scrollPane.setViewportBorder(new EmptyBorder(0, 0, 0, 0));
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		scrollPane.setEnabled(false);
-		scrollPane.setBounds(36, 273, 441, 63);
+		scrollPane.setBounds(36, 273, 441, 57);
 		contentPane.add(scrollPane);
 		
 		table = new JTable();

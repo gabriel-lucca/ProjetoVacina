@@ -172,8 +172,11 @@ public class TelaCadastroVacina extends JFrame {
 		controller.cadastrar(novaVacina);
 		int resposta = JOptionPane.showConfirmDialog(null, controller.validarCampos(novaVacina), "Informação", JOptionPane.OK_CANCEL_OPTION);
 		if(resposta == JOptionPane.OK_OPTION) {
+			TelaAplicacaoVacina telaAplicacaoVacina = new TelaAplicacaoVacina();
+			telaAplicacaoVacina.setVisible(true);
 		} else {
-			//tela inicial
+			TelaPrincipal telaPrincipal = new TelaPrincipal();
+			telaPrincipal.setVisible(true);
 		}
 		
 	}

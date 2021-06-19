@@ -94,7 +94,7 @@ public class TelaCadastroPessoa extends JFrame {
 		txtTelefone.setBounds(176, 176, 347, 29);
 		contentPane.add(txtTelefone);
 		
-		// Teste
+		
 		JLabel lblTelefone = new JLabel("Telefone:");
 		lblTelefone.setBounds(42, 183, 98, 14);
 		contentPane.add(lblTelefone);
@@ -192,10 +192,14 @@ public class TelaCadastroPessoa extends JFrame {
 			
 			//Chamar o controller para cadastrar
 			controller.cadastrar(novaPessoa);
+			System.out.println(novaPessoa);
 			int resposta = JOptionPane.showConfirmDialog(null, controller.validarCampos(novaPessoa), "Deseja corrigir as informações?", JOptionPane.OK_CANCEL_OPTION);
 			if(resposta == JOptionPane.OK_OPTION) {
+				TelaCadastroVacina telaCadastroVacina = new TelaCadastroVacina();
+				telaCadastroVacina.setVisible(true);
 			} else {
-				//tela inicial
+				TelaPrincipal telaPrincipal = new TelaPrincipal();
+				telaPrincipal.setVisible(true);
 			}
 			
 		}
