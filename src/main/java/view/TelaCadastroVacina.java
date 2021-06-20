@@ -40,6 +40,7 @@ public class TelaCadastroVacina extends JFrame {
 	private JComboBox cbxDoses;
 	private JComboBox cbxPais;
 	private ControladoraVacina controller = new ControladoraVacina();
+	private MaskFormatter mascaraDataInicio;
 	
 	DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
@@ -93,7 +94,7 @@ public class TelaCadastroVacina extends JFrame {
 		lblDataIncioE.setBounds(265, 192, 137, 14);
 		contentPane.add(lblDataIncioE);
 		
-		MaskFormatter mascaraDataInicio;
+//		MaskFormatter mascaraDataInicio;
 		try {
 			mascaraDataInicio = new MaskFormatter("##/##/####");
 			txtDataInicio = new JFormattedTextField(mascaraDataInicio);
@@ -170,18 +171,62 @@ public class TelaCadastroVacina extends JFrame {
 		
 		//Chamar o controller para cadastrar
 		controller.cadastrar(novaVacina);
+		limparCampos();
 		System.out.println(novaVacina);
-		int resposta = JOptionPane.showConfirmDialog(null, controller.validarCampos(novaVacina), "Informação", JOptionPane.OK_CANCEL_OPTION);
+		int resposta = JOptionPane.showConfirmDialog(null, null, "Deseja corrigir as informações?", JOptionPane.OK_CANCEL_OPTION);
 		if(resposta == JOptionPane.OK_OPTION) {
-			TelaAplicacaoVacina telaAplicacaoVacina = new TelaAplicacaoVacina();
-			telaAplicacaoVacina.setVisible(true);
+			
+			preencherCampos(novaVacina);
+			
+			VacinaVO vacinaAlterada = new VacinaVO();
+			
+			vacinaAlterada.setDataInicioPesquisa(LocalDate.parse(txtDataInicio.getText(), dataFormatter));
+			vacinaAlterada.setIntervaloDoses(Integer.valueOf(txtIntervalo.getText()));
+			vacinaAlterada.setNomePesquisadorResponsavel(txtNomePesquisador.getText());
+			vacinaAlterada.setNomeVacina(txtNomeVacina.getText());
+			vacinaAlterada.setPaisOrigem(cbxPais.getSelectedItem().toString());
+			vacinaAlterada.setQuantidadeDoses(Integer.valueOf(cbxDoses.getSelectedItem().toString()));
+			
+			controller.alteraInformacoes(vacinaAlterada);
+			
 		} else {
 			TelaPrincipal telaPrincipal = new TelaPrincipal();
 			telaPrincipal.setVisible(true);
+			this.dispose();
+		}
+		
+		int confirma = JOptionPane.showConfirmDialog(null, "Deseja ir para Aplicação vacina?", "Deseja confirmar?", JOptionPane.OK_CANCEL_OPTION);
+		if(confirma == JOptionPane.OK_OPTION) {
+			this.dispose();
+			TelaAplicacaoVacina telaAplicacaoVacina = new TelaAplicacaoVacina();
+			telaAplicacaoVacina.setVisible(true);
+			
+		} else {
+			TelaCadastroVacina telaCadastroVacina = new TelaCadastroVacina();
+			telaCadastroVacina.setVisible(true);
 		}
 		
 	}
 	
+	private void preencherCampos(VacinaVO novaVacina) {
+		this.txtIntervalo.setText(String.valueOf(novaVacina.getIntervaloDoses()));
+		this.txtNomePesquisador.setText(novaVacina.getNomePesquisadorResponsavel());
+		this.txtNomeVacina.setText(novaVacina.getNomeVacina());
+		this.txtDataInicio.setText(String.valueOf(novaVacina.getDataInicioPesquisa()));
+		this.cbxDoses.setSelectedIndex(0);	
+		this.cbxPais.setSelectedIndex(0);
+	}
+
+	private void limparCampos() {
+		this.txtIntervalo.setText("");
+		this.txtNomePesquisador.setText("");
+		this.txtNomeVacina.setText("");
+	//	this.txtDataInicio.setText("");
+		this.cbxDoses.setSelectedIndex(0);	
+		this.cbxPais.setSelectedIndex(0);
+	
+	}
+
 	public String[] ListarPaises(){
 		String[] listaDePaises = new String[] {" --- Selecione --- ","Albânia", "Alemanha", "Andorra", "Angola", "Anguilla", "Antártida", "Antígua e Barbuda", "Antilhas Holandesas",
 		"Arábia Saudita", "Argélia", "Argentina", "Armênia", "Aruba", "Austrália", "Áustria", "Azerbaijão", "Bahamas", "Bahrein", "Bangladesh", "Barbados",

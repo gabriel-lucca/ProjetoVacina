@@ -16,6 +16,8 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
 
+import controller.ControladoraAplicacaoVacina;
+import controller.ControladoraPessoa;
 import model.dao.PessoaDAO;
 import model.vo.PessoaVO;
 
@@ -84,8 +86,23 @@ public class TelaAplicacaoVacina extends JFrame {
 		JButton btnBuscar = new JButton("Buscar");
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				PessoaVO pessoaVO = pessoaDAO.consultarPorCpf(txtCpf.getText());
-				nome = pessoaVO.getNome();
+				consultarPorCpf();
+			}
+
+			protected void consultarPorCpf() {
+				ControladoraPessoa controller = new ControladoraPessoa();
+				PessoaVO p = controller.consultarPorCpf(String.valueOf(txtCpf.getText()));
+				
+				if(p != null) {
+					preencherEnderecoNaTela(p);
+				}
+			}
+
+			protected void preencherEnderecoNaTela(PessoaVO p) {
+				txtCpf.setText(String.valueOf(p.getCpf()));
+				txtNome.setText(p.getNome());
+				txtNome.setEnabled(false);
+				
 			}
 		});
 		btnBuscar.setBounds(378, 30, 99, 29);
@@ -95,13 +112,14 @@ public class TelaAplicacaoVacina extends JFrame {
 		lblNome.setBounds(36, 95, 46, 14);
 		contentPane.add(lblNome);
 		
-		txtNome = new JTextField(nome);
+		txtNome = new JTextField();
 		txtNome.setBackground(Color.WHITE);
 		txtNome.setEnabled(false);
 		txtNome.setEditable(false);
 		txtNome.setBounds(124, 91, 352, 22);
 		contentPane.add(txtNome);
 		txtNome.setColumns(10);
+		
 		
 		JLabel lblVacina = new JLabel("Vacina:");
 		lblVacina.setBounds(36, 145, 46, 14);
@@ -128,6 +146,8 @@ public class TelaAplicacaoVacina extends JFrame {
 		scrollPane.setBounds(36, 273, 441, 57);
 		contentPane.add(scrollPane);
 		
+		
+		
 		table = new JTable();
 		scrollPane.setViewportView(table);
 		table.setModel(new DefaultTableModel(
@@ -149,4 +169,7 @@ public class TelaAplicacaoVacina extends JFrame {
 		table.getColumnModel().getColumn(0).setPreferredWidth(120);
 		table.getColumnModel().getColumn(1).setPreferredWidth(117);
 	}
+	
+	
+	
 }

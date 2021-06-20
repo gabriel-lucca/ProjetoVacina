@@ -41,7 +41,7 @@ public class TelaPrincipal extends JFrame {
 	public TelaPrincipal() {
 		setTitle("Tela principal");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 677, 526);
+		setBounds(100, 100, 648, 487);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(204, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -63,7 +63,7 @@ public class TelaPrincipal extends JFrame {
 		});
 		btnCadastroPessoa.setFont(new Font("Dialog", Font.PLAIN, 15));
 		btnCadastroPessoa.setBackground(Color.CYAN);
-		btnCadastroPessoa.setBounds(201, 28, 281, 76);
+		btnCadastroPessoa.setBounds(83, 108, 281, 76);
 		contentPane.add(btnCadastroPessoa);
 		
 		JButton btnCadastroVacina = new JButton("Cadastro de vacina");
@@ -77,7 +77,7 @@ public class TelaPrincipal extends JFrame {
 		btnCadastroVacina.setForeground(Color.BLACK);
 		btnCadastroVacina.setFont(new Font("Dialog", Font.PLAIN, 15));
 		btnCadastroVacina.setBackground(Color.CYAN);
-		btnCadastroVacina.setBounds(201, 195, 281, 76);
+		btnCadastroVacina.setBounds(83, 195, 281, 76);
 		contentPane.add(btnCadastroVacina);
 		
 		JButton btnAplicacaoVacina = new JButton("Aplica\u00E7\u00E3o Vacina");
@@ -91,21 +91,35 @@ public class TelaPrincipal extends JFrame {
 		btnAplicacaoVacina.setForeground(Color.BLACK);
 		btnAplicacaoVacina.setFont(new Font("Dialog", Font.PLAIN, 15));
 		btnAplicacaoVacina.setBackground(Color.CYAN);
-		btnAplicacaoVacina.setBounds(201, 353, 281, 73);
+		btnAplicacaoVacina.setBounds(83, 282, 281, 79);
 		contentPane.add(btnAplicacaoVacina);
 		
-		JButton btnNewButton = new JButton("Consultar Vacina");
-		btnNewButton.setForeground(Color.BLACK);
-		btnNewButton.setBackground(Color.CYAN);
-		btnNewButton.setFont(new Font("Dialog", Font.PLAIN, 13));
-		btnNewButton.setBounds(201, 282, 281, 60);
-		contentPane.add(btnNewButton);
+		JButton btnConsultarVacina = new JButton("Consultar Vacina");
+		btnConsultarVacina.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				TelaConsultarVacina telaConsultarVacina = new TelaConsultarVacina();
+				telaConsultarVacina.setVisible(true);
+			}
+		});
+		btnConsultarVacina.setForeground(Color.BLACK);
+		btnConsultarVacina.setBackground(Color.CYAN);
+		btnConsultarVacina.setFont(new Font("Dialog", Font.PLAIN, 13));
+		btnConsultarVacina.setBounds(385, 241, 148, 120);
+		contentPane.add(btnConsultarVacina);
 		
-		JButton btnNewButton_1 = new JButton("Consultar pessoa");
-		btnNewButton_1.setBackground(Color.CYAN);
-		btnNewButton_1.setForeground(Color.BLACK);
-		btnNewButton_1.setFont(new Font("Dialog", Font.PLAIN, 13));
-		btnNewButton_1.setBounds(201, 115, 281, 69);
-		contentPane.add(btnNewButton_1);
+		JButton btnConsultarPessoa = new JButton("Consultar pessoa");
+		btnConsultarPessoa.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				TelaConsultarPessoa telaConsultarPessoa = new TelaConsultarPessoa();
+				telaConsultarPessoa.setVisible(true);
+			}
+		});
+		btnConsultarPessoa.setBackground(Color.CYAN);
+		btnConsultarPessoa.setForeground(Color.BLACK);
+		btnConsultarPessoa.setFont(new Font("Dialog", Font.PLAIN, 13));
+		btnConsultarPessoa.setBounds(385, 108, 148, 120);
+		contentPane.add(btnConsultarPessoa);
 	}
 }

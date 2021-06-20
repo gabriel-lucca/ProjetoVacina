@@ -198,7 +198,7 @@ public class TelaCadastroPessoa extends JFrame {
 			int resposta = JOptionPane.showConfirmDialog(null, null, "Deseja corrigir as informações?", JOptionPane.OK_CANCEL_OPTION);
 			if(resposta == JOptionPane.OK_OPTION) {
 
-				preencherCapos(novaPessoa);	
+				preencherCampos(novaPessoa);	
 				
 				
 				PessoaVO pessoaAlterada = new PessoaVO();
@@ -231,7 +231,7 @@ public class TelaCadastroPessoa extends JFrame {
 			
 		}
 
-		private void preencherCapos(PessoaVO novaPessoa) {
+		private void preencherCampos(PessoaVO novaPessoa) {
 			this.txtEmail.setText(novaPessoa.getEmail());
 			this.txtEndereco.setText(novaPessoa.getEndereco());
 			this.txtCidade.setText(novaPessoa.getCidade());
