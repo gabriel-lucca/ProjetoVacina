@@ -16,5 +16,10 @@ public class ControladoraVacina {
 		
 		return mensagem;
 	}
+
+	public void alteraInformacoes(VacinaVO vacinaAlterada) {
+		bo.alterarVacina(vacinaAlterada);
+		
+	}
 	
 }

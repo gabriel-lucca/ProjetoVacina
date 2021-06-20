@@ -2,7 +2,9 @@ package controller;
 
 import exception.AplicacaoException;
 import model.bo.AplicacaoVacinaBO;
+import model.dao.AplicacaoVacinaDAO;
 import model.vo.AplicacaoVacinaVO;
+import model.vo.PessoaVO;
 
 public class ControladoraAplicacaoVacina {
 
@@ -20,4 +22,6 @@ public class ControladoraAplicacaoVacina {
 		}
 		return mensagem;
 	}
+
+
 }
