@@ -1,5 +1,7 @@
 package model.bo;
 
+import javax.swing.JOptionPane;
+
 import model.dao.VacinaDAO;
 import model.vo.VacinaVO;
 
@@ -44,6 +46,9 @@ public class VacinaBO {
 		
 		dao.cadastrar(vacina);
 		return mensagem;
+	}
+	public void alterarVacina(VacinaVO vacinaAlterada) {
+		System.out.println(vacinaAlterada);
 	}
 	
 }

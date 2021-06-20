@@ -46,9 +46,7 @@ public class PessoaBO {
 			return mensagem;
 		}
 		public void alterarPessoa(PessoaVO pessoaAlterada) {
-			System.out.println(pessoaAlterada);
-			JOptionPane.showMessageDialog(null, "Deu certo!");
-			
+			System.out.println(pessoaAlterada);			
 		}
 		
 }
