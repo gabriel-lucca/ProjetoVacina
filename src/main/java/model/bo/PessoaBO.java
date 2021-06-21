@@ -48,5 +48,9 @@ public class PessoaBO {
 		public void alterarPessoa(PessoaVO pessoaAlterada) {
 			System.out.println(pessoaAlterada);			
 		}
+		public PessoaVO consultarPorId(Integer idPessoaSelecionada) {
+			
+			return dao.buscarPorId(idPessoaSelecionada);
+		}
 		
 }
