@@ -1,10 +1,13 @@
 package controller;
 
+import java.util.ArrayList;
+
 import exception.AplicacaoException;
 import model.bo.AplicacaoVacinaBO;
 import model.dao.AplicacaoVacinaDAO;
 import model.vo.AplicacaoVacinaVO;
 import model.vo.PessoaVO;
+import model.vo.VacinaVO;
 
 public class ControladoraAplicacaoVacina {
 
@@ -22,6 +25,15 @@ public class ControladoraAplicacaoVacina {
 		}
 		return mensagem;
 	}
+
+	public PessoaVO consultarPorCpf(String cpf) {
+		return bo.consultarPorCpf(cpf);
+	}
+
+	public ArrayList<AplicacaoVacinaVO> consultarAplicacoes(PessoaVO p) {
+		return bo.consultarAplicacoes(p);
+	}
+
 
 
 }

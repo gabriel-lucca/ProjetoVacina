@@ -21,5 +21,16 @@ public class ControladoraVacina {
 		bo.alterarVacina(vacinaAlterada);
 		
 	}
+
+	public Integer excluir(Integer id) {
+		
+		return bo.excluir(id);
+		
+	}
+	
+	public VacinaVO consultarPorNome(String nome) {
+		
+		return bo.consultarPorNome(nome);
+	}
 	
 }

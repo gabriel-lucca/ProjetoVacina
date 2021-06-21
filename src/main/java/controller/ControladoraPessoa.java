@@ -27,6 +27,11 @@ private PessoaDAO dao = new PessoaDAO();
 	public PessoaVO consultarPorCpf(String cpf) {
 		return dao.consultarPorCpf(cpf);
 	}
+
+	public PessoaVO consultarPorId(Integer idPessoaSelecionada) {
+		
+		return bo.consultarPorId(idPessoaSelecionada);
+	}
 	
 
 }
