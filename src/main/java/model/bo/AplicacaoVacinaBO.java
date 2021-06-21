@@ -20,18 +20,19 @@ public class AplicacaoVacinaBO {
 	//Uma pessoa não pode tomar vacinas diferentes;
 	//Deve-se aplicar apenas quando for cumprido o tempo de intervalo das doses;
 	//Não deve aplicar acima do limite de doses por pessoa
+	PessoaDAO pDAO = new PessoaDAO();
+	VacinaDAO vDAO = new VacinaDAO();
+	AplicacaoVacinaDAO avDAO = new AplicacaoVacinaDAO();
 
 	public boolean podeVacinar(String cpf, int id) throws AplicacaoException {
 		String mensagem = null;
 		boolean resposta = false;
 		
-		PessoaDAO pDAO = new PessoaDAO();
-		VacinaDAO vDAO = new VacinaDAO();
 		AplicacaoVacinaDAO avDAO = new AplicacaoVacinaDAO();
 		PessoaVO avVO = new PessoaVO();
 
 		PessoaVO p = pDAO.consultarPorCpf(cpf);
-		ArrayList<AplicacaoVacinaVO> aplicacoes = avDAO.buscarAplicacoes(p);
+		ArrayList<AplicacaoVacinaVO> aplicacoes = avDAO.consultarAplicacoes(p);
 		VacinaVO v = vDAO.buscarPorId(id);
 
 		Integer dosesAplicadas = aplicacoes.size();
@@ -61,13 +62,11 @@ public class AplicacaoVacinaBO {
 	public AplicacaoVacinaVO cadastrar(AplicacaoVacinaVO aplicacaoVacinaVO) throws AplicacaoException {
 		String mensagem = "";
 		boolean resposta = false;
-		PessoaDAO pDAO = new PessoaDAO();
-		VacinaDAO vDAO = new VacinaDAO();
 		PessoaVO pVO = aplicacaoVacinaVO.getPessoa();
 		
 		VacinaVO vVO = aplicacaoVacinaVO.getVacina();
 
-		if(podeVacinar(pVO.getCpf(), pVO.getIdPessoa())) {
+		if(podeVacinar(pVO.getCpf(), vVO.getIdVacina())) {
 			AplicacaoVacinaDAO avDAO = new AplicacaoVacinaDAO();
 			avDAO.cadastrar(aplicacaoVacinaVO);
 		} else {
@@ -75,6 +74,16 @@ public class AplicacaoVacinaBO {
 		}
 		return aplicacaoVacinaVO;
 	}
+
+	public PessoaVO consultarPorCpf(String cpf) {
+		return pDAO.consultarPorCpf(cpf);
+	}
+
+	public ArrayList<AplicacaoVacinaVO> consultarAplicacoes(PessoaVO p) {
+		return avDAO.consultarAplicacoes(p);
+
+	}
+
 	
 }
 

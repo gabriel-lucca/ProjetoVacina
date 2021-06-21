@@ -14,7 +14,7 @@ public class AplicacaoVacinaDAO {
 
 	public AplicacaoVacinaVO cadastrar(AplicacaoVacinaVO novaAplicacao) {
 		Connection conn = Banco.getConnection();
-		String sql = "insert into aplicacaoVacina(fkIdPessoa, fkIdVacina, dtAplicacao)"
+		String sql = "insert into aplicacaoVacina(fkIdPessoa, idVacina, dtAplicacao)"
 				+ "values(?, ?, ?)";
 		PreparedStatement ps = Banco.getPreparedStatement(conn, sql);
 		PessoaVO pessoa = new PessoaVO();
@@ -84,7 +84,7 @@ public class AplicacaoVacinaDAO {
 		aplicacaoVacina.setPessoa(pessoaVO);
 		
 		VacinaDAO vacinaDao = new VacinaDAO();
-		VacinaVO vacinaAplicada = vacinaDao.buscarPorId(rs.getInt("fkIdVacina"));
+		VacinaVO vacinaAplicada = vacinaDao.buscarPorId(rs.getInt("IdVacina"));
 		aplicacaoVacina.setVacina(vacinaAplicada);
 		
 		return aplicacaoVacina;
@@ -152,13 +152,14 @@ public class AplicacaoVacinaDAO {
 		
 		return aplicacoes;
 	}
-	public ArrayList<AplicacaoVacinaVO> buscarAplicacoes(PessoaVO p, VacinaVO v) {
+	public ArrayList<AplicacaoVacinaVO> consultarAplicacoes(PessoaVO p) {
 		Connection conn = Banco.getConnection();
-		String sql = "select * from aplicacaoVacina where idPessoa= ?";
+		String sql = "select * from aplicacaoVacina where fkIdPessoa= ?";
 		PreparedStatement ps = Banco.getPreparedStatementWithPk(conn, sql);
 		ArrayList<AplicacaoVacinaVO> aplicacoesEncontradas = new ArrayList<AplicacaoVacinaVO>();
 		
 		try {
+			ps.setInt(1, p.getIdPessoa());
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {
 				AplicacaoVacinaVO aplicacaoEncontrada = construirDoResultSet(rs);
@@ -171,9 +172,6 @@ public class AplicacaoVacinaDAO {
 		
 		return aplicacoesEncontradas;
 	}
-	public ArrayList<AplicacaoVacinaVO> buscarAplicacoes(PessoaVO p) {
-
-		return buscarAplicacoes(p);
-	}
+	
 	
 }
