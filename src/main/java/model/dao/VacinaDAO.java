@@ -74,7 +74,7 @@ public class VacinaDAO  {
 		}
 		return resposta;
 	}
-	public VacinaVO construirVacinaDoResultSet(ResultSet rs) throws SQLException {
+	public VacinaVO construirDoResultSet(ResultSet rs) throws SQLException {
 		VacinaVO vacina = new VacinaVO();
 		vacina.setIdVacina(rs.getInt("idVacina"));
 		vacina.setNomePesquisadorResponsavel(rs.getString("nomePesquisadorResponsavel"));
@@ -94,7 +94,7 @@ public class VacinaDAO  {
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			if(rs.next()) {
-				VacinaVO vacina = construirVacinaDoResultSet(rs);
+				VacinaVO vacina = construirDoResultSet(rs);
 			}
 		}catch(SQLException e) {
 			System.out.println("Erro ao buscar por vacina.\nErro: "+e.getMessage());
@@ -112,7 +112,7 @@ public class VacinaDAO  {
 		try {
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {
-				VacinaVO vacina = construirVacinaDoResultSet(rs);
+				VacinaVO vacina = construirDoResultSet(rs);
 				vacinas.add(vacina);
 			}
 		}catch(SQLException e) {
@@ -148,6 +148,27 @@ public class VacinaDAO  {
 	public VacinaVO getVacina() {
 
 	return buscarPorId(0);
+	}
+	
+	public VacinaVO consultarPorNome(String nome) {
+		VacinaVO vacinaEncontrada = new VacinaVO();
+		
+		String sql = "select * from vacina where nomeVacina = ?";
+
+		try (Connection conn = Banco.getConnection();
+				PreparedStatement stmt = Banco.getPreparedStatement(conn, sql);) {
+			stmt.setString(1, nome);
+			
+			ResultSet resultadoConsulta = stmt.executeQuery();
+			
+			if (resultadoConsulta.next()) {
+				vacinaEncontrada = this.construirDoResultSet(resultadoConsulta);
+				
+			}
+		} catch (SQLException e) {
+			System.out.println("Erro ao consultar vacina por nome: \n" + e.getMessage());
+		}
+		return vacinaEncontrada;
 	}
 	
 }

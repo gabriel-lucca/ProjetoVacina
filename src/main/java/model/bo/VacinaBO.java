@@ -50,6 +50,15 @@ public class VacinaBO {
 	public void alterarVacina(VacinaVO vacinaAlterada) {
 		System.out.println(vacinaAlterada);
 	}
+	public Integer excluir(Integer id) {
+		dao.excluir(id);
+		return id;
+
+	}
+	
+	public VacinaVO consultarPorNome(String nome) {
+		return dao.consultarPorNome(nome);
+	}
 	
 }
  
