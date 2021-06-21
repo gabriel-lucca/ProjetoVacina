@@ -1,34 +1,38 @@
 package view;
 
-import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 import java.text.ParseException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
-import javax.swing.JFormattedTextField;
 import javax.swing.JButton;
-import javax.swing.JTextField;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
 
 import controller.ControladoraAplicacaoVacina;
-import controller.ControladoraPessoa;
+import controller.ControladoraVacina;
+import exception.AplicacaoException;
+import model.dao.AplicacaoVacinaDAO;
 import model.dao.PessoaDAO;
+import model.dao.VacinaDAO;
+import model.vo.AplicacaoVacinaVO;
 import model.vo.PessoaVO;
-
-import java.awt.Color;
-import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.border.LineBorder;
-import javax.swing.border.MatteBorder;
-import javax.swing.border.BevelBorder;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import model.vo.VacinaVO;
 
 public class TelaAplicacaoVacina extends JFrame {
 
@@ -36,8 +40,15 @@ public class TelaAplicacaoVacina extends JFrame {
 	private JTextField txtNome;
 	private JTable table;
 	private JTextField txtCpf;
+	ControladoraAplicacaoVacina controller = new ControladoraAplicacaoVacina();
+	ControladoraVacina controllerVacina = new ControladoraVacina();
 	PessoaDAO pessoaDAO = new PessoaDAO();
+	JComboBox<String> cbxVacina = new JComboBox();
+	DefaultTableModel modelo = new DefaultTableModel();
 	private String nome = "";
+	JButton btnVacinar = new JButton("Vacinar");
+	PessoaVO encontrada = new PessoaVO();
+
 	/**
 	 * Launch the application.
 	 */
@@ -66,12 +77,12 @@ public class TelaAplicacaoVacina extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		JLabel lblCpf = new JLabel("Cpf:");
 		lblCpf.setBounds(36, 34, 46, 14);
 		contentPane.add(lblCpf);
 		
-		
+
 		MaskFormatter mascaraCPF;
 		try {
 			mascaraCPF = new MaskFormatter("###.###.###-##");
@@ -81,95 +92,124 @@ public class TelaAplicacaoVacina extends JFrame {
 		txtCpf.setColumns(10);
 		txtCpf.setBounds(124, 31, 187, 29);
 		contentPane.add(txtCpf);
-		
-		
+
 		JButton btnBuscar = new JButton("Buscar");
-		btnBuscar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				consultarPorCpf();
-			}
-
-			protected void consultarPorCpf() {
-				ControladoraPessoa controller = new ControladoraPessoa();
-				PessoaVO p = controller.consultarPorCpf(String.valueOf(txtCpf.getText()));
-				
-				if(p != null) {
-					preencherEnderecoNaTela(p);
+		btnBuscar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// System.out.println(txtCpf.getText());
+				// System.out.println(controller.consultarPorCpf(txtCpf.getText()).toString());
+				PessoaVO encontrada = controller.consultarPorCpf(txtCpf.getText());
+				txtNome.setEnabled(true);
+				txtNome.setEditable(false);
+				txtNome.setText(encontrada.getNome());
+				ArrayList<AplicacaoVacinaVO> historicoAplicacoes = controller.consultarAplicacoes(encontrada);
+				int i = 1;
+				for (AplicacaoVacinaVO av : historicoAplicacoes) {
+						modelo.addRow(new Object[] {i,av.getDataAplicacao()});
+						i++;
 				}
-			}
-
-			protected void preencherEnderecoNaTela(PessoaVO p) {
-				txtCpf.setText(String.valueOf(p.getCpf()));
-				txtNome.setText(p.getNome());
-				txtNome.setEnabled(false);
 				
+				preencherCbxVacina();
+				btnVacinar.setEnabled(true);
 			}
 		});
+
 		btnBuscar.setBounds(378, 30, 99, 29);
 		contentPane.add(btnBuscar);
-		
+
 		JLabel lblNome = new JLabel("Nome:");
 		lblNome.setBounds(36, 95, 46, 14);
 		contentPane.add(lblNome);
-		
+
 		txtNome = new JTextField();
-		txtNome.setBackground(Color.WHITE);
 		txtNome.setEnabled(false);
-		txtNome.setEditable(false);
+		txtNome.setBackground(Color.WHITE);
 		txtNome.setBounds(124, 91, 352, 22);
 		contentPane.add(txtNome);
 		txtNome.setColumns(10);
-		
-		
+
 		JLabel lblVacina = new JLabel("Vacina:");
 		lblVacina.setBounds(36, 145, 46, 14);
 		contentPane.add(lblVacina);
-		
-		JComboBox cbxVacina = new JComboBox();
-		cbxVacina.setForeground(Color.WHITE);
+
+		cbxVacina.setForeground(Color.BLACK);
 		cbxVacina.setBounds(124, 138, 352, 29);
 		contentPane.add(cbxVacina);
-		
+
 		JButton btnVacinar = new JButton("Vacinar");
-		btnVacinar.setEnabled(false);
+		btnVacinar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				try {
+					cadastrarAplicacao();
+				} catch (AplicacaoException e1) {
+					JOptionPane.showConfirmDialog(null, e1.getMessage());
+					e1.printStackTrace();
+				}
+			}
+		});
+		
 		btnVacinar.setBounds(378, 352, 99, 51);
 		contentPane.add(btnVacinar);
-		
+
 		JLabel lblHistrico = new JLabel("Hist\u00F3rico:");
 		lblHistrico.setBounds(36, 240, 76, 14);
 		contentPane.add(lblHistrico);
-		
+
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportBorder(new EmptyBorder(0, 0, 0, 0));
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		scrollPane.setEnabled(false);
 		scrollPane.setBounds(36, 273, 441, 57);
 		contentPane.add(scrollPane);
-		
-		
-		
-		table = new JTable();
+
+		table = new JTable(modelo);
 		scrollPane.setViewportView(table);
-		table.setModel(new DefaultTableModel(
-			new Object[][] {
-				{null, null},
-				{null, null},
-			},
-			new String[] {
-				"Data de aplica\u00E7\u00E3o", "Dose"
-			}
-		) {
-			Class[] columnTypes = new Class[] {
-				Object.class, Integer.class
-			};
-			public Class getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
-			}
-		});
-		table.getColumnModel().getColumn(0).setPreferredWidth(120);
-		table.getColumnModel().getColumn(1).setPreferredWidth(117);
+
+		modelo.addColumn("Dose");
+		modelo.addColumn("Data aplicação");
+	}
+
+	public void consultarPorCpf() {
+		PessoaVO p = controller.consultarPorCpf(txtCpf.getSelectedText());
+		if (p != null) {
+			preencherNome(p);
+		}
+	}
+
+	public void preencherNome(PessoaVO p) {
+		this.txtNome.setText(p.getNome());
+	}
+
+	public void preencherCbxVacina() {
+		VacinaDAO vacina = new VacinaDAO();
+		ArrayList<VacinaVO> buscarTodos = vacina.buscarTodos();
+
+		for (VacinaVO vacinaVO: buscarTodos) {
+			cbxVacina.addItem(vacinaVO.getNomeVacina());
+		}
+
 	}
 	
-	
-	
+	private void cadastrarAplicacao() throws AplicacaoException {
+		AplicacaoVacinaVO aplicacaoVacina = new AplicacaoVacinaVO();
+		aplicacaoVacina.setPessoa(encontrada); 
+		
+		aplicacaoVacina.setVacina(controllerVacina.consultarPorNome(cbxVacina.getSelectedItem().toString()));
+		aplicacaoVacina.setDataAplicacao(LocalDate.now());
+		System.out.println(controller.cadastrar(aplicacaoVacina));
+
+
+	}
+
+	public void carregarTabela() throws SQLException {
+
+		AplicacaoVacinaDAO avDAO = new AplicacaoVacinaDAO();
+
+		// List<AplicacaoVacinaVO> list = avDAO.buscarAplicacoes();
+
+		// for (AplicacaoVacinaVO apvac : list) {
+		// modelo.addRow(new Object[]{apvac.getDataAplicacao()});
+	}
 }

@@ -24,6 +24,8 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import java.awt.Color;
 import javax.swing.DefaultComboBoxModel;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class TelaCadastroPessoa extends JFrame {
 	
@@ -147,7 +149,12 @@ public class TelaCadastroPessoa extends JFrame {
 		contentPane.add(txtEmail);
 		txtEmail.setColumns(10);
 		
+				
 		JButton btnCadastrarPessoa = new JButton("Cadastrar pessoa");
+		btnCadastrarPessoa.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		btnCadastrarPessoa.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -230,8 +237,7 @@ public class TelaCadastroPessoa extends JFrame {
 			}
 			
 		}
-
-		private void preencherCampos(PessoaVO novaPessoa) {
+		public void preencherCampos(PessoaVO novaPessoa) {
 			this.txtEmail.setText(novaPessoa.getEmail());
 			this.txtEndereco.setText(novaPessoa.getEndereco());
 			this.txtCidade.setText(novaPessoa.getCidade());
@@ -239,9 +245,11 @@ public class TelaCadastroPessoa extends JFrame {
 			this.txtDataNascimento.setText(String.valueOf(novaPessoa.getDataNascimento()));
 			this.txtTelefone.setText(novaPessoa.getTelefone());
 			this.txtCpf.setText(novaPessoa.getCpf());
-			this.cbxEstado.setSelectedIndex(0);			
+			this.cbxEstado.setSelectedIndex(0);	
+			
+			
 		}
-
+		
 		private void limparCampos() {
 			this.txtEmail.setText("");
 			this.txtEndereco.setText("");
