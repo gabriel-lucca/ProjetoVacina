@@ -208,7 +208,7 @@ public class TelaCadastroVacina extends JFrame {
 		
 	}
 	
-	private void preencherCampos(VacinaVO novaVacina) {
+	public void preencherCampos(VacinaVO novaVacina) {
 		this.txtIntervalo.setText(String.valueOf(novaVacina.getIntervaloDoses()));
 		this.txtNomePesquisador.setText(novaVacina.getNomePesquisadorResponsavel());
 		this.txtNomeVacina.setText(novaVacina.getNomeVacina());

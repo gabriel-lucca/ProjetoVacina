@@ -21,7 +21,9 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import controller.ControladoraVacina;
+import model.dao.PessoaDAO;
 import model.dao.VacinaDAO;
+import model.vo.PessoaVO;
 import model.vo.VacinaVO;
 
 import javax.swing.JButton;
@@ -86,11 +88,17 @@ public class TelaConsultarVacina extends JFrame {
 		
 		
 		JButton btnAlterar = new JButton("Alterar");
-		btnAlterar.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
+		btnAlterar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Integer idVacinaSelecionada = (Integer) table.getModel().getValueAt(table.getSelectedRow(), 0);
+
+				VacinaVO encontrada = vDAO.buscarPorId(idVacinaSelecionada);
+
 				TelaCadastroVacina telaCadastroVacina = new TelaCadastroVacina();
+				telaCadastroVacina.preencherCampos(encontrada);
 				telaCadastroVacina.setVisible(true);
+//				limparTabelaPessoa();
+//				carregarTabela();
 			}
 		});
 		btnAlterar.setBounds(280, 264, 210, 56);
@@ -100,18 +108,13 @@ public class TelaConsultarVacina extends JFrame {
 		btnExcluir.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				
-				table.getModel().getValueAt(table.getSelectedRow(), 0);
-				
-				String mensagem = " ";
-				boolean excluiu = vDAO.excluir(0);
-				if(excluiu) {
-					mensagem = "Vacina excluída com sucesso.";
-				} else {
-					mensagem = "Erro ao excluir vacina";
-				}
-				JOptionPane.showMessageDialog(null , mensagem);
+				Integer idVacinaSelecionada = (Integer) table.getModel().getValueAt(table.getSelectedRow(), 0);
+				new VacinaDAO().excluir(idVacinaSelecionada);
+				limparTabelaVacina();
+				carregarTabela();
 			}
+
+			
 		});
 		btnExcluir.setBounds(500, 264, 210, 56);
 		contentPane.add(btnExcluir);
@@ -140,7 +143,6 @@ public class TelaConsultarVacina extends JFrame {
 	}
 	
 	private void limparTabelaVacina() {
-		//tblListaVacina.setModel(new DefaultTableModel(new Object[][] {modelo, }, modelo));	
-		
+		modelo.setRowCount(0);		
 	}
 }
