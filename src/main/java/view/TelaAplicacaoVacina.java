@@ -26,7 +26,7 @@ import javax.swing.text.MaskFormatter;
 
 import controller.ControladoraAplicacaoVacina;
 import controller.ControladoraVacina;
-import exception.AplicacaoException;
+import exception.AnalisarCamposVacinaException;
 import model.dao.AplicacaoVacinaDAO;
 import model.dao.PessoaDAO;
 import model.dao.VacinaDAO;
@@ -143,7 +143,7 @@ public class TelaAplicacaoVacina extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				try {
 					cadastrarAplicacao();
-				} catch (AplicacaoException e1) {
+				} catch (AnalisarCamposVacinaException e1) {
 					JOptionPane.showConfirmDialog(null, e1.getMessage());
 					e1.printStackTrace();
 				}
@@ -168,7 +168,7 @@ public class TelaAplicacaoVacina extends JFrame {
 		scrollPane.setViewportView(table);
 
 		modelo.addColumn("Dose");
-		modelo.addColumn("Data aplicação");
+		modelo.addColumn("Data aplicaï¿½ï¿½o");
 	}
 
 	public void consultarPorCpf() {
@@ -192,7 +192,7 @@ public class TelaAplicacaoVacina extends JFrame {
 
 	}
 	
-	private void cadastrarAplicacao() throws AplicacaoException {
+	private void cadastrarAplicacao() throws AnalisarCamposVacinaException {
 		AplicacaoVacinaVO aplicacaoVacina = new AplicacaoVacinaVO();
 		aplicacaoVacina.setPessoa(encontrada); 
 		

@@ -2,7 +2,7 @@ package controller;
 
 import java.util.ArrayList;
 
-import exception.AplicacaoException;
+import exception.AnalisarCamposVacinaException;
 import model.bo.AplicacaoVacinaBO;
 import model.dao.AplicacaoVacinaDAO;
 import model.vo.AplicacaoVacinaVO;
@@ -14,14 +14,14 @@ public class ControladoraAplicacaoVacina {
 	
 	private AplicacaoVacinaBO bo = new AplicacaoVacinaBO();
 	
-	public AplicacaoVacinaVO cadastrar(AplicacaoVacinaVO aplicacaoVacina) throws AplicacaoException {
+	public AplicacaoVacinaVO cadastrar(AplicacaoVacinaVO aplicacaoVacina) throws AnalisarCamposVacinaException {
 		return bo.cadastrar(aplicacaoVacina);
 	}
 	
 	public String validarCampos(AplicacaoVacinaVO aplicacaoVacina) {
 		String mensagem = " ";
 		if(aplicacaoVacina.getDataAplicacao() == null) {
-			mensagem += "O campo data da aplicação deve ser preenchdido.";
+			mensagem += "O campo data da aplicaï¿½ï¿½o deve ser preenchdido.";
 		}
 		return mensagem;
 	}

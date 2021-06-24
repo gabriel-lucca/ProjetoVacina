@@ -11,20 +11,20 @@ import model.vo.AplicacaoVacinaVO;
 import model.vo.PessoaVO;
 import model.vo.VacinaVO;
 
-import exception.AplicacaoException;
+import exception.AnalisarCamposVacinaException;
 
 public class AplicacaoVacinaBO {
 
-	//Quando clicar em buscar deve mostrar quantas doses de vacinas foram tomadas ou se não tomou nenhuma;
-	//É permitido selecionar o campo vacinar quando tiver faltando alguma dose;
-	//Uma pessoa não pode tomar vacinas diferentes;
+	//Quando clicar em buscar deve mostrar quantas doses de vacinas foram tomadas ou se nï¿½o tomou nenhuma;
+	//ï¿½ permitido selecionar o campo vacinar quando tiver faltando alguma dose;
+	//Uma pessoa nï¿½o pode tomar vacinas diferentes;
 	//Deve-se aplicar apenas quando for cumprido o tempo de intervalo das doses;
-	//Não deve aplicar acima do limite de doses por pessoa
+	//Nï¿½o deve aplicar acima do limite de doses por pessoa
 	PessoaDAO pDAO = new PessoaDAO();
 	VacinaDAO vDAO = new VacinaDAO();
 	AplicacaoVacinaDAO avDAO = new AplicacaoVacinaDAO();
 
-	public boolean podeVacinar(String cpf, int id) throws AplicacaoException {
+	public boolean podeVacinar(String cpf, int id) throws AnalisarCamposVacinaException {
 		String mensagem = null;
 		boolean resposta = false;
 		
@@ -48,18 +48,18 @@ public class AplicacaoVacinaBO {
 			mensagem += "Esta pessoa aplicou "+dosesAplicadas+" doses.\nRestam "+(v.getQuantidadeDoses()-dosesAplicadas)+" doses.\nProxima dose: "+aplicacoes.get(dosesAplicadas).getDataAplicacao().plusDays(v.getIntervaloDoses());
 		}
 		if(periodo.getDays() != v.getIntervaloDoses()) {
-			mensagem += "Restam "+periodo.getDays()+" dias até a próxima dose.";	
+			mensagem += "Restam "+periodo.getDays()+" dias atï¿½ a prï¿½xima dose.";	
 		}
 		if(mensagem == null) {
 			resposta = true;
 		} else {
 			resposta = false;
-			throw new AplicacaoException(mensagem);
+			throw new AnalisarCamposVacinaException(mensagem);
 		}
 		 return resposta;
 		}
 	
-	public AplicacaoVacinaVO cadastrar(AplicacaoVacinaVO aplicacaoVacinaVO) throws AplicacaoException {
+	public AplicacaoVacinaVO cadastrar(AplicacaoVacinaVO aplicacaoVacinaVO) throws AnalisarCamposVacinaException {
 		String mensagem = "";
 		boolean resposta = false;
 		PessoaVO pVO = aplicacaoVacinaVO.getPessoa();
@@ -70,7 +70,7 @@ public class AplicacaoVacinaBO {
 			AplicacaoVacinaDAO avDAO = new AplicacaoVacinaDAO();
 			avDAO.cadastrar(aplicacaoVacinaVO);
 		} else {
-			throw new AplicacaoException(mensagem);
+			throw new AnalisarCamposVacinaException(mensagem);
 		}
 		return aplicacaoVacinaVO;
 	}
