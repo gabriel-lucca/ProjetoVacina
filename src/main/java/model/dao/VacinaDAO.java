@@ -85,7 +85,7 @@ public class VacinaDAO  {
 		vacina.setIntervaloDoses(rs.getInt("intervaloDoses"));
 		return vacina;
 	}
-	public VacinaVO buscarPorId(Integer id) {
+	public VacinaVO consultarPorId(Integer id) {
 		Connection conn= Banco.getConnection();
 		String sql = "select * from vacina where idVacina=?";
 		PreparedStatement ps = Banco.getPreparedStatement(conn, sql);
@@ -104,7 +104,7 @@ public class VacinaDAO  {
 		}
 		return vacinaEncontrada;
 	}
-	public ArrayList<VacinaVO> buscarTodos(){
+	public ArrayList<VacinaVO> consultarTodos(){
 		Connection conn = Banco.getConnection();
 		String sql = "select * from vacina";
 		PreparedStatement ps = Banco.getPreparedStatementWithPk(conn, sql);
@@ -121,54 +121,59 @@ public class VacinaDAO  {
 			Banco.closeConnection(conn);
 			Banco.closePreparedStatement(ps);
 		}
-		
 		return vacinas;
 	}
 	public boolean vacinaJaExiste(VacinaVO vacina) {
-		ArrayList<VacinaVO> vacinas = new ArrayList<VacinaVO>();
-		boolean resposta = false;
-		for(VacinaVO v : vacinas) {
-			 if(vacina.getNomeVacina().equalsIgnoreCase(v.getNomeVacina())) {
-				 resposta = true;
-			 }
-			}
-		return resposta;
-	}
-	
-	public boolean paisJaTemVacinaCadastrada(VacinaVO vacina) {
-		ArrayList<VacinaVO> vacinas = new ArrayList<VacinaVO>();
-		boolean resposta = false;
-		for(VacinaVO v : vacinas) {
-			 if(vacina.getPaisOrigem().equalsIgnoreCase(v.getPaisOrigem())) {
-				 resposta = true;
-			 }
-			}
-		return resposta;
-	}
-	public VacinaVO getVacina() {
-
-	return buscarPorId(0);
-	}
-	
-	public VacinaVO consultarPorNome(String nome) {
-		VacinaVO vacinaEncontrada = new VacinaVO();
-		
+		Connection conn = Banco.getConnection();
 		String sql = "select * from vacina where nomeVacina = ?";
-
+		PreparedStatement ps = Banco.getPreparedStatement(conn, sql);
+		boolean resposta = false;
+		try {
+			ps.setString(1, vacina.getNomeVacina());
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				resposta = true;
+			}
+		} catch(SQLException e) {
+			System.out.println("Erro ao verificar se vacina existe.\nErro: "+e.getMessage());
+		} finally {
+			Banco.closeConnection(conn);
+			Banco.closePreparedStatement(ps);
+		}
+		return resposta;
+	}
+	public boolean paisJaTemVacinaCadastrada(VacinaVO vacina) {
+		Connection conn = Banco.getConnection();
+		String sql = "select * from vacina where paisOrigem = ?";
+		PreparedStatement ps = Banco.getPreparedStatement(conn, sql);
+		boolean resposta = false;
+		try {
+			ps.setString(1, vacina.getPaisOrigem());
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				resposta = true;
+			}
+		} catch(SQLException e) {
+			System.out.println("Erro ao verificar se vacina existe.\nErro: "+e.getMessage());
+		} finally {
+			Banco.closeConnection(conn);
+			Banco.closePreparedStatement(ps);
+		}
+		return resposta;
+	}
+	public VacinaVO consultarPorNome(String nome) {
+		VacinaVO vacinaEncontrada = new VacinaVO();	
+		String sql = "select * from vacina where nomeVacina = ?";
 		try (Connection conn = Banco.getConnection();
 				PreparedStatement stmt = Banco.getPreparedStatement(conn, sql);) {
 			stmt.setString(1, nome);
-			
 			ResultSet resultadoConsulta = stmt.executeQuery();
-			
 			if (resultadoConsulta.next()) {
-				vacinaEncontrada = this.construirDoResultSet(resultadoConsulta);
-				
+				vacinaEncontrada = this.construirDoResultSet(resultadoConsulta);	
 			}
 		} catch (SQLException e) {
 			System.out.println("Erro ao consultar vacina por nome: \n" + e.getMessage());
 		}
 		return vacinaEncontrada;
 	}
-	
 }
