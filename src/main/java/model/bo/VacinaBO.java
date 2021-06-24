@@ -30,9 +30,8 @@ public class VacinaBO {
 		return dao.alterar(vacinaAlterada);
 	}
 	
-	public Integer excluir(Integer id) {
-		dao.excluir(id);
-		return id;
+	public boolean excluir(Integer id) {
+		return dao.excluir(id);
 	}
 	public VacinaVO consultarPorNome(String nome) {
 		return dao.consultarPorNome(nome);

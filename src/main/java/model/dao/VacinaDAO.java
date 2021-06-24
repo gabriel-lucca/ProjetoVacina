@@ -94,7 +94,7 @@ public class VacinaDAO  {
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			if(rs.next()) {
-				VacinaVO vacina = construirDoResultSet(rs);
+				vacinaEncontrada = construirDoResultSet(rs);
 			}
 		}catch(SQLException e) {
 			System.out.println("Erro ao buscar por vacina.\nErro: "+e.getMessage());
