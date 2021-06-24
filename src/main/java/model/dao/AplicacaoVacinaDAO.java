@@ -11,7 +11,6 @@ import model.vo.PessoaVO;
 import model.vo.VacinaVO;
 
 public class AplicacaoVacinaDAO {
-
 	public AplicacaoVacinaVO cadastrar(AplicacaoVacinaVO novaAplicacao) {
 		Connection conn = Banco.getConnection();
 		String sql = "insert into aplicacaoVacina(fkIdPessoa, idVacina, dtAplicacao)"
@@ -30,7 +29,7 @@ public class AplicacaoVacinaDAO {
 				novaAplicacao.setIdAplicacaoVacina(rs.getInt(1));
 			}
 		}catch(SQLException e) {
-			System.out.println("Erro ao cadastrar aplicação vacina.\nErro: "+e.getMessage());
+			System.out.println("Erro ao cadastrar aplicaï¿½ï¿½o vacina.\nErro: "+e.getMessage());
 		}finally {
 			Banco.closeConnection(conn);
 			Banco.closePreparedStatement(ps);
@@ -52,7 +51,7 @@ public class AplicacaoVacinaDAO {
 			ps.setDate(3, java.sql.Date.valueOf(aplicacaoAlterada.getDataAplicacao()));
 			resposta = ps.executeUpdate() > 0;
 		}catch(SQLException e) {
-			System.out.println("Erro ao alterar aplicação.\nErro: "+e.getMessage());
+			System.out.println("Erro ao alterar aplicaï¿½ï¿½o.\nErro: "+e.getMessage());
 		}finally {
 			Banco.closeConnection(conn);
 			Banco.closePreparedStatement(ps);
@@ -68,7 +67,7 @@ public class AplicacaoVacinaDAO {
 			ps.setInt(1, id);
 			resposta = ps.executeUpdate()>0;
 		}catch(SQLException e) {
-			System.out.println("Erro ao excluir aplicação.\nErro: "+e.getMessage());
+			System.out.println("Erro ao excluir aplicaï¿½ï¿½o.\nErro: "+e.getMessage());
 		}finally {
 			Banco.closeConnection(conn);
 			Banco.closePreparedStatement(ps);
@@ -84,12 +83,10 @@ public class AplicacaoVacinaDAO {
 		aplicacaoVacina.setPessoa(pessoaVO);
 		
 		VacinaDAO vacinaDao = new VacinaDAO();
-		VacinaVO vacinaAplicada = vacinaDao.buscarPorId(rs.getInt("IdVacina"));
+		VacinaVO vacinaAplicada = vacinaDao.consultarPorId(rs.getInt("IdVacina"));
 		aplicacaoVacina.setVacina(vacinaAplicada);
-		
 		return aplicacaoVacina;
-	}
-		
+	}	
 	public AplicacaoVacinaVO buscarPorId(Integer id) {
 		Connection conn= Banco.getConnection();
 		String sql = "select * from aplicacaoVacina where idVacina=?";
@@ -109,30 +106,22 @@ public class AplicacaoVacinaDAO {
 		}
 		return aplicacaoEncontrada;
 	}
-	
 	public AplicacaoVacinaVO consultarPorCpf(String cpf) {
-		
 		AplicacaoVacinaVO aplicacaoVacinaConsultada = null;
-		
-		String sql = "select * from aplicacaoVacina where idAplicacao = ?";
-
+		String sql = "select * from aplicacaoVacina where cpf = ?";
 		try (Connection conn = Banco.getConnection();
 				PreparedStatement stmt = Banco.getPreparedStatement(conn, sql);) {
 			stmt.setString(1, cpf);
-			
 			ResultSet resultadoConsulta = stmt.executeQuery();
-			
 			if (resultadoConsulta.next()) {
 				aplicacaoVacinaConsultada = this.construirDoResultSet(resultadoConsulta);
-				
 			}
 		} catch (SQLException e) {
 			System.out.println("Erro ao consultar aplicacao vacina por CPF: \n" + e.getMessage());
 		}
 		return aplicacaoVacinaConsultada;
 	}
-	
-	public ArrayList<AplicacaoVacinaVO> buscarTodos(){
+	public ArrayList<AplicacaoVacinaVO> consultarTodos(){
 		Connection conn = Banco.getConnection();
 		String sql = "select * from vacina";
 		PreparedStatement ps = Banco.getPreparedStatementWithPk(conn, sql);
@@ -149,7 +138,6 @@ public class AplicacaoVacinaDAO {
 			Banco.closeConnection(conn);
 			Banco.closePreparedStatement(ps);
 		}
-		
 		return aplicacoes;
 	}
 	public ArrayList<AplicacaoVacinaVO> consultarAplicacoes(PessoaVO p) {
@@ -157,7 +145,6 @@ public class AplicacaoVacinaDAO {
 		String sql = "select * from aplicacaoVacina where fkIdPessoa= ?";
 		PreparedStatement ps = Banco.getPreparedStatementWithPk(conn, sql);
 		ArrayList<AplicacaoVacinaVO> aplicacoesEncontradas = new ArrayList<AplicacaoVacinaVO>();
-		
 		try {
 			ps.setInt(1, p.getIdPessoa());
 			ResultSet rs = ps.executeQuery();
@@ -165,13 +152,9 @@ public class AplicacaoVacinaDAO {
 				AplicacaoVacinaVO aplicacaoEncontrada = construirDoResultSet(rs);
 				aplicacoesEncontradas.add(aplicacaoEncontrada);
 			}
-			
 		} catch(SQLException e) {
-			System.out.println("Erro ao buscar aplicações de "+p.getNome()+ "\nErro: "+e.getMessage());
+			System.out.println("Erro ao buscar aplicaï¿½ï¿½es de "+p.getNome()+ "\nErro: "+e.getMessage());
 		}
-		
 		return aplicacoesEncontradas;
 	}
-	
-	
 }
