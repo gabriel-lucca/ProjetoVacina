@@ -24,21 +24,21 @@ public class ControladoraVacina {
 		//Os campos devem possuir no m�nimo d�gitos 3 e no m�ximo 100
 		//NomePesquisador:
 		if(vacina.getNomePesquisadorResponsavel().length() < 3) {
-			mensagem += "O nome do deve possuir no mínimo 3 caracteres";
+			mensagem += "\nO nome do deve possuir no mínimo 3 caracteres";
 		}else if(vacina.getNomePesquisadorResponsavel().length() > 100) {
-			mensagem += "O nome não deve possuir mais de 100 caracteres";
+			mensagem += "\nO nome não deve possuir mais de 100 caracteres";
 		}
 		//paisOrigem:
 		if(vacina.getPaisOrigem().length() < 3) {
-			mensagem += "O pas de origem possuir no mínimo 3 caracteres";
+			mensagem += "\nO pas de origem deve possuir no mínimo 3 caracteres";
 		}else if(vacina.getPaisOrigem().length() > 100) {
-			mensagem += "O ps de origem não pode passar de 100 caracteres";
+			mensagem += "\nO ps de origem deve possuir mais de 100 caracteres";
 		}
 		//NomeVacina:
 		if(vacina.getNomeVacina().length() < 3) {
-			mensagem += "O nome da vacina possuir no mínimo 3 caracteres";
+			mensagem += "\nO nome da vacina pdeve possuir no mínimo 3 caracteres";
 		}else if(vacina.getNomeVacina().length() > 100) {
-			mensagem += "O nome da vacina n�o pode passar de 100 caracteres";
+			mensagem += "\nO nome da deve possuir mais de 100 caracteres";
 		}
 		return mensagem;
 	}
@@ -52,7 +52,7 @@ public class ControladoraVacina {
 	public ArrayList<VacinaVO> consultarTodos(){
 		return bo.consutarTodos();
 	}
-	public Integer excluir(Integer id) {
+	public boolean excluir(Integer id) {
 		return bo.excluir(id);
 	}
 	public VacinaVO consultarPorNome(String nome) {
