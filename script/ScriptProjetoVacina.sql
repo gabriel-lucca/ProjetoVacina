@@ -27,8 +27,7 @@ create table aplicacaoVacina(
 	idAplicacao int not null auto_increment primary key,
     idPessoa int not null,
     idVacina int not null,
-    dtAplicacao date not null,
-	foreign key(fkIdPessoa) references pessoa(idPessoa) 
+    dtAplicacao date not null
 );
 -- Inserts:
 insert into pessoa(nomePessoa, cpf, email, telefone, dtNascimento, cidade, estado, endereco) values("Bigodin Finin", "111.111.111-11", "Dr.BigodinFinin@gmail.com", "21911111111", '1970-06-04', "Rio de Janeiro", "Rio de Janeiro", "Logo alí"); 
