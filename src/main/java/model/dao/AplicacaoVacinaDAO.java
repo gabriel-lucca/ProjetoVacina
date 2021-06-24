@@ -87,7 +87,7 @@ public class AplicacaoVacinaDAO {
 		aplicacaoVacina.setVacina(vacinaAplicada);
 		return aplicacaoVacina;
 	}	
-	public AplicacaoVacinaVO buscarPorId(Integer id) {
+	public AplicacaoVacinaVO consultarPorId(Integer id) {
 		Connection conn= Banco.getConnection();
 		String sql = "select * from aplicacaoVacina where idVacina=?";
 		PreparedStatement ps = Banco.getPreparedStatement(conn, sql);
@@ -105,21 +105,6 @@ public class AplicacaoVacinaDAO {
 			Banco.closePreparedStatement(ps);
 		}
 		return aplicacaoEncontrada;
-	}
-	public AplicacaoVacinaVO consultarPorCpf(String cpf) {
-		AplicacaoVacinaVO aplicacaoVacinaConsultada = null;
-		String sql = "select * from aplicacaoVacina where cpf = ?";
-		try (Connection conn = Banco.getConnection();
-				PreparedStatement stmt = Banco.getPreparedStatement(conn, sql);) {
-			stmt.setString(1, cpf);
-			ResultSet resultadoConsulta = stmt.executeQuery();
-			if (resultadoConsulta.next()) {
-				aplicacaoVacinaConsultada = this.construirDoResultSet(resultadoConsulta);
-			}
-		} catch (SQLException e) {
-			System.out.println("Erro ao consultar aplicacao vacina por CPF: \n" + e.getMessage());
-		}
-		return aplicacaoVacinaConsultada;
 	}
 	public ArrayList<AplicacaoVacinaVO> consultarTodos(){
 		Connection conn = Banco.getConnection();
