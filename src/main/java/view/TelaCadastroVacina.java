@@ -9,6 +9,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.text.MaskFormatter;
 
 import controller.ControladoraVacina;
+import exception.exceptionVacina.AnalisarCamposVacinaException;
+import exception.exceptionVacina.PaisJaTemVacinaRegistradaException;
+import exception.exceptionVacina.VacinaJaExisteException;
 import model.vo.VacinaVO;
 
 import javax.swing.JLabel;
@@ -29,6 +32,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class TelaCadastroVacina extends JFrame {
 
@@ -39,11 +44,15 @@ public class TelaCadastroVacina extends JFrame {
 	private JTextField txtDataInicio;
 	private JComboBox cbxDoses;
 	private JComboBox cbxPais;
+	private JButton btnCadastrar;
 	private ControladoraVacina controller = new ControladoraVacina();
 	private MaskFormatter mascaraDataInicio;
-	
+	private int respostaCadastro;
+	private int respostaAlteracao;
+	private int respostaExclusao;
+	Object[] opcoes = {"Sim","NÃ£o"};
 	DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
+	
 	/**
 	 * Launch the application.
 	 */
@@ -120,16 +129,6 @@ public class TelaCadastroVacina extends JFrame {
 		txtNomePesquisador.setBounds(265, 43, 310, 34);
 		contentPane.add(txtNomePesquisador);
 		
-		JButton btnCadastrarVacina = new JButton("Cadastrar vacina");
-		btnCadastrarVacina.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				cadastrar();
-			}
-		});
-		btnCadastrarVacina.setBounds(422, 331, 153, 47);
-		contentPane.add(btnCadastrarVacina);
-		
 		JLabel lblIntervalo = new JLabel("Intervalo entre as doses (em dias):");
 		lblIntervalo.setFont(new Font("Dialog", Font.BOLD, 13));
 		lblIntervalo.setBounds(265, 278, 224, 14);
@@ -152,13 +151,44 @@ public class TelaCadastroVacina extends JFrame {
 		contentPane.add(cbxDoses);
 		
 		cbxPais = new JComboBox();
-		cbxPais.setModel(new DefaultComboBoxModel(new String[] {"                                   Selecione o pa\u00EDs     ", "Alb\u00E2nia", "Alemanha", "Andorra", "Angola", "Anguilla", "Ant\u00E1rtida", "Ant\u00EDgua e Barbuda", "Antilhas Holandesas", "Ar\u00E1bia Saudita", "Arg\u00E9lia", "Argentina", "Arm\u00EAnia", "Aruba", "Austr\u00E1lia", "\u00C1ustria", "Azerbaij\u00E3o", "Bahamas", "Bahrein", "Bangladesh", "Barbados", "Belarus", "B\u00E9lgica", "Belize", "Benin", "Bermudas", "Bol\u00EDvia", "B\u00F3snia-Herzeg\u00F3vina", "Botsuana", "Brasil", "Brunei", "Bulg\u00E1ria", "Burkina Fasso", "Burundi", "But\u00E3o", "Cabo Verde", "Camar\u00F5es", "Camboja", "Canad\u00E1", "Cazaquist\u00E3o", "Chade", "Chile", "China", "Chipre", "Cingapura", "Col\u00F4mbia", "Congo", "Cor\u00E9ia do Norte", "Cor\u00E9ia do Sul", "Costa do Marfim", "Costa Rica", "Cro\u00E1cia (Hrvatska)", "Cuba", "Dinamarca", "Djibuti", "Dominica", "Egito", "El Salvador", "Emirados \u00C1rabes Unidos", "Equador", "Eritr\u00E9ia", "Eslov\u00E1quia", "Eslov\u00EAnia", "Espanha", "Estados Unidos", "Est\u00F4nia", "Eti\u00F3pia", "Fiji", "Filipinas", "Finl\u00E2ndia", "Fran\u00E7a", "Gab\u00E3o", "G\u00E2mbia", "Gana", "Ge\u00F3rgia", "Gibraltar", "Gr\u00E3-Bretanha (Reino Unido, UK)", "Granada", "Gr\u00E9cia", "Groel\u00E2ndia", "Guadalupe", "Guam (Territ\u00F3rio dos Estados Unidos)", "Guatemala", "Guernsey", "Guiana", "Guiana Francesa", "Guin\u00E9", "Guin\u00E9 Equatorial", "Guin\u00E9-Bissau", "Haiti", "Holanda", "Honduras", "Hong Kong", "Hungria", "I\u00EAmen", "Ilha Bouvet (Territ\u00F3rio da Noruega)", "Ilha do Homem", "Ilha Natal", "Ilha Pitcairn", "Ilha Reuni\u00E3o", "Ilhas Aland", "Ilhas Cayman", "Ilhas Cocos", "Ilhas Comores", "Ilhas Cook", "Ilhas Faroes", "Ilhas Falkland (Malvinas)", "Ilhas Ge\u00F3rgia do Sul e Sandwich do Sul", "Ilhas Heard e McDonald (Territ\u00F3rio da Austr\u00E1lia)", "Ilhas Marianas do Norte", "Ilhas Marshall", "Ilhas Menores dos Estados Unidos", "Ilhas Norfolk", "Ilhas Seychelles", "Ilhas Solom\u00E3o", "Ilhas Svalbard e Jan Mayen", "Ilhas Tokelau", "Ilhas Turks e Caicos", "Ilhas Virgens (Estados Unidos)", "Ilhas Virgens (Inglaterra)", "Ilhas Wallis e Futuna", "\u00EDndia", "Indon\u00E9sia", "Iraque", "Irlanda", "Isl\u00E2ndia", "Israel", "It\u00E1lia", "Jamaica", "Jap\u00E3o", "Jersey", "Jord\u00E2nia", "K\u00EAnia", "Kiribati", "Kuait", "Laos", "L\u00E1tvia", "Lesoto", "L\u00EDbano", "Lib\u00E9ria", "L\u00EDbia", "Liechtenstein", "Litu\u00E2nia", "Luxemburgo", "Macau", "Maced\u00F4nia (Rep\u00FAblica Yugoslava)", "Madagascar", "Mal\u00E1sia", "Malaui", "Maldivas", "Mali", "Malta", "Marrocos", "Martinica", "Maur\u00EDcio", "Maurit\u00E2nia", "Mayotte", "M\u00E9xico", "Micron\u00E9sia", "Mo\u00E7ambique", "Moldova", "M\u00F4naco", "Mong\u00F3lia", "Montenegro", "Montserrat", "Myanma", "Nam\u00EDbia", "Nauru", "Nepal", "Nicar\u00E1gua", "N\u00EDger", "Nig\u00E9ria", "Niue", "Noruega", "Nova Caled\u00F4nia", "Nova Zel\u00E2ndia", "Om\u00E3", "Palau", "Panam\u00E1", "Papua-Nova Guin\u00E9", "Paquist\u00E3o", "Paraguai", "Peru", "Polin\u00E9sia Francesa", "Pol\u00F4nia", "Porto Rico", "Portugal", "Qatar", "Quirguist\u00E3o", "Reino Unido", "Rep\u00FAblica Centro-Africana", "Rep\u00FAblica Democr\u00E1tica do Congo", "Rep\u00FAblica Dominicana", "Rep\u00FAblica Tcheca", "Rom\u00EAnia", "Ruanda", "R\u00FAssia (antiga URSS) - Federa\u00E7\u00E3o Russa", "Saara Ocidental", "Saint Vincente e Granadinas", "Samoa Americana", "Samoa Ocidental", "San Marino", "Santa Helena", "Santa L\u00FAcia", "S\u00E3o Bartolomeu", "S\u00E3o Crist\u00F3v\u00E3o e N\u00E9vis", "S\u00E3o Martim", "S\u00E3o Tom\u00E9 e Pr\u00EDncipe", "Senegal", "Serra Leoa", "S\u00E9rvia", "S\u00EDria", "Som\u00E1lia", "Sri Lanka", "St. Pierre and Miquelon", "Suazil\u00E2ndia", "Sud\u00E3o", "Su\u00E9cia", "Su\u00ED\u00E7a", "Suriname", "Tadjiquist\u00E3o", "Tail\u00E2ndia", "Taiwan", "Tanz\u00E2nia", "Territ\u00F3rios do Sul da Fran\u00E7a", "Territ\u00F3rios Palestinos Ocupados", "Timor Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tun\u00EDsia", "Turcomenist\u00E3o", "Turquia", "Tuvalu", "Ucr\u00E2nia", "Uganda", "Uzbequist\u00E3o", "Vanuatu", "Vaticano", "Venezuela", "Vietn\u00E3", "Z\u00E2mbia", "Zimb\u00E1bue"}));
+		for(int i = 0; i<listarPaises().length; i++) {
+	    	cbxPais.addItem(listarPaises()[i]);
+	    }
 		cbxPais.setBounds(265, 88, 310, 33);
 		contentPane.add(cbxPais);
-	}
-	public void cadastrar() {
-		//TODO desenvolver 
 		
+		
+		btnCadastrar = new JButton("Cadastrar");
+		btnCadastrar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				Object[] opcoes = {"Sim", "NÃ£o"};
+				try {
+					cadastrar();
+				} catch (AnalisarCamposVacinaException | VacinaJaExisteException | PaisJaTemVacinaRegistradaException e) {
+					respostaCadastro = JOptionPane.showOptionDialog(null, e+"\nDeseja editar as informaÃ§Ãµes?", "Aviso", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opcoes, opcoes[0]);		
+				}
+			}	
+		});
+		btnCadastrar.setBounds(422, 331, 153, 47);
+		contentPane.add(btnCadastrar);
+
+		JButton btnAlterar = new JButton("Alterar");
+		btnAlterar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent me) {
+				try {
+					alterar();
+				} catch (AnalisarCamposVacinaException e) {
+					respostaAlteracao = JOptionPane.showOptionDialog(null, e+"\nDeseja editar as informaÃ§Ãµes?", "Aviso", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opcoes, opcoes[0]);		
+				}
+			}
+		});
+		btnAlterar.setBounds(30, 331, 153, 47);
+		contentPane.add(btnAlterar);
+		
+	}
+	public void cadastrar() throws AnalisarCamposVacinaException, VacinaJaExisteException, PaisJaTemVacinaRegistradaException {
 		//Instanciar uma nova vacina (de VacinaVO)
 		//Preencher a nova vacina com todos os campos da tela
 		VacinaVO novaVacina = new VacinaVO();
@@ -168,53 +198,62 @@ public class TelaCadastroVacina extends JFrame {
 		novaVacina.setNomeVacina(txtNomeVacina.getText());
 		novaVacina.setPaisOrigem(cbxPais.getSelectedItem().toString());
 		novaVacina.setQuantidadeDoses(Integer.valueOf(cbxDoses.getSelectedItem().toString()));
-		
 		//Chamar o controller para cadastrar
 		controller.cadastrar(novaVacina);
-		limparCampos();
-		System.out.println(novaVacina);
-		int resposta = JOptionPane.showConfirmDialog(null, null, "Deseja corrigir as informações?", JOptionPane.OK_CANCEL_OPTION);
-		if(resposta == JOptionPane.OK_OPTION) {
-			
-			preencherCampos(novaVacina);
-			
-			VacinaVO vacinaAlterada = new VacinaVO();
-			
-			vacinaAlterada.setDataInicioPesquisa(LocalDate.parse(txtDataInicio.getText(), dataFormatter));
-			vacinaAlterada.setIntervaloDoses(Integer.valueOf(txtIntervalo.getText()));
-			vacinaAlterada.setNomePesquisadorResponsavel(txtNomePesquisador.getText());
-			vacinaAlterada.setNomeVacina(txtNomeVacina.getText());
-			vacinaAlterada.setPaisOrigem(cbxPais.getSelectedItem().toString());
-			vacinaAlterada.setQuantidadeDoses(Integer.valueOf(cbxDoses.getSelectedItem().toString()));
-			
-			controller.alteraInformacoes(vacinaAlterada);
-			
+		String resultadoValidacao = controller.validarCampos(novaVacina);
+		if(resultadoValidacao!=null && !resultadoValidacao.isEmpty()) {
+			if(respostaCadastro == 0) {
+				setVisible(false);
+				setVisible(false);
+			} else {
+				setVisible(false);
+			}
 		} else {
-			TelaPrincipal telaPrincipal = new TelaPrincipal();
-			telaPrincipal.setVisible(true);
-			this.dispose();
+			JOptionPane.showMessageDialog(null, "Cadastrado com sucesso");	
 		}
-		
-		int confirma = JOptionPane.showConfirmDialog(null, "Deseja ir para Aplicação vacina?", "Deseja confirmar?", JOptionPane.OK_CANCEL_OPTION);
-		if(confirma == JOptionPane.OK_OPTION) {
-			this.dispose();
-			TelaAplicacaoVacina telaAplicacaoVacina = new TelaAplicacaoVacina();
-			telaAplicacaoVacina.setVisible(true);
-			
-		} else {
-			TelaCadastroVacina telaCadastroVacina = new TelaCadastroVacina();
-			telaCadastroVacina.setVisible(true);
-		}
-		
 	}
-	
-	public void preencherCampos(VacinaVO novaVacina) {
-		this.txtIntervalo.setText(String.valueOf(novaVacina.getIntervaloDoses()));
-		this.txtNomePesquisador.setText(novaVacina.getNomePesquisadorResponsavel());
-		this.txtNomeVacina.setText(novaVacina.getNomeVacina());
-		this.txtDataInicio.setText(String.valueOf(novaVacina.getDataInicioPesquisa()));
+	public void alterar() throws AnalisarCamposVacinaException {
+		VacinaVO vacinaAlterada = new VacinaVO();
+		vacinaAlterada.setDataInicioPesquisa(LocalDate.parse(txtDataInicio.getText(), dataFormatter));
+		vacinaAlterada.setIntervaloDoses(Integer.valueOf(txtIntervalo.getText()));
+		vacinaAlterada.setNomePesquisadorResponsavel(txtNomePesquisador.getText());
+		vacinaAlterada.setNomeVacina(txtNomeVacina.getText());
+		vacinaAlterada.setPaisOrigem(cbxPais.getSelectedItem().toString());
+		vacinaAlterada.setQuantidadeDoses(Integer.valueOf(cbxDoses.getSelectedItem().toString()));
+		controller.alterar(vacinaAlterada);
+		String resultadoValidacao = controller.validarCampos(vacinaAlterada);
+		if(resultadoValidacao!=null && !resultadoValidacao.isEmpty()) {
+			if(respostaCadastro == 1) {
+				setVisible(false);
+				setVisible(false);
+			} else {
+				setVisible(false);
+			}
+		} else {
+			JOptionPane.showMessageDialog(null, "Cadastrado com sucesso");	
+		}
+	}
+	public boolean verificarCamposPreenchdidos() {
+		boolean resposta = false;
+		if(!txtIntervalo.getText().isEmpty() &&
+		!txtNomePesquisador.getText().isEmpty() &&
+		!txtNomeVacina.getText().isEmpty() &&
+		!txtDataInicio.getText().isEmpty() &&
+		cbxDoses.getSelectedIndex() > 0 &&
+		!cbxPais.getSelectedItem().toString().isEmpty()) {
+			 resposta = true;
+		}
+		return resposta;
+	}
+	public void preencherCampos(VacinaVO vacina) {
+		this.txtIntervalo.setText(String.valueOf(vacina.getIntervaloDoses()));
+		this.txtNomePesquisador.setText(vacina.getNomePesquisadorResponsavel());
+		this.txtNomeVacina.setText(vacina.getNomeVacina());
+		this.txtDataInicio.setText(String.valueOf(vacina.getDataInicioPesquisa()));
 		this.cbxDoses.setSelectedIndex(0);	
-		this.cbxPais.setSelectedIndex(0);
+		cbxPais.removeAllItems();
+		cbxPais.addItem(vacina.getPaisOrigem());
+	
 	}
 
 	private void limparCampos() {
@@ -226,32 +265,32 @@ public class TelaCadastroVacina extends JFrame {
 		this.cbxPais.setSelectedIndex(0);
 	
 	}
-
-	public String[] ListarPaises(){
-		String[] listaDePaises = new String[] {" --- Selecione --- ","Albânia", "Alemanha", "Andorra", "Angola", "Anguilla", "Antártida", "Antígua e Barbuda", "Antilhas Holandesas",
-		"Arábia Saudita", "Argélia", "Argentina", "Armênia", "Aruba", "Austrália", "Áustria", "Azerbaijão", "Bahamas", "Bahrein", "Bangladesh", "Barbados",
-		"Belarus", "Bélgica", "Belize", "Benin", "Bermudas", "Bolívia", "Bósnia-Herzegóvina", "Botsuana", "Brasil", "Brunei", "Bulgária", "Burkina Fasso",
-		"Burundi", "Butão", "Cabo Verde", "Camarões", "Camboja", "Canadá", "Cazaquistão", "Chade", "Chile", "China", "Chipre", "Cingapura", "Colômbia",
-		"Congo", "Coréia do Norte", "Coréia do Sul", "Costa do Marfim", "Costa Rica", "Croácia (Hrvatska)", "Cuba", "Dinamarca", "Djibuti", "Dominica",
-		"Egito", "El Salvador", "Emirados Árabes Unidos", "Equador", "Eritréia", "Eslováquia", "Eslovênia", "Espanha", "Estados Unidos","Estônia", "Etiópia",
-		"Fiji", "Filipinas", "Finlândia", "França", "Gabão", "Gâmbia", "Gana", "Geórgia", "Gibraltar", "Grã-Bretanha (Reino Unido, UK)", "Granada", "Grécia",
-		"Groelândia", "Guadalupe", "Guam (Território dos Estados Unidos)", "Guatemala", "Guernsey", "Guiana", "Guiana Francesa", "Guiné", "Guiné Equatorial",
-		"Guiné-Bissau", "Haiti", "Holanda", "Honduras", "Hong Kong", "Hungria", "Iêmen", "Ilha Bouvet (Território da Noruega)", "Ilha do Homem", "Ilha Natal",
-		"Ilha Pitcairn", "Ilha Reunião", "Ilhas Aland", "Ilhas Cayman", "Ilhas Cocos", "Ilhas Comores", "Ilhas Cook", "Ilhas Faroes", "Ilhas Falkland (Malvinas)",
-		"Ilhas Geórgia do Sul e Sandwich do Sul", "Ilhas Heard e McDonald (Território da Austrália)", "Ilhas Marianas do Norte", "Ilhas Marshall",
-		"Ilhas Menores dos Estados Unidos", "Ilhas Norfolk", "Ilhas Seychelles", "Ilhas Solomão", "Ilhas Svalbard e Jan Mayen", "Ilhas Tokelau", "Ilhas Turks e Caicos",
-		"Ilhas Virgens (Estados Unidos)", "Ilhas Virgens (Inglaterra)", "Ilhas Wallis e Futuna", "índia", "Indonésia", "Iraque", "Irlanda", "Islândia", "Israel",
-		"Itália", "Jamaica", "Japão", "Jersey", "Jordânia", "Kênia", "Kiribati", "Kuait", "Laos", "Látvia", "Lesoto", "Líbano", "Libéria",
-		"Líbia", "Liechtenstein", "Lituânia", "Luxemburgo", "Macau", "Macedônia (República Yugoslava)", "Madagascar", "Malásia", "Malaui", "Maldivas",
-		"Mali", "Malta", "Marrocos", "Martinica", "Maurício", "Mauritânia", "Mayotte", "México", "Micronésia", "Moçambique", "Moldova", "Mônaco","Mongólia",
-		"Montenegro", "Montserrat", "Myanma", "Namíbia", "Nauru", "Nepal", "Nicarágua", "Níger", "Nigéria", "Niue","Noruega", "Nova Caledônia",
-		"Nova Zelândia", "Omã", "Palau", "Panamá", "Papua-Nova Guiné", "Paquistão", "Paraguai", "Peru", "Polinésia Francesa", "Polônia", "Porto Rico",
-		"Portugal", "Qatar", "Quirguistão", "República Centro-Africana", "República Democrática do Congo", "República Dominicana", "República Tcheca","Romênia",
-		"Ruanda", "Rússia (antiga URSS) - Federação Russa", "Saara Ocidental", "Saint Vincente e Granadinas", "Samoa Americana", "Samoa Ocidental", "San Marino",
-		"Santa Helena", "Santa Lúcia", "São Bartolomeu", "São Cristóvão e Névis", "São Martim", "São Tomé e Príncipe", "Senegal", "Serra Leoa", "Sérvia", "Síria",
-		"Somália", "Sri Lanka", "St. Pierre and Miquelon", "Suazilândia", "Sudão", "Suécia", "Suíça", "Suriname", "Tadjiquistão", "Tailândia", "Taiwan",
-		"Tanzânia", "Territórios do Sul da França", "Territórios Palestinos Ocupados", "Timor Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunísia",
-		"Turcomenistão", "Turquia", "Tuvalu", "Ucrânia", "Uganda", "Uzbequistão", "Vanuatu", "Vaticano", "Venezuela","Vietnã","Zâmbia","Zimbábue"};
+    
+	public String[] listarPaises(){
+		String[] listaDePaises = new String[] {" --- Selecione --- ","Albï¿½nia", "Alemanha", "Andorra", "Angola", "Anguilla", "Antï¿½rtida", "Antï¿½gua e Barbuda", "Antilhas Holandesas",
+		"Arï¿½bia Saudita", "Argï¿½lia", "Argentina", "Armï¿½nia", "Aruba", "Austrï¿½lia", "ï¿½ustria", "Azerbaijï¿½o", "Bahamas", "Bahrein", "Bangladesh", "Barbados",
+		"Belarus", "Bï¿½lgica", "Belize", "Benin", "Bermudas", "Bolï¿½via", "Bï¿½snia-Herzegï¿½vina", "Botsuana", "Brasil", "Brunei", "Bulgï¿½ria", "Burkina Fasso",
+		"Burundi", "Butï¿½o", "Cabo Verde", "Camarï¿½es", "Camboja", "Canadï¿½", "Cazaquistï¿½o", "Chade", "Chile", "China", "Chipre", "Cingapura", "Colï¿½mbia",
+		"Congo", "Corï¿½ia do Norte", "Corï¿½ia do Sul", "Costa do Marfim", "Costa Rica", "Croï¿½cia (Hrvatska)", "Cuba", "Dinamarca", "Djibuti", "Dominica",
+		"Egito", "El Salvador", "Emirados ï¿½rabes Unidos", "Equador", "Eritrï¿½ia", "Eslovï¿½quia", "Eslovï¿½nia", "Espanha", "Estados Unidos","Estï¿½nia", "Etiï¿½pia",
+		"Fiji", "Filipinas", "Finlï¿½ndia", "Franï¿½a", "Gabï¿½o", "Gï¿½mbia", "Gana", "Geï¿½rgia", "Gibraltar", "Grï¿½-Bretanha (Reino Unido, UK)", "Granada", "Grï¿½cia",
+		"Groelï¿½ndia", "Guadalupe", "Guam (Territï¿½rio dos Estados Unidos)", "Guatemala", "Guernsey", "Guiana", "Guiana Francesa", "Guinï¿½", "Guinï¿½ Equatorial",
+		"Guinï¿½-Bissau", "Haiti", "Holanda", "Honduras", "Hong Kong", "Hungria", "Iï¿½men", "Ilha Bouvet (Territï¿½rio da Noruega)", "Ilha do Homem", "Ilha Natal",
+		"Ilha Pitcairn", "Ilha Reuniï¿½o", "Ilhas Aland", "Ilhas Cayman", "Ilhas Cocos", "Ilhas Comores", "Ilhas Cook", "Ilhas Faroes", "Ilhas Falkland (Malvinas)",
+		"Ilhas Geï¿½rgia do Sul e Sandwich do Sul", "Ilhas Heard e McDonald (Territï¿½rio da Austrï¿½lia)", "Ilhas Marianas do Norte", "Ilhas Marshall",
+		"Ilhas Menores dos Estados Unidos", "Ilhas Norfolk", "Ilhas Seychelles", "Ilhas Solomï¿½o", "Ilhas Svalbard e Jan Mayen", "Ilhas Tokelau", "Ilhas Turks e Caicos",
+		"Ilhas Virgens (Estados Unidos)", "Ilhas Virgens (Inglaterra)", "Ilhas Wallis e Futuna", "ï¿½ndia", "Indonï¿½sia", "Iraque", "Irlanda", "Islï¿½ndia", "Israel",
+		"Itï¿½lia", "Jamaica", "Japï¿½o", "Jersey", "Jordï¿½nia", "Kï¿½nia", "Kiribati", "Kuait", "Laos", "Lï¿½tvia", "Lesoto", "Lï¿½bano", "Libï¿½ria",
+		"Lï¿½bia", "Liechtenstein", "Lituï¿½nia", "Luxemburgo", "Macau", "Macedï¿½nia (Repï¿½blica Yugoslava)", "Madagascar", "Malï¿½sia", "Malaui", "Maldivas",
+		"Mali", "Malta", "Marrocos", "Martinica", "Maurï¿½cio", "Mauritï¿½nia", "Mayotte", "Mï¿½xico", "Micronï¿½sia", "Moï¿½ambique", "Moldova", "Mï¿½naco","Mongï¿½lia",
+		"Montenegro", "Montserrat", "Myanma", "Namï¿½bia", "Nauru", "Nepal", "Nicarï¿½gua", "Nï¿½ger", "Nigï¿½ria", "Niue","Noruega", "Nova Caledï¿½nia",
+		"Nova Zelï¿½ndia", "Omï¿½", "Palau", "Panamï¿½", "Papua-Nova Guinï¿½", "Paquistï¿½o", "Paraguai", "Peru", "Polinï¿½sia Francesa", "Polï¿½nia", "Porto Rico",
+		"Portugal", "Qatar", "Quirguistï¿½o", "Repï¿½blica Centro-Africana", "Repï¿½blica Democrï¿½tica do Congo", "Repï¿½blica Dominicana", "Repï¿½blica Tcheca","Romï¿½nia",
+		"Ruanda", "Rï¿½ssia (antiga URSS) - Federaï¿½ï¿½o Russa", "Saara Ocidental", "Saint Vincente e Granadinas", "Samoa Americana", "Samoa Ocidental", "San Marino",
+		"Santa Helena", "Santa Lï¿½cia", "Sï¿½o Bartolomeu", "Sï¿½o Cristï¿½vï¿½o e Nï¿½vis", "Sï¿½o Martim", "Sï¿½o Tomï¿½ e Prï¿½ncipe", "Senegal", "Serra Leoa", "Sï¿½rvia", "Sï¿½ria",
+		"Somï¿½lia", "Sri Lanka", "St. Pierre and Miquelon", "Suazilï¿½ndia", "Sudï¿½o", "Suï¿½cia", "Suï¿½ï¿½a", "Suriname", "Tadjiquistï¿½o", "Tailï¿½ndia", "Taiwan",
+		"Tanzï¿½nia", "Territï¿½rios do Sul da Franï¿½a", "Territï¿½rios Palestinos Ocupados", "Timor Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunï¿½sia",
+		"Turcomenistï¿½o", "Turquia", "Tuvalu", "Ucrï¿½nia", "Uganda", "Uzbequistï¿½o", "Vanuatu", "Vaticano", "Venezuela","Vietnï¿½","Zï¿½mbia","Zimbï¿½bue"};
 
 		return listaDePaises;
 		};
@@ -262,7 +301,7 @@ public class TelaCadastroVacina extends JFrame {
 			try { 
 				valor = Long.parseLong(Numero.getText()); 
 			}catch(NumberFormatException ex){ 
-				JOptionPane.showMessageDialog(null, "Esse Campo só aceita números" ,"Informação",JOptionPane.INFORMATION_MESSAGE); 
+				JOptionPane.showMessageDialog(null, "Esse Campo sï¿½ aceita nï¿½meros" ,"Informaï¿½ï¿½o",JOptionPane.INFORMATION_MESSAGE); 
 				Numero.grabFocus(); 
 			} 
 		} 

@@ -37,8 +37,9 @@ public class TelaConsultarVacina extends JFrame {
 	private JPanel contentPane;
 	private JTable table;
 	DefaultTableModel modelo = new DefaultTableModel();
-	private ControladoraVacina vacinaController = new ControladoraVacina();
-	private VacinaDAO vDAO = new VacinaDAO();
+	private ControladoraVacina vController = new ControladoraVacina();
+	private int respostaExclusao;
+	Object[] opcoes = {"Sim", "Não"};
 	/**
 	 * Launch the application.
 	 */
@@ -85,18 +86,16 @@ public class TelaConsultarVacina extends JFrame {
 		modelo.addColumn("Quantidade doses");
 		modelo.addColumn("Intervalo doses");
 		
-		
-		
 		JButton btnAlterar = new JButton("Alterar");
 		btnAlterar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Integer idVacinaSelecionada = (Integer) table.getModel().getValueAt(table.getSelectedRow(), 0);
-
-				VacinaVO encontrada = vDAO.buscarPorId(idVacinaSelecionada);
-
 				TelaCadastroVacina telaCadastroVacina = new TelaCadastroVacina();
-				telaCadastroVacina.preencherCampos(encontrada);
+				Integer idVacinaSelecionada = (Integer) table.getModel().getValueAt(table.getSelectedRow(), 0);
+				VacinaVO vacinaSelecionada = vController.consultarPorId(idVacinaSelecionada);
+				
+				setVisible(false);
 				telaCadastroVacina.setVisible(true);
+				telaCadastroVacina.preencherCampos(vacinaSelecionada);
 //				limparTabelaPessoa();
 //				carregarTabela();
 			}
@@ -104,17 +103,15 @@ public class TelaConsultarVacina extends JFrame {
 		btnAlterar.setBounds(280, 264, 210, 56);
 		contentPane.add(btnAlterar);
 		
+		
 		JButton btnExcluir = new JButton("Excluir");
 		btnExcluir.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				Integer idVacinaSelecionada = (Integer) table.getModel().getValueAt(table.getSelectedRow(), 0);
-				new VacinaDAO().excluir(idVacinaSelecionada);
-				limparTabelaVacina();
-				carregarTabela();
+				respostaExclusao = JOptionPane.showOptionDialog(null, "\nDeseja excluir vacina?", "Confirmação", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opcoes, opcoes[0]);
+				excluir(idVacinaSelecionada);
 			}
-
-			
 		});
 		btnExcluir.setBounds(500, 264, 210, 56);
 		contentPane.add(btnExcluir);
@@ -124,17 +121,29 @@ public class TelaConsultarVacina extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				limparTabelaVacina();
 				carregarTabela();
-				
 			}
-
 		});
 		btnConsultar.setBounds(410, 65, 174, 41);
 		contentPane.add(btnConsultar);
 	}
 	
+	public void excluir(Integer id) {
+		if(respostaExclusao==0){
+			if(vController.excluir(id)) {
+				JOptionPane.showMessageDialog(null, "\nVacina excluída com sucesso");
+				modelo.setRowCount(0);
+				carregarTabela();
+			} else {
+				JOptionPane.showMessageDialog(null, "\nNão foi possível excluir vacina");
+			}
+		} else {
+			
+		}
+	}
+	
 	public void carregarTabela() {	
 		VacinaDAO vacina = new VacinaDAO();
-		ArrayList<VacinaVO> list = vacina.buscarTodos();
+		ArrayList<VacinaVO> list = vacina.consultarTodos();
 			
 		for (VacinaVO vac : list) {
 			modelo.addRow(new Object[]{vac.getIdVacina(),vac.getNomePesquisadorResponsavel(),vac.getPaisOrigem(),
