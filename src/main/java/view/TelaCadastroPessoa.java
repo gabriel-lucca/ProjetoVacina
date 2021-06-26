@@ -13,7 +13,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.MaskFormatter;
 
-import controller.ControladoraPessoa; 
+import controller.ControladoraPessoa;
+import exception.exception_pessoa.AnalisarCamposPessoaException;
 import model.vo.PessoaVO;
 
 import javax.swing.JLabel;
@@ -40,7 +41,10 @@ public class TelaCadastroPessoa extends JFrame {
 	private JComboBox cbxEstado;
 	private ControladoraPessoa controller = new ControladoraPessoa();
 	private MaskFormatter mascaraDtNascimento;
-
+	private int respostaCadastro;
+	private int respostaAlteracao;
+	private int respostaExclusao;
+	Object[] opcoes = {"Sim","Não"};
 
 
 	DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -66,7 +70,7 @@ public class TelaCadastroPessoa extends JFrame {
 	 */
 	public TelaCadastroPessoa() {
 		setTitle("Cadastro de pessoa");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 622, 495);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(204, 255, 255));
@@ -151,15 +155,16 @@ public class TelaCadastroPessoa extends JFrame {
 		
 				
 		JButton btnCadastrarPessoa = new JButton("Cadastrar pessoa");
-		btnCadastrarPessoa.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
 		btnCadastrarPessoa.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				cadastrar();
-			}
+				Object[] opcoes = {"Sim", "Não"};
+				try {
+					cadastrar();
+				} catch (AnalisarCamposPessoaException e) {
+					respostaCadastro = JOptionPane.showOptionDialog(null, e+"\nDeseja editar as informações?", "Aviso", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opcoes, opcoes[0]);		
+				}
+			}	
 		});
 		btnCadastrarPessoa.setBounds(368, 380, 155, 46);
 		contentPane.add(btnCadastrarPessoa);
@@ -181,11 +186,23 @@ public class TelaCadastroPessoa extends JFrame {
 		cbxEstado.setModel(new DefaultComboBoxModel(new String[] {"AC", "AL", "AP", "AM", "BA", "CE", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO", "DF"}));
 		cbxEstado.setBounds(448, 267, 75, 29);
 		contentPane.add(cbxEstado);
+		
+		JButton btnAlterar = new JButton("Alterar");
+		btnAlterar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent me) {
+				try {
+					alterar();
+				} catch (AnalisarCamposPessoaException e) {
+					respostaAlteracao = JOptionPane.showOptionDialog(null, e+"\nDeseja editar as informações?", "Aviso", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opcoes, opcoes[0]);		
+				}
+			}
+		});
+		btnAlterar.setBounds(210, 380, 148, 46);
+		contentPane.add(btnAlterar);
 		}
 		
-		public void cadastrar() {
-			//TODO desenvolver 
-			
+		public void cadastrar() throws AnalisarCamposPessoaException {			
 			//Instanciar uma nova vacina (de VacinaVO)
 			//Preencher a nova vacina com todos os campos da tela
 			PessoaVO novaPessoa = new PessoaVO();
@@ -200,54 +217,66 @@ public class TelaCadastroPessoa extends JFrame {
 			
 			//Chamar o controller para cadastrar
 			controller.cadastrar(novaPessoa);
-			limparCampos();
-			System.out.println(novaPessoa);
-			int resposta = JOptionPane.showConfirmDialog(null, null, "Deseja corrigir as informa��es?", JOptionPane.OK_CANCEL_OPTION);
-			if(resposta == JOptionPane.OK_OPTION) {
-
-				preencherCampos(novaPessoa);	
-				
-				
-				PessoaVO pessoaAlterada = new PessoaVO();
-				pessoaAlterada.setCidade(txtCidade.getText());
-				pessoaAlterada.setCpf(txtCpf.getText());
-				pessoaAlterada.setDataNascimento(LocalDate.parse(txtDataNascimento.getText(), dataFormatter));
-				pessoaAlterada.setEmail(txtEmail.getText());
-				pessoaAlterada.setEndereco(txtEndereco.getText());
-				pessoaAlterada.setEstado(cbxEstado.getSelectedItem().toString());
-				pessoaAlterada.setNome(txtNome.getText());
-				pessoaAlterada.setTelefone(txtTelefone.getText());
-				
-				controller.alteraInformacoes(pessoaAlterada);
-				
+			String resultadoValidacao = controller.validarCampos(novaPessoa);
+			if(resultadoValidacao!=null && !resultadoValidacao.isEmpty()) {
+				if(respostaCadastro == 0) {
+					setVisible(false);
+					setVisible(false);
+				} else {
+					setVisible(false);
+				}
 			} else {
-				TelaPrincipal telaPrincipal = new TelaPrincipal();
-				telaPrincipal.setVisible(true);
-				this.dispose();
+				JOptionPane.showMessageDialog(null, "Cadastrado com sucesso");	
 			}
-			int confirma = JOptionPane.showConfirmDialog(null, "Deseja ir cadastrar vacina?", "Deseja confirmar?", JOptionPane.OK_CANCEL_OPTION);
-			if(confirma == JOptionPane.OK_OPTION) {
-				this.dispose();
-				TelaCadastroVacina telaCadastroVacina = new TelaCadastroVacina();
-				telaCadastroVacina.setVisible(true);
-				
-			} else {
-				TelaCadastroPessoa telaCadastroPessoa = new TelaCadastroPessoa();
-				telaCadastroPessoa.setVisible(true);
-			}
-			
 		}
-		public void preencherCampos(PessoaVO novaPessoa) {
-			this.txtEmail.setText(novaPessoa.getEmail());
-			this.txtEndereco.setText(novaPessoa.getEndereco());
-			this.txtCidade.setText(novaPessoa.getCidade());
-			this.txtNome.setText(novaPessoa.getNome());
-			this.txtDataNascimento.setText(String.valueOf(novaPessoa.getDataNascimento()));
-			this.txtTelefone.setText(novaPessoa.getTelefone());
-			this.txtCpf.setText(novaPessoa.getCpf());
+		public void alterar() throws AnalisarCamposPessoaException {
+			PessoaVO pessoaAlterada = new PessoaVO();
+			pessoaAlterada.setCidade(txtCidade.getText());
+			pessoaAlterada.setCpf(txtCpf.getText());
+			pessoaAlterada.setDataNascimento(LocalDate.parse(txtDataNascimento.getText(), dataFormatter));
+			pessoaAlterada.setEmail(txtEmail.getText());
+			pessoaAlterada.setEndereco(txtEndereco.getText());
+			pessoaAlterada.setEstado(cbxEstado.getSelectedItem().toString());
+			pessoaAlterada.setNome(txtNome.getText());
+			pessoaAlterada.setTelefone(txtTelefone.getText());
+			controller.alterar(pessoaAlterada);
+			String resultadoValidacao = controller.validarCampos(pessoaAlterada);
+			if(resultadoValidacao!=null && !resultadoValidacao.isEmpty()) {
+				if(respostaCadastro == 1) {
+					setVisible(false);
+					setVisible(false);
+				} else {
+					setVisible(false);
+				}
+			} else {
+				JOptionPane.showMessageDialog(null, "Cadastrado com sucesso");	
+			}
+		}
+		public boolean verificarCamposPreenchdidos() {
+			boolean resposta = false;
+			if(!txtCidade.getText().isEmpty() &&
+			!txtCpf.getText().isEmpty() &&
+			!txtDataNascimento.getText().isEmpty() &&
+			!txtEmail.getText().isEmpty() &&
+			!txtEndereco.getText().isEmpty() &&
+			!txtNome.getText().isEmpty() &&
+			!txtTelefone.getText().isEmpty() &&
+			!cbxEstado.getSelectedItem().toString().isEmpty()) {
+				 resposta = true;
+			}
+			return resposta;
+		}
+		public void preencherCampos(PessoaVO pessoa) {
+			this.txtEmail.setText(pessoa.getEmail());
+			this.txtEndereco.setText(pessoa.getEndereco());
+			this.txtCidade.setText(pessoa.getCidade());
+			this.txtNome.setText(pessoa.getNome());
+			this.txtDataNascimento.setText(String.valueOf(pessoa.getDataNascimento()));
+			this.txtTelefone.setText(pessoa.getTelefone());
+			this.txtCpf.setText(pessoa.getCpf());
 			this.cbxEstado.setSelectedIndex(0);	
-			
-			
+			cbxEstado.removeAllItems();
+			cbxEstado.addItem(pessoa.getEstado());
 		}
 		
 		private void limparCampos() {

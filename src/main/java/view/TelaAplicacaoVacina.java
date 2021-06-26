@@ -26,7 +26,9 @@ import javax.swing.text.MaskFormatter;
 
 import controller.ControladoraAplicacaoVacina;
 import controller.ControladoraVacina;
-import exception.AnalisarCamposVacinaException;
+import exception.exceptionVacina.AnalisarCamposVacinaException;
+import exception.exception_aplicacao_vacina.AnalisarCamposAplicacaoException;
+import exception.exception_aplicacao_vacina.AnalisarSePodeAplicarException;
 import model.dao.AplicacaoVacinaDAO;
 import model.dao.PessoaDAO;
 import model.dao.VacinaDAO;
@@ -40,7 +42,7 @@ public class TelaAplicacaoVacina extends JFrame {
 	private JTextField txtNome;
 	private JTable table;
 	private JTextField txtCpf;
-	ControladoraAplicacaoVacina controller = new ControladoraAplicacaoVacina();
+	ControladoraAplicacaoVacina avController = new ControladoraAplicacaoVacina();
 	ControladoraVacina controllerVacina = new ControladoraVacina();
 	PessoaDAO pessoaDAO = new PessoaDAO();
 	JComboBox<String> cbxVacina = new JComboBox();
@@ -70,7 +72,7 @@ public class TelaAplicacaoVacina extends JFrame {
 	 */
 	public TelaAplicacaoVacina() {
 		setTitle("Aplica\u00E7\u00E3o Vacina");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 553, 470);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(204, 255, 255));
@@ -99,11 +101,11 @@ public class TelaAplicacaoVacina extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				// System.out.println(txtCpf.getText());
 				// System.out.println(controller.consultarPorCpf(txtCpf.getText()).toString());
-				PessoaVO encontrada = controller.consultarPorCpf(txtCpf.getText());
+				PessoaVO encontrada = pessoaDAO.consultarPorCpf(txtCpf.getText());
 				txtNome.setEnabled(true);
 				txtNome.setEditable(false);
 				txtNome.setText(encontrada.getNome());
-				ArrayList<AplicacaoVacinaVO> historicoAplicacoes = controller.consultarAplicacoes(encontrada);
+				ArrayList<AplicacaoVacinaVO> historicoAplicacoes = avController.consultarAplicacoes(encontrada);
 				int i = 1;
 				for (AplicacaoVacinaVO av : historicoAplicacoes) {
 						modelo.addRow(new Object[] {i,av.getDataAplicacao()});
@@ -143,8 +145,8 @@ public class TelaAplicacaoVacina extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				try {
 					cadastrarAplicacao();
-				} catch (AnalisarCamposVacinaException e1) {
-					JOptionPane.showConfirmDialog(null, e1.getMessage());
+				} catch (AnalisarSePodeAplicarException | AnalisarCamposAplicacaoException e1) {
+					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -172,7 +174,7 @@ public class TelaAplicacaoVacina extends JFrame {
 	}
 
 	public void consultarPorCpf() {
-		PessoaVO p = controller.consultarPorCpf(txtCpf.getSelectedText());
+		PessoaVO p = pessoaDAO.consultarPorCpf(txtCpf.getSelectedText());
 		if (p != null) {
 			preencherNome(p);
 		}
@@ -184,7 +186,7 @@ public class TelaAplicacaoVacina extends JFrame {
 
 	public void preencherCbxVacina() {
 		VacinaDAO vacina = new VacinaDAO();
-		ArrayList<VacinaVO> buscarTodos = vacina.buscarTodos();
+		ArrayList<VacinaVO> buscarTodos = vacina.consultarTodos();
 
 		for (VacinaVO vacinaVO: buscarTodos) {
 			cbxVacina.addItem(vacinaVO.getNomeVacina());
@@ -192,13 +194,13 @@ public class TelaAplicacaoVacina extends JFrame {
 
 	}
 	
-	private void cadastrarAplicacao() throws AnalisarCamposVacinaException {
+	private void cadastrarAplicacao() throws AnalisarSePodeAplicarException, AnalisarCamposAplicacaoException {
 		AplicacaoVacinaVO aplicacaoVacina = new AplicacaoVacinaVO();
 		aplicacaoVacina.setPessoa(encontrada); 
 		
 		aplicacaoVacina.setVacina(controllerVacina.consultarPorNome(cbxVacina.getSelectedItem().toString()));
 		aplicacaoVacina.setDataAplicacao(LocalDate.now());
-		System.out.println(controller.cadastrar(aplicacaoVacina));
+		System.out.println(avController.cadastrar(aplicacaoVacina));
 
 
 	}

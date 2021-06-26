@@ -61,7 +61,7 @@ public class TelaConsultarVacina extends JFrame {
 	 */
 	public TelaConsultarVacina() {
 		setTitle("Consultar Vacinas");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1001, 405);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(204, 255, 255));

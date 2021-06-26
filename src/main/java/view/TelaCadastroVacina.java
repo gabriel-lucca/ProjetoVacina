@@ -75,7 +75,7 @@ public class TelaCadastroVacina extends JFrame {
 	public TelaCadastroVacina() {
 		setBackground(Color.BLACK);
 		setTitle("Tela cadastro de vacina");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 656, 486);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(204, 255, 255));
@@ -89,7 +89,7 @@ public class TelaCadastroVacina extends JFrame {
 		contentPane.add(lblPasDeOrigem);
 		
 		txtNomeVacina = new JTextField();
-		txtNomeVacina.setBounds(265, 129, 310, 35);
+		txtNomeVacina.setBounds(265, 130, 310, 35);
 		contentPane.add(txtNomeVacina);
 		txtNomeVacina.setColumns(10);
 		
@@ -184,7 +184,7 @@ public class TelaCadastroVacina extends JFrame {
 				}
 			}
 		});
-		btnAlterar.setBounds(30, 331, 153, 47);
+		btnAlterar.setBounds(259, 331, 153, 47);
 		contentPane.add(btnAlterar);
 		
 	}
@@ -198,6 +198,7 @@ public class TelaCadastroVacina extends JFrame {
 		novaVacina.setNomeVacina(txtNomeVacina.getText());
 		novaVacina.setPaisOrigem(cbxPais.getSelectedItem().toString());
 		novaVacina.setQuantidadeDoses(Integer.valueOf(cbxDoses.getSelectedItem().toString()));
+		
 		//Chamar o controller para cadastrar
 		controller.cadastrar(novaVacina);
 		String resultadoValidacao = controller.validarCampos(novaVacina);
@@ -250,7 +251,7 @@ public class TelaCadastroVacina extends JFrame {
 		this.txtNomePesquisador.setText(vacina.getNomePesquisadorResponsavel());
 		this.txtNomeVacina.setText(vacina.getNomeVacina());
 		this.txtDataInicio.setText(String.valueOf(vacina.getDataInicioPesquisa()));
-		this.cbxDoses.setSelectedIndex(0);	
+		this.cbxDoses.setSelectedIndex(0);
 		cbxPais.removeAllItems();
 		cbxPais.addItem(vacina.getPaisOrigem());
 	

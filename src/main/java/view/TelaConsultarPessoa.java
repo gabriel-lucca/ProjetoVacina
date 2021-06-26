@@ -16,6 +16,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import controller.ControladoraPessoa;
+import controller.ControladoraVacina;
 import model.dao.PessoaDAO;
 import model.vo.PessoaVO;
 
@@ -24,7 +25,9 @@ public class TelaConsultarPessoa extends JFrame {
 	private JPanel contentPane;
 	private JTable table;
 	DefaultTableModel modelo = new DefaultTableModel();
-	private PessoaDAO dao = new PessoaDAO();
+	private ControladoraPessoa pController = new ControladoraPessoa();
+	private int respostaExclusao;
+	Object[] opcoes = {"Sim", "Não"};
 
 	/**
 	 * Launch the application.
@@ -46,7 +49,7 @@ public class TelaConsultarPessoa extends JFrame {
 	 * Create the frame.
 	 */
 	public TelaConsultarPessoa() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1033, 634);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(204, 255, 255));
@@ -76,13 +79,13 @@ public class TelaConsultarPessoa extends JFrame {
 		JButton btnAlterar = new JButton("Alterar");
 		btnAlterar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				TelaCadastroPessoa telaCadastroPessoa = new TelaCadastroPessoa();				
 				Integer idPessoaSelecionada = (Integer) table.getModel().getValueAt(table.getSelectedRow(), 0);
+				PessoaVO pessoaSelecionada = pController.consultarPorId(idPessoaSelecionada);
 
-				PessoaVO encontrada = dao.buscarPorId(idPessoaSelecionada);
-
-				TelaCadastroPessoa telaCadastroPessoa = new TelaCadastroPessoa();
-				telaCadastroPessoa.preencherCampos(encontrada);
+				setVisible(false);
 				telaCadastroPessoa.setVisible(true);
+				telaCadastroPessoa.preencherCampos(pessoaSelecionada);
 //				limparTabelaPessoa();
 //				carregarTabela();
 			}
@@ -92,11 +95,11 @@ public class TelaConsultarPessoa extends JFrame {
 
 		JButton btnExcluir = new JButton("Excluir");
 		btnExcluir.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				Integer idPessoaSelecionada = (Integer) table.getModel().getValueAt(table.getSelectedRow(), 0);
-				new PessoaDAO().excluir(idPessoaSelecionada);
-				limparTabelaPessoa();
-				carregarTabela();
+				respostaExclusao = JOptionPane.showOptionDialog(null, "\nDeseja excluir pessoa?", "Confirmação", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opcoes, opcoes[0]);
+				excluir(idPessoaSelecionada);
 			}
 		});
 		btnExcluir.setBounds(509, 482, 210, 56);
@@ -113,6 +116,21 @@ public class TelaConsultarPessoa extends JFrame {
 		btnConsultar.setBounds(437, 53, 149, 49);
 		contentPane.add(btnConsultar);
 	}
+	
+	public void excluir(Integer id) {
+		if(respostaExclusao==0){
+			if(pController.excluir(id)) {
+				JOptionPane.showMessageDialog(null, "\nPessoa excluída com sucesso");
+				modelo.setRowCount(0);
+				carregarTabela();
+			} else {
+				JOptionPane.showMessageDialog(null, "\nNão foi possível excluir pessoa");
+			}
+		} else {
+			
+		}
+	}
+	
 
 	public void carregarTabela() {
 		PessoaDAO pessoa = new PessoaDAO();
