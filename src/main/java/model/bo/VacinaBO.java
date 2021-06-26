@@ -37,7 +37,6 @@ public class VacinaBO {
 		return dao.consultarPorNome(nome);
 	}
 	public ArrayList<VacinaVO> consutarTodos() {
-		
 		return dao.consultarTodos();
 	}
 	public VacinaVO consultarPorId(Integer id) {
