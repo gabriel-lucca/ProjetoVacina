@@ -11,27 +11,27 @@ import model.vo.PessoaVO;
 import model.vo.VacinaVO;
 
 public class PessoaDAO {
-	public PessoaVO cadastrar(PessoaVO novaPessoa) {
+	public PessoaVO cadastrar(PessoaVO pessoa) {
 		Connection conn = Banco.getConnection();
 		String sql = "insert into pessoa(nomePessoa, cpf, email, telefone, dtNascimento, cidade, estado, endereco)"
 				+ "values(?, ?, ?, ?, ?, ?, ?, ?)";
 		PreparedStatement ps = Banco.getPreparedStatementWithPk(conn, sql);
 		ResultSet rs = null;
 		try {
-			ps.setString(1, novaPessoa.getNome());
-			ps.setString(2, novaPessoa.getCpf());
-			ps.setString(3, novaPessoa.getEmail());
-			ps.setString(4, novaPessoa.getTelefone());
-			ps.setDate(5, java.sql.Date.valueOf(novaPessoa.getDataNascimento()));
-			ps.setString(6, novaPessoa.getCidade());
-			ps.setString(7, novaPessoa.getEstado());
-			ps.setString(8, novaPessoa.getEndereco());
+			ps.setString(1, pessoa.getNome());
+			ps.setString(2, pessoa.getCpf());
+			ps.setString(3, pessoa.getEmail());
+			ps.setString(4, pessoa.getTelefone());
+			ps.setDate(5, java.sql.Date.valueOf(pessoa.getDataNascimento()));
+			ps.setString(6, pessoa.getCidade());
+			ps.setString(7, pessoa.getEstado());
+			ps.setString(8, pessoa.getEndereco());
 			ps.executeUpdate();
 
 			System.out.println("print" + ps.toString());
 			rs = ps.getGeneratedKeys();
 			if (rs.next()) {
-				novaPessoa.setIdPessoa(rs.getInt(1));
+				pessoa.setIdPessoa(rs.getInt(1));
 			}
 		} catch (SQLException e) {
 			System.out.println("Erro ao cadastrar pessoa.\nErro: " + e.getMessage());
@@ -40,7 +40,7 @@ public class PessoaDAO {
 			Banco.closePreparedStatement(ps);
 			Banco.closeResultSet(rs);
 		}
-		return novaPessoa;
+		return pessoa;
 	}
 
 	public boolean alterar(PessoaVO PessoaAlterada) {
@@ -109,7 +109,7 @@ public class PessoaDAO {
 			ps.setInt(1, idPessoaSelecionada);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
-				PessoaVO pessoa = construirDoResultSet(rs);
+				pessoaEncontrada = construirDoResultSet(rs);
 			}
 		} catch (SQLException e) {
 			System.out.println("Erro ao buscar por pessoa.\nErro: " + e.getMessage());
@@ -124,12 +124,12 @@ public class PessoaDAO {
 		Connection conn = Banco.getConnection();
 		String sql = "select * from pessoa";
 		PreparedStatement ps = Banco.getPreparedStatementWithPk(conn, sql);
-		ArrayList<PessoaVO> pessoasEncontradas = new ArrayList<PessoaVO>();
+		ArrayList<PessoaVO> pessoas = new ArrayList<PessoaVO>();
 		try {
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				PessoaVO pessoaEncontrada = construirDoResultSet(rs);
-				pessoasEncontradas.add(pessoaEncontrada);
+				PessoaVO pessoa = construirDoResultSet(rs);
+				pessoas.add(pessoa);
 			}
 		} catch (SQLException e) {
 			System.out.println("Erro ao buscar todas pessoas.\nErro: " + e.getMessage());
@@ -138,37 +138,56 @@ public class PessoaDAO {
 			Banco.closePreparedStatement(ps);
 		}
 
-		return pessoasEncontradas;
+		return pessoas;
 	}
 
-	public boolean vacinaJaExiste(PessoaVO pessoa) {
-		ArrayList<PessoaVO> vacinas = new ArrayList<PessoaVO>();
+	public boolean pessoaJaExiste(PessoaVO pessoa) {
+		Connection conn = Banco.getConnection();
+		String sql = "select * from pessoa where nomePessoa = ?";
+		PreparedStatement ps = Banco.getPreparedStatement(conn, sql);
 		boolean resposta = false;
-		for (PessoaVO v : vacinas) {
-			if (pessoa.getNome().equalsIgnoreCase(v.getNome())) {
+		try {
+			ps.setString(1, pessoa.getNome());
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
 				resposta = true;
 			}
+		} catch(SQLException e) {
+			System.out.println("Erro ao verificar se pessoa existe.\nErro: "+e.getMessage());
+		} finally {
+			Banco.closeConnection(conn);
+			Banco.closePreparedStatement(ps);
 		}
 		return resposta;
 	}
-
 	public PessoaVO consultarPorCpf(String cpf) {
 		PessoaVO pessoaVacinaConsultada = new PessoaVO();
-
 		String sql = "select * from pessoa where cpf = ?";
-
 		try (Connection conn = Banco.getConnection(); PreparedStatement stmt = Banco.getPreparedStatement(conn, sql);) {
 			stmt.setString(1, cpf);
-
 			ResultSet resultadoConsulta = stmt.executeQuery();
-
 			if (resultadoConsulta.next()) {
 				pessoaVacinaConsultada = this.construirDoResultSet(resultadoConsulta);
-
 			}
 		} catch (SQLException e) {
 			System.out.println("Erro ao consultar pessoa por CPF: \n" + e.getMessage());
 		}
 		return pessoaVacinaConsultada;
+	}
+
+	public PessoaVO consultarPorNome(String nome) {
+		PessoaVO pessoaEncontrada = new PessoaVO();	
+		String sql = "select * from pessoa where nomePessoa = ?";
+		try (Connection conn = Banco.getConnection();
+				PreparedStatement stmt = Banco.getPreparedStatement(conn, sql);) {
+			stmt.setString(1, nome);
+			ResultSet resultadoConsulta = stmt.executeQuery();
+			if (resultadoConsulta.next()) {
+				pessoaEncontrada = this.construirDoResultSet(resultadoConsulta);	
+			}
+		} catch (SQLException e) {
+			System.out.println("Erro ao consultar pessoa por nome: \n" + e.getMessage());
+		}
+		return pessoaEncontrada;
 	}
 }

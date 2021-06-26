@@ -1,9 +1,12 @@
 package model.bo;
 
+import java.util.ArrayList;
+
 import javax.swing.JOptionPane;
 
 import model.dao.PessoaDAO;
 import model.vo.PessoaVO;
+import model.vo.VacinaVO;
 
 public class PessoaBO {
 	
@@ -11,32 +14,32 @@ public class PessoaBO {
 		public String cadastrarPessoaBO(PessoaVO pessoa) {
 			String mensagem = "";
 
-			//Os campos devem possuir no mínimo dígitos 3 e no máximo 100
+			//Os campos devem possuir no mï¿½nimo dï¿½gitos 3 e no mï¿½ximo 100
 			//Nome:
 			if(pessoa.getNome().length() < 3) {
-				mensagem += "O nome deve conter no mínimo 3 caracteres";
+				mensagem += "O nome deve conter no mï¿½nimo 3 caracteres";
 			}else if(pessoa.getNome().length() > 100) {
-				mensagem += "O nome não pode passar de 100 caracteres";
+				mensagem += "O nome nï¿½o pode passar de 100 caracteres";
 			}
 			//Email:
 			if(pessoa.getEmail().length() < 3) {
-				mensagem += "O email deve conter no mínimo 3 caracteres";
+				mensagem += "O email deve conter no mï¿½nimo 3 caracteres";
 			}else if(pessoa.getEmail().length() > 100) {
-				mensagem += "O email não pode passar de 100 caracteres";
+				mensagem += "O email nï¿½o pode passar de 100 caracteres";
 			}
 			//Endereco:
 			if(pessoa.getEndereco().length() < 3) {
-				mensagem += "O endereço deve conter no mínimo 3 caracteres";
+				mensagem += "O endereï¿½o deve conter no mï¿½nimo 3 caracteres";
 			}else if(pessoa.getEndereco().length() > 100) {
-				mensagem += "O endereço não pode passar de 100 caracteres";
+				mensagem += "O endereï¿½o nï¿½o pode passar de 100 caracteres";
 			}
 			
-			//Os campos devem possuir no mínimo dígitos 3 e no máximo 50
+			//Os campos devem possuir no mï¿½nimo dï¿½gitos 3 e no mï¿½ximo 50
 			//Cidade:
 			if(pessoa.getCidade().length() < 3) {
-				mensagem += "A cidade deve conter no mínimo 3 caracteres";
+				mensagem += "A cidade deve conter no mï¿½nimo 3 caracteres";
 			}else if(pessoa.getNome().length() > 50) {
-				mensagem += "A cidade não pode passar de 50 caracteres";
+				mensagem += "A cidade nï¿½o pode passar de 50 caracteres";
 			}
 			
 			if(mensagem.isEmpty()) {
@@ -45,12 +48,23 @@ public class PessoaBO {
 			dao.cadastrar(pessoa);
 			return mensagem;
 		}
-		public void alterarPessoa(PessoaVO pessoaAlterada) {
-			System.out.println(pessoaAlterada);			
+		public boolean alterar(PessoaVO pessoaAlterada) {
+			return dao.alterar(pessoaAlterada);
 		}
+	
+		public boolean excluir(Integer id) {
+			return dao.excluir(id);
+		}
+		
 		public PessoaVO consultarPorId(Integer idPessoaSelecionada) {
-			
 			return dao.buscarPorId(idPessoaSelecionada);
+		}
+		
+		public PessoaVO consultarPorNome(String nome) {
+			return dao.consultarPorNome(nome);
+		}
+		public ArrayList<PessoaVO> consultarTodos() {
+			return dao.buscarTodos();
 		}
 		
 }
