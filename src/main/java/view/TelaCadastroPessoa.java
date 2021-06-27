@@ -239,6 +239,8 @@ public class TelaCadastroPessoa extends JFrame {
 			pessoaAlterada.setEstado(cbxEstado.getSelectedItem().toString());
 			pessoaAlterada.setNome(txtNome.getText());
 			pessoaAlterada.setTelefone(txtTelefone.getText());
+			pessoaAlterada.setIdPessoa(controller.consultarPorCpf(pessoaAlterada.getCpf()).getIdPessoa());
+			
 			controller.alterar(pessoaAlterada);
 			String resultadoValidacao = controller.validarCampos(pessoaAlterada);
 			if(resultadoValidacao!=null && !resultadoValidacao.isEmpty()) {
