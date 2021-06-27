@@ -46,10 +46,6 @@ private PessoaDAO dao = new PessoaDAO();
 			mensagem += "A cidade deve conter no m�nimo 3 caracteres";
 		}else if(pessoa.getNome().length() > 50) {
 			mensagem += "A cidade n�o pode passar de 50 caracteres";
-		}
-		
-		if(mensagem.isEmpty()) {
-			mensagem = "Pessoa cadastrada com sucesso!";
 		}		
 		return mensagem;
 	}
