@@ -34,6 +34,9 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 public class TelaCadastroVacina extends JFrame {
 
@@ -45,12 +48,13 @@ public class TelaCadastroVacina extends JFrame {
 	private JComboBox cbxDoses;
 	private JComboBox cbxPais;
 	private JButton btnCadastrar;
+	private JButton btnAlterar;
 	private ControladoraVacina controller = new ControladoraVacina();
 	private MaskFormatter mascaraDataInicio;
 	private int respostaCadastro;
 	private int respostaAlteracao;
 	private int respostaExclusao;
-	Object[] opcoes = {"Sim","Não"};
+	private Object[] opcoes = {"Sim", "Não"};
 	DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	
 	/**
@@ -78,6 +82,18 @@ public class TelaCadastroVacina extends JFrame {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 656, 486);
 		contentPane = new JPanel();
+		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				if(verificarCamposPreenchdidos()) {
+					btnCadastrar.setEnabled(true);
+					btnAlterar.setEnabled(true);
+				} else {
+					btnCadastrar.setEnabled(false);
+					btnAlterar.setEnabled(false);
+				}
+			}
+		});
 		contentPane.setBackground(new Color(204, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -107,7 +123,7 @@ public class TelaCadastroVacina extends JFrame {
 		try {
 			mascaraDataInicio = new MaskFormatter("##/##/####");
 			txtDataInicio = new JFormattedTextField(mascaraDataInicio);
-		} catch (ParseException e1) {
+		} catch (ParseException | NullPointerException npe) {
 		}
 		
 		txtDataInicio.setColumns(10);
@@ -134,7 +150,11 @@ public class TelaCadastroVacina extends JFrame {
 		lblIntervalo.setBounds(265, 278, 224, 14);
 		contentPane.add(lblIntervalo);
 		
-		txtIntervalo = new JTextField();
+		try {
+			txtIntervalo = new JTextField();
+		} catch(NumberFormatException nfe) {
+			JOptionPane.showMessageDialog(null, nfe.getMessage());
+		}
 		txtIntervalo.addCaretListener(new CaretListener() {
 			public void caretUpdate(CaretEvent e) {
 				validarNumero(txtIntervalo);
@@ -159,10 +179,10 @@ public class TelaCadastroVacina extends JFrame {
 		
 		
 		btnCadastrar = new JButton("Cadastrar");
+		btnCadastrar.setEnabled(false);
 		btnCadastrar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				Object[] opcoes = {"Sim", "Não"};
 				try {
 					cadastrar();
 				} catch (AnalisarCamposVacinaException | VacinaJaExisteException | PaisJaTemVacinaRegistradaException e) {
@@ -173,7 +193,8 @@ public class TelaCadastroVacina extends JFrame {
 		btnCadastrar.setBounds(422, 331, 153, 47);
 		contentPane.add(btnCadastrar);
 
-		JButton btnAlterar = new JButton("Alterar");
+		btnAlterar = new JButton("Alterar");
+		btnAlterar.setEnabled(false);
 		btnAlterar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent me) {
@@ -188,6 +209,8 @@ public class TelaCadastroVacina extends JFrame {
 		contentPane.add(btnAlterar);
 		
 	}
+	
+	//Métodos e funções:
 	public void cadastrar() throws AnalisarCamposVacinaException, VacinaJaExisteException, PaisJaTemVacinaRegistradaException {
 		//Instanciar uma nova vacina (de VacinaVO)
 		//Preencher a nova vacina com todos os campos da tela
@@ -261,7 +284,7 @@ public class TelaCadastroVacina extends JFrame {
 		this.txtIntervalo.setText("");
 		this.txtNomePesquisador.setText("");
 		this.txtNomeVacina.setText("");
-	//	this.txtDataInicio.setText("");
+		this.txtDataInicio.setText("");
 		this.cbxDoses.setSelectedIndex(0);	
 		this.cbxPais.setSelectedIndex(0);
 	
@@ -296,15 +319,23 @@ public class TelaCadastroVacina extends JFrame {
 		return listaDePaises;
 		};
 	
-	public void validarNumero(JTextField Numero) { 
+	public boolean validarNumero(JTextField numero) { 
+		
 		long valor; 
-		if (Numero.getText().length() != 0){ 
+		boolean resposta = false;
+		String numeroString = numero.getText().toString();
+		if (numero.getText().length() != 0){ 
 			try { 
-				valor = Long.parseLong(Numero.getText()); 
+				valor = Long.parseLong(numero.getText()); 
 			}catch(NumberFormatException ex){ 
-				JOptionPane.showMessageDialog(null, "Esse Campo s� aceita n�meros" ,"Informa��o",JOptionPane.INFORMATION_MESSAGE); 
-				Numero.grabFocus(); 
-			} 
-		} 
-	} 
+				JOptionPane.showMessageDialog(null, "Este campo aceita apenas números inteiros." ,"Informação",JOptionPane.INFORMATION_MESSAGE); 
+				numero.grabFocus(); 
+			}
+			txtIntervalo.setText(txtIntervalo.getText().toString().substring(txtIntervalo.getText().length()));
+			
+		} else {
+			resposta = true;
+		}
+		return resposta;
+	}
 }

@@ -134,6 +134,7 @@ public class TelaCadastroPessoa extends JFrame {
 			mascaraDtNascimento = new MaskFormatter("##/##/####");
 			txtDataNascimento = new JFormattedTextField(mascaraDtNascimento);
 		} catch (ParseException e1) {
+			
 		}
 		txtDataNascimento.setColumns(10);
 		txtDataNascimento.setBounds(176, 218, 75, 29);
@@ -230,6 +231,7 @@ public class TelaCadastroPessoa extends JFrame {
 			}
 		}
 		public void alterar() throws AnalisarCamposPessoaException {
+			
 			PessoaVO pessoaAlterada = new PessoaVO();
 			pessoaAlterada.setCidade(txtCidade.getText());
 			pessoaAlterada.setCpf(txtCpf.getText());
@@ -280,7 +282,6 @@ public class TelaCadastroPessoa extends JFrame {
 			cbxEstado.removeAllItems();
 			cbxEstado.addItem(pessoa.getEstado());
 		}
-		
 		private void limparCampos() {
 			this.txtEmail.setText("");
 			this.txtEndereco.setText("");
@@ -293,7 +294,6 @@ public class TelaCadastroPessoa extends JFrame {
 //			}
 			this.txtTelefone.setText("");
 			this.txtCpf.setText("");
-			this.cbxEstado.setSelectedIndex(0);
-			
+			this.cbxEstado.setSelectedIndex(0);	
 		}
 	}
