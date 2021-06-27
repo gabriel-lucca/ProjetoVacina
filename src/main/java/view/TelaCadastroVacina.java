@@ -231,7 +231,7 @@ public class TelaCadastroVacina extends JFrame {
 				setVisible(false);
 			}
 		} else {
-			JOptionPane.showMessageDialog(null, "Cadastrado com sucesso");	
+			JOptionPane.showMessageDialog(null, "Alterado com sucesso");
 		}
 	}
 	public boolean verificarCamposPreenchdidos() {

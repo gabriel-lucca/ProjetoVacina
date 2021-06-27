@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -14,11 +15,16 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.MaskFormatter;
 
 import controller.ControladoraPessoa;
 import controller.ControladoraVacina;
 import model.dao.PessoaDAO;
 import model.vo.PessoaVO;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 
 public class TelaConsultarPessoa extends JFrame {
 
@@ -28,6 +34,8 @@ public class TelaConsultarPessoa extends JFrame {
 	private ControladoraPessoa pController = new ControladoraPessoa();
 	private int respostaExclusao;
 	Object[] opcoes = {"Sim", "Não"};
+	private JTextField txtNome;
+	private JTextField txtDataNascimento;
 
 	/**
 	 * Launch the application.
@@ -59,7 +67,7 @@ public class TelaConsultarPessoa extends JFrame {
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setEnabled(false);
-		scrollPane.setBounds(20, 123, 956, 329);
+		scrollPane.setBounds(25, 210, 956, 286);
 		contentPane.add(scrollPane);
 
 		table = new JTable(modelo);
@@ -90,7 +98,7 @@ public class TelaConsultarPessoa extends JFrame {
 //				carregarTabela();
 			}
 		});
-		btnAlterar.setBounds(289, 482, 210, 56);
+		btnAlterar.setBounds(289, 512, 210, 56);
 		contentPane.add(btnAlterar);
 
 		JButton btnExcluir = new JButton("Excluir");
@@ -102,7 +110,7 @@ public class TelaConsultarPessoa extends JFrame {
 				excluir(idPessoaSelecionada);
 			}
 		});
-		btnExcluir.setBounds(509, 482, 210, 56);
+		btnExcluir.setBounds(509, 512, 210, 56);
 		contentPane.add(btnExcluir);
 
 		JButton btnConsultar = new JButton("Consultar");
@@ -113,8 +121,39 @@ public class TelaConsultarPessoa extends JFrame {
 			}
 
 		});
-		btnConsultar.setBounds(437, 53, 149, 49);
+		btnConsultar.setBounds(421, 150, 149, 49);
 		contentPane.add(btnConsultar);
+		
+		JLabel lblNomePessoa = new JLabel("Nome pessoa");
+		lblNomePessoa.setBounds(115, 59, 129, 14);
+		contentPane.add(lblNomePessoa);
+		
+		txtNome = new JTextField();
+		txtNome.setBounds(115, 84, 188, 37);
+		contentPane.add(txtNome);
+		txtNome.setColumns(10);
+		
+		JLabel lblDataNascimento = new JLabel("Data nascimento");
+		lblDataNascimento.setBounds(421, 59, 107, 14);
+		contentPane.add(lblDataNascimento);
+		
+		MaskFormatter mascaraDtNascimento;
+			try {
+				mascaraDtNascimento = new MaskFormatter("##/##/####");
+				txtDataNascimento = new JFormattedTextField(mascaraDtNascimento);
+			} catch (ParseException e1) {
+			}
+			txtDataNascimento.setColumns(10);
+		txtDataNascimento.setBounds(421, 84, 107, 37);
+		contentPane.add(txtDataNascimento);
+		
+		JLabel lblCidade = new JLabel("Cidade");
+		lblCidade.setBounds(671, 59, 87, 14);
+		contentPane.add(lblCidade);
+		
+		JComboBox cbxCidades = new JComboBox();
+		cbxCidades.setBounds(671, 84, 119, 37);
+		contentPane.add(cbxCidades);
 	}
 	
 	public void excluir(Integer id) {

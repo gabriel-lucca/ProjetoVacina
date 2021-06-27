@@ -31,6 +31,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 public class TelaConsultarVacina extends JFrame {
 
@@ -40,6 +42,9 @@ public class TelaConsultarVacina extends JFrame {
 	private ControladoraVacina vController = new ControladoraVacina();
 	private int respostaExclusao;
 	Object[] opcoes = {"Sim", "Não"};
+	private JTextField textField;
+	private JTextField txtPaisOrigem;
+	private JTextField txtDoses;
 	/**
 	 * Launch the application.
 	 */
@@ -71,7 +76,7 @@ public class TelaConsultarVacina extends JFrame {
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setEnabled(false);
-		scrollPane.setBounds(33, 117, 942, 110);
+		scrollPane.setBounds(33, 160, 942, 110);
 		contentPane.add(scrollPane);
 		
 		table = new JTable(modelo);
@@ -100,7 +105,7 @@ public class TelaConsultarVacina extends JFrame {
 //				carregarTabela();
 			}
 		});
-		btnAlterar.setBounds(280, 264, 210, 56);
+		btnAlterar.setBounds(281, 281, 210, 56);
 		contentPane.add(btnAlterar);
 		
 		
@@ -113,7 +118,7 @@ public class TelaConsultarVacina extends JFrame {
 				excluir(idVacinaSelecionada);
 			}
 		});
-		btnExcluir.setBounds(500, 264, 210, 56);
+		btnExcluir.setBounds(500, 281, 210, 56);
 		contentPane.add(btnExcluir);
 		
 		JButton btnConsultar = new JButton("Consultar");
@@ -123,8 +128,35 @@ public class TelaConsultarVacina extends JFrame {
 				carregarTabela();
 			}
 		});
-		btnConsultar.setBounds(410, 65, 174, 41);
+		btnConsultar.setBounds(415, 108, 174, 41);
 		contentPane.add(btnConsultar);
+		
+		JLabel lblNomeVacina = new JLabel("Nome vacina");
+		lblNomeVacina.setBounds(174, 26, 114, 14);
+		contentPane.add(lblNomeVacina);
+		
+		textField = new JTextField();
+		textField.setBounds(174, 44, 139, 35);
+		contentPane.add(textField);
+		textField.setColumns(10);
+		
+		JLabel lblPaisOrigem = new JLabel("País origem");
+		lblPaisOrigem.setBounds(415, 26, 114, 14);
+		contentPane.add(lblPaisOrigem);
+		
+		txtPaisOrigem = new JTextField();
+		txtPaisOrigem.setBounds(415, 43, 174, 36);
+		contentPane.add(txtPaisOrigem);
+		txtPaisOrigem.setColumns(10);
+		
+		JLabel lblDoses = new JLabel("Doses");
+		lblDoses.setBounds(686, 26, 119, 14);
+		contentPane.add(lblDoses);
+		
+		txtDoses = new JTextField();
+		txtDoses.setBounds(686, 44, 86, 35);
+		contentPane.add(txtDoses);
+		txtDoses.setColumns(10);
 	}
 	
 	public void excluir(Integer id) {
