@@ -37,7 +37,7 @@ public class VacinaDAO  {
 	}
 	public boolean alterar(VacinaVO vacina) {
 		Connection conn = Banco.getConnection();
-		String sql = "update vacina "
+		String sql = "update from vacina "
 				+ "set nomePesquisadorResponsavel=?, paisOrigem=?, nomeVacina=?, dtInicioPesquisa=?, quantidadeDoses=?, intervaloDoses=?"
 				+ "where idVacina=?";
 		PreparedStatement ps = Banco.getPreparedStatement(conn, sql);
@@ -49,6 +49,7 @@ public class VacinaDAO  {
 			ps.setDate(4, java.sql.Date.valueOf(vacina.getDataInicioPesquisa()));
 			ps.setInt(5, vacina.getQuantidadeDoses());
 			ps.setInt(6, vacina.getIntervaloDoses());
+			ps.setInt(7, vacina.getIdVacina());
 			resposta = ps.executeUpdate() > 0;
 		}catch(SQLException e) {
 			System.out.println("Erro ao alterar vacina.\nErro: "+e.getMessage());
