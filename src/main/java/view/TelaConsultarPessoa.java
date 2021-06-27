@@ -19,6 +19,7 @@ import javax.swing.text.MaskFormatter;
 
 import controller.ControladoraPessoa;
 import controller.ControladoraVacina;
+import exception.exception_pessoa.AnalisarCamposPessoaException;
 import model.dao.PessoaDAO;
 import model.vo.PessoaVO;
 import javax.swing.JLabel;
