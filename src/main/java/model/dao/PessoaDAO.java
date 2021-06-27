@@ -26,7 +26,7 @@ public class PessoaDAO {
 			ps.setString(6, pessoa.getCidade());
 			ps.setString(7, pessoa.getEstado());
 			ps.setString(8, pessoa.getEndereco());
-			ps.executeUpdate();
+			ps.execute();
 
 			System.out.println("print" + ps.toString());
 			rs = ps.getGeneratedKeys();
@@ -46,7 +46,7 @@ public class PessoaDAO {
 	public boolean alterar(PessoaVO PessoaAlterada) {
 		Connection conn = Banco.getConnection();
 		String sql = "update pessoa "
-				+ "set nomePessoa=?, cpf=?, email=?, telefone=?, dataNascimento=?, cidade=?, estado=?, endereco=?"
+				+ "set nomePessoa=?, cpf=?, email=?, telefone=?, dtNascimento=?, cidade=?, estado=?, endereco=?"
 				+ "where idPessoa=?";
 		PreparedStatement ps = Banco.getPreparedStatement(conn, sql);
 		boolean resposta = false;
@@ -59,6 +59,7 @@ public class PessoaDAO {
 			ps.setString(6, PessoaAlterada.getCidade());
 			ps.setString(7, PessoaAlterada.getEstado());
 			ps.setString(8, PessoaAlterada.getEndereco());
+			ps.setInt(9, PessoaAlterada.getIdPessoa());
 			resposta = ps.executeUpdate() > 0;
 		} catch (SQLException e) {
 			System.out.println("Erro ao alterar pessoa.\nErro: " + e.getMessage());
