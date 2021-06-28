@@ -25,8 +25,12 @@ import model.dao.PessoaDAO;
 import model.dao.VacinaDAO;
 import model.vo.PessoaVO;
 import model.vo.VacinaVO;
+import util.PlanilhaPessoa;
+import util.PlanilhaVacina;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -70,7 +74,7 @@ public class TelaConsultarVacina extends JFrame {
 	public TelaConsultarVacina() {
 		setTitle("Consultar Vacinas");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 1001, 405);
+		setBounds(100, 100, 1001, 476);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(204, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -80,7 +84,7 @@ public class TelaConsultarVacina extends JFrame {
 		JScrollPane scrollPane = new JScrollPane();
 		
 		scrollPane.setEnabled(false);
-		scrollPane.setBounds(33, 160, 942, 110);
+		scrollPane.setBounds(33, 160, 942, 149);
 		contentPane.add(scrollPane);
 		
 		table = new JTable(modelo);
@@ -128,7 +132,7 @@ public class TelaConsultarVacina extends JFrame {
 //				carregarTabela();
 			}
 		});
-		btnAlterar.setBounds(281, 281, 210, 56);
+		btnAlterar.setBounds(280, 336, 210, 56);
 		contentPane.add(btnAlterar);
 		
 		
@@ -142,7 +146,7 @@ public class TelaConsultarVacina extends JFrame {
 				excluir(idVacinaSelecionada);
 			}
 		});
-		btnExcluir.setBounds(500, 281, 210, 56);
+		btnExcluir.setBounds(498, 336, 210, 56);
 		contentPane.add(btnExcluir);
 		
 		JButton btnConsultar = new JButton("Consultar");
@@ -195,6 +199,25 @@ public class TelaConsultarVacina extends JFrame {
 		btnLimpar.setVisible(false);
 		btnLimpar.setBounds(789, 108, 131, 41);
 		contentPane.add(btnLimpar);
+		
+		JButton btnGerarPlanilha = new JButton("Gerar relatório");
+		btnGerarPlanilha.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				JFileChooser jfc = new JFileChooser();
+				jfc.setDialogTitle("Salvar relatório como...");
+				ArrayList<VacinaVO> list = vController.consultarTodos();
+				int resultado = jfc.showSaveDialog(null);
+				if(resultado == JFileChooser.APPROVE_OPTION) {
+					String caminhoEscolhido = jfc.getSelectedFile().getAbsolutePath();
+					PlanilhaVacina planilha = new PlanilhaVacina();
+					planilha.gerarPlanilhaVacinas(caminhoEscolhido, list);
+					JOptionPane.showMessageDialog(null, "Salvo com sucesso.");
+				}
+			}
+		});
+		btnGerarPlanilha.setBounds(33, 108, 149, 41);
+		contentPane.add(btnGerarPlanilha);
 	}
 	
 	public void excluir(Integer id) {

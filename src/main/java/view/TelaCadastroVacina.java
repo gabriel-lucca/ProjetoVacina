@@ -99,7 +99,7 @@ public class TelaCadastroVacina extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblPasDeOrigem = new JLabel("Pa\u00EDs de origem:");
+		JLabel lblPasDeOrigem = new JLabel("Pais de origem:");
 		lblPasDeOrigem.setFont(new Font("Dialog", Font.BOLD, 13));
 		lblPasDeOrigem.setBounds(30, 101, 175, 18);
 		contentPane.add(lblPasDeOrigem);
@@ -114,7 +114,7 @@ public class TelaCadastroVacina extends JFrame {
 		lblNomeDaVacina.setBounds(30, 139, 175, 14);
 		contentPane.add(lblNomeDaVacina);
 		
-		JLabel lblDataIncioE = new JLabel("Data in\u00EDcio pesquisa:");
+		JLabel lblDataIncioE = new JLabel("Data inicio pesquisa:");
 		lblDataIncioE.setFont(new Font("Dialog", Font.BOLD, 13));
 		lblDataIncioE.setBounds(265, 192, 137, 14);
 		contentPane.add(lblDataIncioE);
@@ -165,8 +165,7 @@ public class TelaCadastroVacina extends JFrame {
 		contentPane.add(txtIntervalo);
 		txtIntervalo.setColumns(10);		
 		
-		cbxDoses = new JComboBox();
-		
+		cbxDoses = new JComboBox();	
 		cbxDoses.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3", "4", "5"}));
 		cbxDoses.setBounds(501, 226, 74, 33);
 		contentPane.add(cbxDoses);
@@ -274,7 +273,11 @@ public class TelaCadastroVacina extends JFrame {
 		this.txtIntervalo.setText(String.valueOf(vacina.getIntervaloDoses()));
 		this.txtNomePesquisador.setText(vacina.getNomePesquisadorResponsavel());
 		this.txtNomeVacina.setText(vacina.getNomeVacina());
-		this.txtDataInicio.setText(String.valueOf(vacina.getDataInicioPesquisa()));
+		
+		DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		String dataInicioPesquisaFormatada = formatador.format(vacina.getDataInicioPesquisa());
+		
+		this.txtDataInicio.setText(dataInicioPesquisaFormatada);
 		this.cbxDoses.setSelectedItem(vacina.getQuantidadeDoses());
 		this.cbxPais.setSelectedItem(vacina.getPaisOrigem());
 	}
