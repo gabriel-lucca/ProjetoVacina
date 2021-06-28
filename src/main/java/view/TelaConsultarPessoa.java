@@ -5,6 +5,8 @@ import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -22,6 +24,7 @@ import controller.ControladoraVacina;
 import exception.exception_pessoa.AnalisarCamposPessoaException;
 import model.dao.PessoaDAO;
 import model.vo.PessoaVO;
+import seletor.FiltroPessoa;
 import util.PlanilhaPessoa;
 
 import javax.swing.JLabel;
@@ -44,6 +47,9 @@ public class TelaConsultarPessoa extends JFrame {
 	private JButton btnExcluir;
 	private JButton btnCancelar;
 	private ControladoraPessoa pController = new ControladoraPessoa();
+	private JComboBox cbxCidades;
+	MaskFormatter mascaraDtNascimento;
+	DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	Object[] opcoes = {"Sim", "Não"};
 	/**
 	 * Launch the application.
@@ -145,7 +151,7 @@ public class TelaConsultarPessoa extends JFrame {
 
 		JButton btnConsultar = new JButton("Consultar");
 		btnConsultar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent arg0) {	
 				limparTabelaPessoa();
 				carregarTabela();
 			}
@@ -166,14 +172,12 @@ public class TelaConsultarPessoa extends JFrame {
 		JLabel lblDataNascimento = new JLabel("Data nascimento");
 		lblDataNascimento.setBounds(421, 59, 107, 14);
 		contentPane.add(lblDataNascimento);
-		
-		MaskFormatter mascaraDtNascimento;
 			try {
 				mascaraDtNascimento = new MaskFormatter("##/##/####");
 				txtDataNascimento = new JFormattedTextField(mascaraDtNascimento);
 			} catch (ParseException e1) {
 			}
-			txtDataNascimento.setColumns(10);
+		txtDataNascimento.setColumns(10);
 		txtDataNascimento.setBounds(421, 84, 107, 37);
 		contentPane.add(txtDataNascimento);
 		
@@ -181,7 +185,7 @@ public class TelaConsultarPessoa extends JFrame {
 		lblCidade.setBounds(671, 59, 87, 14);
 		contentPane.add(lblCidade);
 		
-		JComboBox cbxCidades = new JComboBox();
+		cbxCidades = new JComboBox();
 		cbxCidades.setBounds(671, 84, 119, 37);
 		contentPane.add(cbxCidades);
 		
@@ -233,11 +237,28 @@ public class TelaConsultarPessoa extends JFrame {
 		}
 	}
 	
-
+	public boolean verificarFiltroPreenchido() {
+		boolean resposta = false;
+		if(txtNome.getText()!=null&&!txtNome.getText().isEmpty()&&
+				txtDataNascimento.getText()!=null&&!txtDataNascimento.getText().isEmpty()&&
+				cbxCidades.getSelectedItem()!=null) {
+			resposta = true;
+		}
+		return resposta;
+	}
 	public void carregarTabela() {
 		PessoaDAO pessoa = new PessoaDAO();
-		ArrayList<PessoaVO> list = pController.consultarTodos();
-
+		ArrayList<PessoaVO> list = new ArrayList<PessoaVO>();
+		FiltroPessoa seletor = new FiltroPessoa();
+		if(verificarFiltroPreenchido()) {
+			seletor.setNome(txtNome.getText().toString());
+			seletor.setDtNascimento(LocalDate.parse(txtDataNascimento.getText(), dataFormatter));
+			seletor.setCidade(cbxCidades.getSelectedItem().toString());
+			list = pController.consultarComFiltro(seletor);
+		} else {
+			list = pController.consultarTodos();
+		}
+		
 		for (PessoaVO p : list) {
 			modelo.addRow(new Object[] { p.getIdPessoa(), p.getNome(), p.getCpf(), p.getEmail(), p.getTelefone(),
 					p.getDataNascimento(), p.getCidade(), p.getEstado(), p.getEndereco() });
