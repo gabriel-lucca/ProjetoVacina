@@ -195,12 +195,15 @@ public class PessoaDAO {
 	public ArrayList<PessoaVO> consultarComFiltro(FiltroPessoa seletor) {
 		ArrayList<PessoaVO> encontrado = new ArrayList<PessoaVO>();
 		Connection conn = Banco.getConnection();
-		String sql = "select * from pessoa "+seletor.criarFiltros(seletor);
-		System.out.println(sql);
+		String sql = "select * from pessoa ";
+		
+		if(seletor.temFiltro()) {
+			sql += seletor.criarFiltros(seletor, sql);
+		}
 		PreparedStatement ps = Banco.getPreparedStatement(conn, sql);
 		try {
 			ResultSet rs = ps.executeQuery();
-			if(rs.next()) {
+			while(rs.next()) {
 				encontrado.add(construirDoResultSet(rs));
 			}
 		} catch(SQLException e) {

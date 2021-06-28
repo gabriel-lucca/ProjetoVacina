@@ -239,9 +239,8 @@ public class TelaConsultarPessoa extends JFrame {
 	
 	public boolean verificarFiltroPreenchido() {
 		boolean resposta = false;
-		if(txtNome.getText().toString()!=null&&!txtNome.getText().isEmpty()&&
-				txtDataNascimento.getText().toString()!=null&&!txtDataNascimento.getText().isEmpty()&&
-				cbxCidades.getSelectedItem()!=null) {
+		if(txtNome.getText().toString().length()!=0||
+				txtDataNascimento.getText().toString()!="  /  /    ") {
 			resposta = true;
 		}
 		return resposta;
@@ -251,13 +250,25 @@ public class TelaConsultarPessoa extends JFrame {
 		PessoaDAO pessoa = new PessoaDAO();
 		ArrayList<PessoaVO> list = new ArrayList<PessoaVO>();
 		FiltroPessoa seletor = new FiltroPessoa();
+		JOptionPane.showMessageDialog(null, verificarFiltroPreenchido());
+		
 		if(verificarFiltroPreenchido()) {
-			seletor.setNome(txtNome.getText().toString());
-			System.out.println(seletor.getNome());
-			seletor.setDtNascimento(LocalDate.parse(txtDataNascimento.getText(), dataFormatter));
-			seletor.setCidade(cbxCidades.getSelectedItem().toString());
-		} else {
+			
+			if(txtNome.getText().toString().length()!=0) {
+				seletor.setNome(txtNome.getText().toString());
+			}
+			if(txtDataNascimento.getText().toString()!=null) {
+				seletor.setDtNascimento(LocalDate.parse(txtDataNascimento.getText().toString(), dataFormatter));
+			}
+			JOptionPane.showMessageDialog(null, seletor.getNome()+"\n"+seletor.getDtNascimento());
+			//if(cbxCidades!=null) {
+			//	seletor.setCidade(cbxCidades.getSelectedItem().toString());
+			//}
+			
 			list = pController.consultarComFiltro(seletor);
+		} else {
+			JOptionPane.showMessageDialog(null, "Não encontrado");
+			list = pController.consultarTodos();
 		}		
 		for (PessoaVO p : list) {
 			modelo.addRow(new Object[] { p.getIdPessoa(), p.getNome(), p.getCpf(), p.getEmail(), p.getTelefone(),

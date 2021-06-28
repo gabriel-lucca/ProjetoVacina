@@ -64,32 +64,37 @@ public class FiltroPessoa {
 	public int getOffset() {
 		return (this.limite)*(this.pagina-1);
 	}
-	
-	public String criarFiltros(FiltroPessoa seletor) {
-		 String sql = "where";
+	public String criarFiltros(FiltroPessoa seletor, String sql) {
+		sql = " where ";
 		boolean primeiro = true;
 		if(seletor.nome!=null&&!seletor.nome.isEmpty()) {
 			if(!primeiro) {
-				sql += "and";
+				sql += " and ";
 			}
-			sql+="nomePessoa LIKE '%' "+seletor.getNome()+" '%'";
+			sql+=" nomePessoa LIKE '% "+seletor.getNome()+" %'";
+			primeiro = false;
 		}
-		
 		if(seletor.getDtNascimento()!=null) {
 			if(!primeiro) {
-				sql += "and";
+				sql += " and ";
 			}
-			sql+="dtNascimento = "+seletor.getDtNascimento();
+			sql+=" dtNascimento = "+seletor.getDtNascimento();
+			primeiro = false;
 		}
-		
 		if(seletor.getCidade()!=null&&!seletor.getCidade().isEmpty()) {
 			if(!primeiro) {
-				sql += "and";
+				sql += " and ";
 			}
-			sql+="cidade LIKE '%' "+seletor.getCidade()+" '%'";
+			sql+=" cidade LIKE '% "+seletor.getCidade()+" %'";
+			primeiro = false;
 		}
 		return sql;
 	}
+	@Override
+	public String toString() {
+		return "FiltroPessoa [nome=" + nome + ", dtNascimento=" + dtNascimento + ", cidade=" + cidade + "]";
+	}
+	
 }
 
 
