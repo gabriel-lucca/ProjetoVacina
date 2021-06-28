@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.List;
+import java.util.ArrayList;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -23,8 +23,7 @@ public class PlanilhaPessoa {
 	 * 
 	 * @return uma mensagem informando ao usuario o que ocorreu
 	 */
-	
-	public String gerarPlanilhaPessoas(String caminhoArquivo, List<PessoaVO> pessoas) {
+	public String gerarPlanilhaPessoas(String caminhoArquivo, ArrayList<PessoaVO> pessoas) {
 		// Criar a planilha (Workbook)
 		XSSFWorkbook planilha = new XSSFWorkbook();
 
@@ -44,7 +43,7 @@ public class PlanilhaPessoa {
 		return salvarNoDisco(planilha, caminhoArquivo, ".xlsx");
 	}
 
-	private void criarLinhasPessoas(List<PessoaVO> pessoas, XSSFSheet aba, int posicaoLinhaAtual) {
+	private void criarLinhasPessoas(ArrayList<PessoaVO> pessoas, XSSFSheet aba, int posicaoLinhaAtual) {
 		for (PessoaVO p : pessoas) {
 			// criar uma nova linha na planilha
 			XSSFRow linhaAtual = aba.createRow(posicaoLinhaAtual);
