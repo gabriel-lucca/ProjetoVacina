@@ -67,11 +67,11 @@ public class FiltroPessoa {
 	public String criarFiltros(FiltroPessoa seletor, String sql) {
 		sql = " where ";
 		boolean primeiro = true;
-		if(seletor.nome!=null&&!seletor.nome.isEmpty()) {
+		if(seletor.getNome()!=null && !seletor.getNome().isEmpty()) {
 			if(!primeiro) {
 				sql += " and ";
 			}
-			sql+=" nomePessoa LIKE '% "+seletor.getNome()+" %'";
+			sql+=" nomePessoa LIKE '%"+seletor.getNome()+"%'";
 			primeiro = false;
 		}
 		if(seletor.getDtNascimento()!=null) {
@@ -81,11 +81,11 @@ public class FiltroPessoa {
 			sql+=" dtNascimento = "+seletor.getDtNascimento();
 			primeiro = false;
 		}
-		if(seletor.getCidade()!=null&&!seletor.getCidade().isEmpty()) {
+		if(seletor.getCidade()!=null && !seletor.getCidade().isEmpty()) {
 			if(!primeiro) {
 				sql += " and ";
 			}
-			sql+=" cidade LIKE '% "+seletor.getCidade()+" %'";
+			sql+=" cidade LIKE '%"+seletor.getCidade()+"%'";
 			primeiro = false;
 		}
 		return sql;
