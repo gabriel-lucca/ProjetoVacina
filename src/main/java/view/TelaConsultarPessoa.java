@@ -47,10 +47,10 @@ public class TelaConsultarPessoa extends JFrame {
 	private JButton btnExcluir;
 	private JButton btnCancelar;
 	private ControladoraPessoa pController = new ControladoraPessoa();
-	private JComboBox cbxCidades;
 	MaskFormatter mascaraDtNascimento;
 	DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	Object[] opcoes = {"Sim", "Não"};
+	private JTextField txtCidade;
 	/**
 	 * Launch the application.
 	 */
@@ -185,10 +185,6 @@ public class TelaConsultarPessoa extends JFrame {
 		lblCidade.setBounds(671, 59, 87, 14);
 		contentPane.add(lblCidade);
 		
-		cbxCidades = new JComboBox();
-		cbxCidades.setBounds(671, 84, 119, 37);
-		contentPane.add(cbxCidades);
-		
 		JButton btnGerarPlanilha = new JButton("Gerar relatório");
 		btnGerarPlanilha.addMouseListener(new MouseAdapter() {
 			@Override
@@ -222,6 +218,11 @@ public class TelaConsultarPessoa extends JFrame {
 		btnCancelar.setBounds(832, 150, 149, 49);
 		contentPane.add(btnCancelar);
 		
+		txtCidade = new JTextField();
+		txtCidade.setColumns(10);
+		txtCidade.setBounds(671, 84, 188, 37);
+		contentPane.add(txtCidade);
+		
 	}
 	public void excluir(Integer id) {
 		if(respostaExclusao==0){
@@ -239,8 +240,9 @@ public class TelaConsultarPessoa extends JFrame {
 	
 	public boolean verificarFiltroPreenchido() {
 		boolean resposta = false;
-		if(txtNome.getText().toString().length()!=0||
-				txtDataNascimento.getText().toString()!="  /  /    ") {
+		if(txtNome.getText().toString().length()!=0 ||
+				txtDataNascimento.getText().toString()!=null ||
+				txtCidade.getText().toString().length()!=0) {
 			resposta = true;
 		}
 		return resposta;
@@ -250,21 +252,18 @@ public class TelaConsultarPessoa extends JFrame {
 		PessoaDAO pessoa = new PessoaDAO();
 		ArrayList<PessoaVO> list = new ArrayList<PessoaVO>();
 		FiltroPessoa seletor = new FiltroPessoa();
-		JOptionPane.showMessageDialog(null, verificarFiltroPreenchido());
 		
 		if(verificarFiltroPreenchido()) {
 			
 			if(txtNome.getText().toString().length()!=0) {
 				seletor.setNome(txtNome.getText().toString());
 			}
-			if(txtDataNascimento.getText().toString()!=null) {
-				seletor.setDtNascimento(LocalDate.parse(txtDataNascimento.getText().toString(), dataFormatter));
-			}
-			JOptionPane.showMessageDialog(null, seletor.getNome()+"\n"+seletor.getDtNascimento());
-			//if(cbxCidades!=null) {
-			//	seletor.setCidade(cbxCidades.getSelectedItem().toString());
+			//if(txtDataNascimento.getText().toString()!=null) {
+			//	seletor.setDtNascimento(LocalDate.parse(txtDataNascimento.getText().toString(), dataFormatter));
 			//}
-			
+			if(txtCidade!=null) {
+				seletor.setCidade(txtCidade.getText().toString());
+			}
 			list = pController.consultarComFiltro(seletor);
 		} else {
 			JOptionPane.showMessageDialog(null, "Não encontrado");
