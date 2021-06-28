@@ -27,15 +27,11 @@ create table aplicacaoVacina(
 	idAplicacao int not null auto_increment primary key,
     idPessoa int not null,
     idVacina int not null,
-    dtAplicacao date not null,
-	foreign key(IdPessoa) references pessoa(idPessoa) 
+    dtAplicacao date not null
 );
 -- Inserts:
 insert into pessoa(nomePessoa, cpf, email, telefone, dtNascimento, cidade, estado, endereco) values("Gabriel", "111.111.111-11", "gabriel123@gmail.com", "21911111111", '1970-06-04', "Florianopolis", "SC", "Servidão Araquari"); 
-insert into vacina(nomePesquisadorResponsavel, paisOrigem, nomeVacina, dtInicioPesquisa, quantidadeDoses, intervaloDoses) values("Felipe Oliveira", "Brasil", "Coronavac", '2020-05-05', 2, 90);
-insert into aplicacaoVacina(idPessoa, idVacina, dtAplicacao) values(1, 1, '2021-03-02');
 insert into pessoa(nomePessoa, cpf, email, telefone, dtNascimento, cidade, estado, endereco) values("Usuario para teste de exclusão", "222.111.111-11", "BigodinGrossin@gmail.com", "21911111211", '1970-07-04', "Rio de Fevereiro", "Rio de JFevereiro", "Bem alí"); 
-insert into aplicacaoVacina(idPessoa, idVacina, dtAplicacao) values(1, 1, '2021-03-02');
 insert into pessoa(nomePessoa, cpf, email, telefone, dtNascimento, cidade, estado, endereco) values("André Jacinto", "245.046.289-11", "andrefilipe@gmail.com", "48911648911", '2000-08-08', "Florianopolis", "SC", "Rodovia Barreiros");
 insert into pessoa(nomePessoa, cpf, email, telefone, dtNascimento, cidade, estado, endereco) values("Gabriel Martins", "245.046.760-11", "gabrielmarti@gmail.com", "48911648333", '2001-08-01', "Florianopolis", "SC", "Rodovia Gonzaga");
 insert into pessoa(nomePessoa, cpf, email, telefone, dtNascimento, cidade, estado, endereco) values("Rodolfo bawbis", "215.489.289-11", "rodolfobawbis@gmail.com", "48911677911", '1980-05-08', "Florianopolis", "SC", "Avenida Ropi");
@@ -44,6 +40,14 @@ insert into pessoa(nomePessoa, cpf, email, telefone, dtNascimento, cidade, estad
 insert into pessoa(nomePessoa, cpf, email, telefone, dtNascimento, cidade, estado, endereco) values("Guilherme Ryan Nicolas Brito", "769.509.372-61", "gguilhermeryannicolasbrito@kascher.com.br", "8499078-0813", '1990-09-11', "Manaus", "AM", "Beco São Geraldo");
 insert into pessoa(nomePessoa, cpf, email, telefone, dtNascimento, cidade, estado, endereco) values("Lúcia Carla Fogaça", "170.331.931-14", "luciacarlafogaca__luciacarlafogaca@terrabrasil.com.br", "4199791-6258", '1980-10-11', "Fazenda Rio Grande", "PR", "Rua Baraúna");
 insert into pessoa(nomePessoa, cpf, email, telefone, dtNascimento, cidade, estado, endereco) values("Lucas Manoel Pereira", "325.722.095-27", "lucasmanoelpereira-77@diebold.com", "4499393-3799", '1990-10-12', "Umuarama", "PR", "Rua Andorinha");
+
+insert into vacina(nomePesquisadorResponsavel, paisOrigem, nomeVacina, dtInicioPesquisa, quantidadeDoses, intervaloDoses) values("Felipe Oliveira", "Brasil", "Coronavac", '2020-05-05', 2, 90);
+insert into vacina(nomePesquisadorResponsavel, paisOrigem, nomeVacina, dtInicioPesquisa, quantidadeDoses, intervaloDoses) values("VAC", "China", "Coronavac", '2020-06-05', 2, 90);
+insert into vacina(nomePesquisadorResponsavel, paisOrigem, nomeVacina, dtInicioPesquisa, quantidadeDoses, intervaloDoses) values("BioNTech", "Alemanha", "Pfizer", '2020-10-10', 2, 90);
+insert into vacina(nomePesquisadorResponsavel, paisOrigem, nomeVacina, dtInicioPesquisa, quantidadeDoses, intervaloDoses) values("Oxford", "Reino Unido", "Aztrazeneca", '2020-06-05', 2, 90);
+insert into vacina(nomePesquisadorResponsavel, paisOrigem, nomeVacina, dtInicioPesquisa, quantidadeDoses, intervaloDoses) values("Oxford", "índia", "Covaxin", '2020-11-11', 2, 90);
+
+insert into aplicacaoVacina(idPessoa, idVacina, dtAplicacao) values(1, 1, '2021-03-02');
 
 -- Select:
 select * from pessoa;
