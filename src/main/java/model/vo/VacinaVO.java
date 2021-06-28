@@ -6,7 +6,7 @@ public class VacinaVO {
 
 	private Integer idVacina;
 	private String nomePesquisadorResponsavel;
-	private String PaisOrigem;
+	private String paisOrigem;
 	private String nomeVacina;
 	private LocalDate dataInicioPesquisa;
 	private int quantidadeDoses;
@@ -17,7 +17,7 @@ public class VacinaVO {
 		super();
 		this.idVacina = idVacina;
 		this.nomePesquisadorResponsavel = nomePesquisadorResponsavel;
-		PaisOrigem = paisOrigem;
+		this.paisOrigem = paisOrigem;
 		this.nomeVacina = nomeVacina;
 		this.dataInicioPesquisa = dataInicioPesquisa;
 		this.quantidadeDoses = quantidadeDoses;
@@ -45,11 +45,11 @@ public class VacinaVO {
 	}
 
 	public String getPaisOrigem() {
-		return PaisOrigem;
+		return paisOrigem;
 	}
 
 	public void setPaisOrigem(String paisOrigem) {
-		PaisOrigem = paisOrigem;
+		this.paisOrigem = paisOrigem;
 	}
 
 	public String getNomeVacina() {
@@ -87,7 +87,7 @@ public class VacinaVO {
 	@Override
 	public String toString() {
 		return "VacinaVO [idVacina=" + idVacina + ", nomePesquisadorResponsavel=" + nomePesquisadorResponsavel
-				+ ", PaisOrigem=" + PaisOrigem + ", nomeVacina=" + nomeVacina + ", dataInicioPesquisa="
+				+ ", PaisOrigem=" + paisOrigem + ", nomeVacina=" + nomeVacina + ", dataInicioPesquisa="
 				+ dataInicioPesquisa + ", quantidadeDoses=" + quantidadeDoses + ", intervaloDoses=" + intervaloDoses
 				+ "]";
 	}
