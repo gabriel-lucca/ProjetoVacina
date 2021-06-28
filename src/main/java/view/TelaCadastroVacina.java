@@ -165,8 +165,10 @@ public class TelaCadastroVacina extends JFrame {
 		contentPane.add(txtIntervalo);
 		txtIntervalo.setColumns(10);		
 		
-		cbxDoses = new JComboBox();	
-		cbxDoses.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3", "4", "5"}));
+		cbxDoses = new JComboBox();
+		for(int i = 0; i<listarDoses().length; i++) {
+			cbxDoses.addItem(listarDoses()[i]);
+	    }		
 		cbxDoses.setBounds(501, 226, 74, 33);
 		contentPane.add(cbxDoses);
 		
@@ -220,7 +222,7 @@ public class TelaCadastroVacina extends JFrame {
 		novaVacina.setNomePesquisadorResponsavel(txtNomePesquisador.getText());
 		novaVacina.setNomeVacina(txtNomeVacina.getText());
 		novaVacina.setPaisOrigem(cbxPais.getSelectedItem().toString());
-		novaVacina.setQuantidadeDoses(Integer.valueOf(cbxDoses.getSelectedItem().toString()));
+		novaVacina.setQuantidadeDoses(cbxDoses.getSelectedItem().toString());
 		
 		//Chamar o controller para cadastrar
 		controller.cadastrar(novaVacina);
@@ -243,7 +245,7 @@ public class TelaCadastroVacina extends JFrame {
 		vacinaAlterada.setNomePesquisadorResponsavel(txtNomePesquisador.getText());
 		vacinaAlterada.setNomeVacina(txtNomeVacina.getText());
 		vacinaAlterada.setPaisOrigem(cbxPais.getSelectedItem().toString());
-		vacinaAlterada.setQuantidadeDoses(Integer.valueOf(cbxDoses.getSelectedItem().toString()));
+		vacinaAlterada.setQuantidadeDoses(cbxDoses.getSelectedItem().toString());
 		controller.alterar(vacinaAlterada);
 		String resultadoValidacao = controller.validarCampos(vacinaAlterada);
 		if(resultadoValidacao!=null && !resultadoValidacao.isEmpty()) {
@@ -287,10 +289,16 @@ public class TelaCadastroVacina extends JFrame {
 		this.txtNomePesquisador.setText("");
 		this.txtNomeVacina.setText("");
 		this.txtDataInicio.setText("");
-		this.cbxDoses.setSelectedIndex(0);	
+		this.cbxDoses.setSelectedIndex(0);
 		this.cbxPais.setSelectedIndex(0);
 	
 	}
+	
+	public String[] listarDoses(){
+		String[] listaDeDoses = new String[] {"1", "2", "3", "4", "5"};
+		
+		return listaDeDoses;
+	};
     
 	public String[] listarPaises(){
 		String[] listaDePaises = new String[] {" --- Selecione --- ","Alb�nia", "Alemanha", "Andorra", "Angola", "Anguilla", "Ant�rtida", "Ant�gua e Barbuda", "Antilhas Holandesas",
