@@ -239,26 +239,26 @@ public class TelaConsultarPessoa extends JFrame {
 	
 	public boolean verificarFiltroPreenchido() {
 		boolean resposta = false;
-		if(txtNome.getText()!=null&&!txtNome.getText().isEmpty()&&
-				txtDataNascimento.getText()!=null&&!txtDataNascimento.getText().isEmpty()&&
+		if(txtNome.getText().toString()!=null&&!txtNome.getText().isEmpty()&&
+				txtDataNascimento.getText().toString()!=null&&!txtDataNascimento.getText().isEmpty()&&
 				cbxCidades.getSelectedItem()!=null) {
 			resposta = true;
 		}
 		return resposta;
 	}
+	
 	public void carregarTabela() {
 		PessoaDAO pessoa = new PessoaDAO();
 		ArrayList<PessoaVO> list = new ArrayList<PessoaVO>();
 		FiltroPessoa seletor = new FiltroPessoa();
 		if(verificarFiltroPreenchido()) {
 			seletor.setNome(txtNome.getText().toString());
+			System.out.println(seletor.getNome());
 			seletor.setDtNascimento(LocalDate.parse(txtDataNascimento.getText(), dataFormatter));
 			seletor.setCidade(cbxCidades.getSelectedItem().toString());
-			list = pController.consultarComFiltro(seletor);
 		} else {
-			list = pController.consultarTodos();
-		}
-		
+			list = pController.consultarComFiltro(seletor);
+		}		
 		for (PessoaVO p : list) {
 			modelo.addRow(new Object[] { p.getIdPessoa(), p.getNome(), p.getCpf(), p.getEmail(), p.getTelefone(),
 					p.getDataNascimento(), p.getCidade(), p.getEstado(), p.getEndereco() });
