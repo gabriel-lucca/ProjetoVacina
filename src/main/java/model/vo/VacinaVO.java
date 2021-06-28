@@ -9,11 +9,11 @@ public class VacinaVO {
 	private String paisOrigem;
 	private String nomeVacina;
 	private LocalDate dataInicioPesquisa;
-	private int quantidadeDoses;
+	private String quantidadeDoses;
 	private int intervaloDoses;
 	
 	public VacinaVO(Integer idVacina, String nomePesquisadorResponsavel, String paisOrigem, String nomeVacina,
-			LocalDate dataInicioPesquisa, int quantidadeDoses, int intervaloDoses) {
+			LocalDate dataInicioPesquisa, String quantidadeDoses, int intervaloDoses) {
 		super();
 		this.idVacina = idVacina;
 		this.nomePesquisadorResponsavel = nomePesquisadorResponsavel;
@@ -68,12 +68,12 @@ public class VacinaVO {
 		this.dataInicioPesquisa = dataInicioPesquisa;
 	}
 
-	public int getQuantidadeDoses() {
+	public String getQuantidadeDoses() {
 		return quantidadeDoses;
 	}
 
-	public void setQuantidadeDoses(int quantidadeDoses) {
-		this.quantidadeDoses = quantidadeDoses;
+	public void setQuantidadeDoses(String string) {
+		this.quantidadeDoses = string;
 	}
 
 	public int getIntervaloDoses() {

@@ -20,7 +20,7 @@ public class VacinaDAO  {
 			ps.setString(2, vacina.getPaisOrigem());
 			ps.setString(3,  vacina.getNomeVacina());
 			ps.setDate(4, java.sql.Date.valueOf(vacina.getDataInicioPesquisa()));
-			ps.setInt(5, vacina.getQuantidadeDoses());
+			ps.setString(5, vacina.getQuantidadeDoses());
 			ps.setInt(6, vacina.getIntervaloDoses());
 			ps.execute();
 			rs = ps.getGeneratedKeys();
@@ -47,7 +47,7 @@ public class VacinaDAO  {
 			ps.setString(2, vacina.getPaisOrigem());
 			ps.setString(3,  vacina.getNomeVacina());
 			ps.setDate(4, java.sql.Date.valueOf(vacina.getDataInicioPesquisa()));
-			ps.setInt(5, vacina.getQuantidadeDoses());
+			ps.setString(5, vacina.getQuantidadeDoses());
 			ps.setInt(6, vacina.getIntervaloDoses());
 			ps.setInt(7, vacina.getIdVacina());
 			resposta = ps.executeUpdate() > 0;
@@ -82,7 +82,7 @@ public class VacinaDAO  {
 		vacina.setPaisOrigem(rs.getString("paisOrigem"));
 		vacina.setNomeVacina(rs.getString("nomeVacina"));
 		vacina.setDataInicioPesquisa(rs.getDate("dtInicioPesquisa").toLocalDate());
-		vacina.setQuantidadeDoses(rs.getInt("quantidadeDoses"));
+		vacina.setQuantidadeDoses(rs.getString("quantidadeDoses"));
 		vacina.setIntervaloDoses(rs.getInt("intervaloDoses"));
 		return vacina;
 	}
