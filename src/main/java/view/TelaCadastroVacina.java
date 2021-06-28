@@ -158,6 +158,7 @@ public class TelaCadastroVacina extends JFrame {
 		txtIntervalo.addCaretListener(new CaretListener() {
 			public void caretUpdate(CaretEvent e) {
 				validarNumero(txtIntervalo);
+				
 			}
 		});
 		txtIntervalo.setBounds(501, 270, 74, 31);
@@ -262,7 +263,8 @@ public class TelaCadastroVacina extends JFrame {
 		if(!txtIntervalo.getText().isEmpty() &&
 		!txtNomePesquisador.getText().isEmpty() &&
 		!txtNomeVacina.getText().isEmpty() &&
-		!txtDataInicio.getText().isEmpty() &&
+		!txtDataInicio.getText().isEmpty() && 
+		txtDataInicio.getText().length() == 10 &&
 		cbxDoses.getSelectedIndex() > 0 &&
 		!cbxPais.getSelectedItem().toString().isEmpty()) {
 			 resposta = true;
@@ -319,20 +321,18 @@ public class TelaCadastroVacina extends JFrame {
 		return listaDePaises;
 		};
 	
-	public boolean validarNumero(JTextField numero) { 
-		
+	public boolean validarNumero(JTextField numero) { 	
 		long valor; 
 		boolean resposta = false;
 		String numeroString = numero.getText().toString();
 		if (numero.getText().length() != 0){ 
 			try { 
-				valor = Long.parseLong(numero.getText()); 
+				valor = Integer.parseInt(numero.getText()); 
 			}catch(NumberFormatException ex){ 
 				JOptionPane.showMessageDialog(null, "Este campo aceita apenas números inteiros." ,"Informação",JOptionPane.INFORMATION_MESSAGE); 
 				numero.grabFocus(); 
 			}
-			txtIntervalo.setText(txtIntervalo.getText().toString().substring(txtIntervalo.getText().length()));
-			
+			numero.setText(numero.getText().toString().substring(numero.getText().length()));
 		} else {
 			resposta = true;
 		}
