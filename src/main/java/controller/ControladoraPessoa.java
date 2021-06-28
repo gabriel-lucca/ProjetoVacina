@@ -1,5 +1,7 @@
 package controller;
 
+import java.util.ArrayList;
+
 import exception.exception_pessoa.AnalisarCamposPessoaException;
 import model.bo.PessoaBO;
 import model.dao.PessoaDAO;
@@ -66,7 +68,9 @@ private PessoaDAO dao = new PessoaDAO();
 		
 		return bo.consultarPorId(idPessoaSelecionada);
 	}
-
+	public ArrayList<PessoaVO> consultarTodos(){
+		return bo.consultarTodos();
+	}
 	public boolean excluir(Integer id) {
 		return bo.excluir(id);
 	}
