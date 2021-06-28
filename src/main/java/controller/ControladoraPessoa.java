@@ -6,6 +6,7 @@ import exception.exception_pessoa.AnalisarCamposPessoaException;
 import model.bo.PessoaBO;
 import model.dao.PessoaDAO;
 import model.vo.PessoaVO;
+import seletor.FiltroPessoa;
 
 public class ControladoraPessoa {
 
@@ -73,6 +74,11 @@ private PessoaDAO dao = new PessoaDAO();
 	}
 	public boolean excluir(Integer id) {
 		return bo.excluir(id);
+	}
+
+	public ArrayList<PessoaVO> consultarComFiltro(FiltroPessoa seletor) {
+		return bo.consultarComFiltro(seletor);
+		
 	}
 	
 

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import model.vo.AplicacaoVacinaVO;
 import model.vo.PessoaVO;
 import model.vo.VacinaVO;
+import seletor.FiltroPessoa;
 
 public class PessoaDAO {
 	public PessoaVO cadastrar(PessoaVO pessoa) {
@@ -138,7 +139,6 @@ public class PessoaDAO {
 			Banco.closeConnection(conn);
 			Banco.closePreparedStatement(ps);
 		}
-
 		return pessoas;
 	}
 
@@ -191,4 +191,41 @@ public class PessoaDAO {
 		}
 		return pessoaEncontrada;
 	}
+
+	public ArrayList<PessoaVO> consultarComFiltro(FiltroPessoa seletor) {
+		ArrayList<PessoaVO> encontrado = new ArrayList<PessoaVO>();
+		Connection conn = Banco.getConnection();
+		String sql = "select * from pessoa "+seletor.criarFiltros(seletor);
+		System.out.println(sql);
+		PreparedStatement ps = Banco.getPreparedStatement(conn, sql);
+		try {
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				encontrado.add(construirDoResultSet(rs));
+			}
+		} catch(SQLException e) {
+			System.out.println("Erro ao buscar por filtro.\nErro: "+e.getMessage());
+		} finally {
+			Banco.closeConnection(conn);
+			Banco.closeConnection(conn);
+		}
+		return encontrado;
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

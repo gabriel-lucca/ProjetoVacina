@@ -7,6 +7,7 @@ import javax.swing.JOptionPane;
 import model.dao.PessoaDAO;
 import model.vo.PessoaVO;
 import model.vo.VacinaVO;
+import seletor.FiltroPessoa;
 
 public class PessoaBO {
 	
@@ -65,6 +66,10 @@ public class PessoaBO {
 		}
 		public ArrayList<PessoaVO> consultarTodos() {
 			return dao.buscarTodos();
+		}
+		public ArrayList<PessoaVO> consultarComFiltro(FiltroPessoa seletor) {
+			// TODO Auto-generated method stub
+			return dao.consultarComFiltro(seletor);
 		}
 		
 }
