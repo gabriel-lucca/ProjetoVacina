@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -25,12 +26,13 @@ public class PlanilhaVacina {
 	 * @return uma mensagem informando ao usuario o que ocorreu
 	 */
 	
-	public String gerarPlanilhaPessoas(String caminhoArquivo, List<VacinaVO> vacinas) {
+	XSSFWorkbook planilha = new XSSFWorkbook();
+	XSSFSheet aba ;
+	public String gerarPlanilhaVacinas(String caminhoArquivo, List<VacinaVO> vacinas) {
 		// Criar a planilha (Workbook)
-		XSSFWorkbook planilha = new XSSFWorkbook();
 
 		// Criar uma aba (Sheet)
-		XSSFSheet aba = planilha.createSheet("Vacinas");
+		aba = planilha.createSheet("Vacinas");
 
 		int linhaAtual = 0;
 
@@ -38,11 +40,23 @@ public class PlanilhaVacina {
 		String[] nomesColunas = { "#", "Nome Pesquisador Responsável", "Pais Origem", "Nome Vacina", "Data Inicio Pesquisa", "Quantidade de Doses", "Intervalo das doses" };
 		criarCabecalho(nomesColunas, aba, linhaAtual);
 		linhaAtual++;
-		// Preencher as linhas com os vacinas
+		// Preencher as linhas com as vacinas
 		criarLinhasVacinas(vacinas, aba, linhaAtual);
 
 		// Salvar o arquivo gerado no disco 
 		return salvarNoDisco(planilha, caminhoArquivo, ".xlsx");
+	}
+	
+	private void criarCabecalho(String[] nomesColunas, XSSFSheet aba, int posicaoLinhaAtual) {
+		Row linhaAtual = aba.createRow(posicaoLinhaAtual);
+
+		posicaoLinhaAtual++;
+		// Para mudar o estilo:
+		// https://stackoverflow.com/questions/43467253/setting-style-in-apache-poi
+		for (int i = 0; i < nomesColunas.length; i++) {
+			Cell novaCelula = linhaAtual.createCell(i);
+			novaCelula.setCellValue(nomesColunas[i]);
+		}
 	}
 
 	private void criarLinhasVacinas(List<VacinaVO> vacinas, XSSFSheet aba, int posicaoLinhaAtual) {
@@ -64,17 +78,6 @@ public class PlanilhaVacina {
 
 	}
 
-	private void criarCabecalho(String[] nomesColunas, XSSFSheet aba, int posicaoLinhaAtual) {
-		Row linhaAtual = aba.createRow(posicaoLinhaAtual);
-
-		posicaoLinhaAtual++;
-		// Para mudar o estilo:
-		// https://stackoverflow.com/questions/43467253/setting-style-in-apache-poi
-		for (int i = 0; i < nomesColunas.length; i++) {
-			Cell novaCelula = linhaAtual.createCell(i);
-			novaCelula.setCellValue(nomesColunas[i]);
-		}
-	}
 
 	private String salvarNoDisco(XSSFWorkbook planilha, String caminhoArquivo, String extensao) {
 		String mensagem = "";
@@ -106,4 +109,5 @@ public class PlanilhaVacina {
 
 		return mensagem;
 	}
+
 }
