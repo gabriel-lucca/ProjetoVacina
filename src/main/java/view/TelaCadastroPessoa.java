@@ -11,6 +11,7 @@ import java.time.format.DateTimeFormatter;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.DateFormatter;
 import javax.swing.text.MaskFormatter;
 
 import controller.ControladoraPessoa;
@@ -275,12 +276,14 @@ public class TelaCadastroPessoa extends JFrame {
 			this.txtEndereco.setText(pessoa.getEndereco());
 			this.txtCidade.setText(pessoa.getCidade());
 			this.txtNome.setText(pessoa.getNome());
-			this.txtDataNascimento.setText(String.valueOf(pessoa.getDataNascimento()));
+			
+			DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			String dataNascimentoFormatada = formatador.format(pessoa.getDataNascimento());
+				
+			this.txtDataNascimento.setText(dataNascimentoFormatada);
 			this.txtTelefone.setText(pessoa.getTelefone());
 			this.txtCpf.setText(pessoa.getCpf());
-			this.cbxEstado.setSelectedIndex(0);	
-			cbxEstado.removeAllItems();
-			cbxEstado.addItem(pessoa.getEstado());
+			this.cbxEstado.setSelectedItem(pessoa.getEstado());
 		}
 		private void limparCampos() {
 			this.txtEmail.setText("");

@@ -45,6 +45,9 @@ public class TelaConsultarVacina extends JFrame {
 	private JTextField textField;
 	private JTextField txtPaisOrigem;
 	private JTextField txtDoses;
+	private JButton btnAlterar;
+	private JButton btnExcluir;
+	private JButton btnLimpar;
 	/**
 	 * Launch the application.
 	 */
@@ -75,14 +78,33 @@ public class TelaConsultarVacina extends JFrame {
 		contentPane.setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
+		
 		scrollPane.setEnabled(false);
 		scrollPane.setBounds(33, 160, 942, 110);
 		contentPane.add(scrollPane);
 		
 		table = new JTable(modelo);
+		
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				System.out.println(table.getSelectedRow());
+				if((Integer) table.getModel().getValueAt(table.getSelectedRow(), 0)>0) {
+					btnAlterar.setEnabled(true);
+					btnExcluir.setEnabled(true);
+					btnLimpar.setVisible(true);
+					btnLimpar.setEnabled(true);
+				} else {
+					btnAlterar.setEnabled(false);
+					btnExcluir.setEnabled(false);
+					btnLimpar.setVisible(false);
+					btnLimpar.setEnabled(false);
+				}
+			}
+		});
+		
 		table.setBackground(Color.WHITE);
 		scrollPane.setViewportView(table);
-		
 		modelo.addColumn("idVacina");
 		modelo.addColumn("Nome pesquisador responsavel");
 		modelo.addColumn("Pais Origem");
@@ -91,7 +113,8 @@ public class TelaConsultarVacina extends JFrame {
 		modelo.addColumn("Quantidade doses");
 		modelo.addColumn("Intervalo doses");
 		
-		JButton btnAlterar = new JButton("Alterar");
+		btnAlterar = new JButton("Alterar");
+		btnAlterar.setEnabled(false);
 		btnAlterar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				TelaCadastroVacina telaCadastroVacina = new TelaCadastroVacina();
@@ -109,7 +132,8 @@ public class TelaConsultarVacina extends JFrame {
 		contentPane.add(btnAlterar);
 		
 		
-		JButton btnExcluir = new JButton("Excluir");
+		btnExcluir = new JButton("Excluir");
+		btnExcluir.setEnabled(false);
 		btnExcluir.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -157,6 +181,20 @@ public class TelaConsultarVacina extends JFrame {
 		txtDoses.setBounds(686, 44, 86, 35);
 		contentPane.add(txtDoses);
 		txtDoses.setColumns(10);
+		
+		btnLimpar = new JButton("Limpar");
+		btnLimpar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				limparTabelaVacina();
+				btnLimpar.setEnabled(false);
+				btnLimpar.setVisible(false);
+			}
+		});
+		btnLimpar.setEnabled(false);
+		btnLimpar.setVisible(false);
+		btnLimpar.setBounds(789, 108, 131, 41);
+		contentPane.add(btnLimpar);
 	}
 	
 	public void excluir(Integer id) {

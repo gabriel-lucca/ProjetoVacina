@@ -39,7 +39,7 @@ import model.vo.VacinaVO;
 public class TelaAplicacaoVacina extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField txtNome;
+	private JTextField txtNome; 
 	private JTable table;
 	private JTextField txtCpf;
 	ControladoraAplicacaoVacina avController = new ControladoraAplicacaoVacina();

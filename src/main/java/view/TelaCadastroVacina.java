@@ -264,8 +264,7 @@ public class TelaCadastroVacina extends JFrame {
 		!txtNomePesquisador.getText().isEmpty() &&
 		!txtNomeVacina.getText().isEmpty() &&
 		!txtDataInicio.getText().isEmpty() && 
-		txtDataInicio.getText().length() == 10 &&
-		cbxDoses.getSelectedIndex() > 0 &&
+		!cbxDoses.getSelectedItem().toString().isEmpty() &&
 		!cbxPais.getSelectedItem().toString().isEmpty()) {
 			 resposta = true;
 		}
@@ -276,10 +275,8 @@ public class TelaCadastroVacina extends JFrame {
 		this.txtNomePesquisador.setText(vacina.getNomePesquisadorResponsavel());
 		this.txtNomeVacina.setText(vacina.getNomeVacina());
 		this.txtDataInicio.setText(String.valueOf(vacina.getDataInicioPesquisa()));
-		this.cbxDoses.setSelectedIndex(0);
-		cbxPais.removeAllItems();
-		cbxPais.addItem(vacina.getPaisOrigem());
-	
+		this.cbxDoses.setSelectedItem(vacina.getQuantidadeDoses());
+		this.cbxPais.setSelectedItem(vacina.getPaisOrigem());
 	}
 
 	private void limparCampos() {
@@ -332,7 +329,7 @@ public class TelaCadastroVacina extends JFrame {
 				JOptionPane.showMessageDialog(null, "Este campo aceita apenas números inteiros." ,"Informação",JOptionPane.INFORMATION_MESSAGE); 
 				numero.grabFocus(); 
 			}
-			numero.setText(numero.getText().toString().substring(numero.getText().length()));
+//			numero.setText(numeroString.substring(numero.getText().length()));
 		} else {
 			resposta = true;
 		}

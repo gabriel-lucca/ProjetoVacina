@@ -197,13 +197,14 @@ public class TelaConsultarPessoa extends JFrame {
 					String caminhoEscolhido = jfc.getSelectedFile().getAbsolutePath();
 					PlanilhaPessoa planilha = new PlanilhaPessoa();
 					planilha.gerarPlanilhaPessoas(caminhoEscolhido, list);
+					JOptionPane.showMessageDialog(null, "Salvo com sucesso.");
 				}
 			}
 		});
 		btnGerarPlanilha.setBounds(25, 150, 149, 49);
 		contentPane.add(btnGerarPlanilha);
 		
-		btnCancelar = new JButton("Cancelar");
+		btnCancelar = new JButton("Limpar");
 		btnCancelar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
