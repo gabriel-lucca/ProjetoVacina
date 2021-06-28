@@ -22,25 +22,33 @@ import controller.ControladoraVacina;
 import exception.exception_pessoa.AnalisarCamposPessoaException;
 import model.dao.PessoaDAO;
 import model.vo.PessoaVO;
+import util.PlanilhaPessoa;
+
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFormattedTextField;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class TelaConsultarPessoa extends JFrame {
 
 	private JPanel contentPane;
 	private JTable table;
-	DefaultTableModel modelo = new DefaultTableModel();
-	private ControladoraPessoa pController = new ControladoraPessoa();
+	DefaultTableModel modelo = new DefaultTableModel();	
 	private int respostaExclusao;
-	Object[] opcoes = {"Sim", "Não"};
 	private JTextField txtNome;
 	private JTextField txtDataNascimento;
-
+	private JButton btnAlterar;
+	private JButton btnExcluir;
+	private JButton btnCancelar;
+	private ControladoraPessoa pController = new ControladoraPessoa();
+	Object[] opcoes = {"Sim", "Não"};
 	/**
 	 * Launch the application.
 	 */
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -67,14 +75,33 @@ public class TelaConsultarPessoa extends JFrame {
 		contentPane.setLayout(null);
 
 		JScrollPane scrollPane = new JScrollPane();
+		
 		scrollPane.setEnabled(false);
 		scrollPane.setBounds(25, 210, 956, 286);
 		contentPane.add(scrollPane);
-
+		
 		table = new JTable(modelo);
+		
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				System.out.println(table.getSelectedRow());
+				if((Integer) table.getModel().getValueAt(table.getSelectedRow(), 0)>0) {
+					btnAlterar.setEnabled(true);
+					btnExcluir.setEnabled(true);
+					btnCancelar.setVisible(true);
+					btnCancelar.setEnabled(true);
+				} else {
+					btnAlterar.setEnabled(false);
+					btnExcluir.setEnabled(false);
+					btnCancelar.setVisible(false);
+					btnCancelar.setEnabled(false);
+				}
+			}
+		});
+		
 		table.setBackground(Color.WHITE);
 		scrollPane.setViewportView(table);
-
 		modelo.addColumn("idPessoa");
 		modelo.addColumn("Nome pessoa");
 		modelo.addColumn("Cpf");
@@ -84,8 +111,9 @@ public class TelaConsultarPessoa extends JFrame {
 		modelo.addColumn("Cidade");
 		modelo.addColumn("Estado");
 		modelo.addColumn("Endereco");
-
-		JButton btnAlterar = new JButton("Alterar");
+		
+		btnAlterar = new JButton("Alterar");
+		btnAlterar.setEnabled(false);
 		btnAlterar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				TelaCadastroPessoa telaCadastroPessoa = new TelaCadastroPessoa();				
@@ -102,7 +130,8 @@ public class TelaConsultarPessoa extends JFrame {
 		btnAlterar.setBounds(289, 512, 210, 56);
 		contentPane.add(btnAlterar);
 
-		JButton btnExcluir = new JButton("Excluir");
+		btnExcluir = new JButton("Excluir");
+		btnExcluir.setEnabled(false);
 		btnExcluir.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -155,8 +184,40 @@ public class TelaConsultarPessoa extends JFrame {
 		JComboBox cbxCidades = new JComboBox();
 		cbxCidades.setBounds(671, 84, 119, 37);
 		contentPane.add(cbxCidades);
+		
+		JButton btnGerarPlanilha = new JButton("Gerar relatório");
+		btnGerarPlanilha.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				JFileChooser jfc = new JFileChooser();
+				jfc.setDialogTitle("Salvar relatoório como...");
+				ArrayList<PessoaVO> list = pController.consultarTodos();
+				int resultado = jfc.showSaveDialog(null);
+				if(resultado == JFileChooser.APPROVE_OPTION) {
+					String caminhoEscolhido = jfc.getSelectedFile().getAbsolutePath();
+					PlanilhaPessoa planilha = new PlanilhaPessoa();
+					planilha.gerarPlanilhaPessoas(caminhoEscolhido, list);
+				}
+			}
+		});
+		btnGerarPlanilha.setBounds(25, 150, 149, 49);
+		contentPane.add(btnGerarPlanilha);
+		
+		btnCancelar = new JButton("Cancelar");
+		btnCancelar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				limparTabelaPessoa();
+				btnCancelar.setEnabled(false);
+				btnCancelar.setVisible(false);
+			}
+		});
+		btnCancelar.setEnabled(false);
+		btnCancelar.setVisible(false);
+		btnCancelar.setBounds(832, 150, 149, 49);
+		contentPane.add(btnCancelar);
+		
 	}
-	
 	public void excluir(Integer id) {
 		if(respostaExclusao==0){
 			if(pController.excluir(id)) {
@@ -174,7 +235,7 @@ public class TelaConsultarPessoa extends JFrame {
 
 	public void carregarTabela() {
 		PessoaDAO pessoa = new PessoaDAO();
-		ArrayList<PessoaVO> list = pessoa.buscarTodos();
+		ArrayList<PessoaVO> list = pController.consultarTodos();
 
 		for (PessoaVO p : list) {
 			modelo.addRow(new Object[] { p.getIdPessoa(), p.getNome(), p.getCpf(), p.getEmail(), p.getTelefone(),
