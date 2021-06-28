@@ -36,7 +36,7 @@ public class VacinaBO {
 	public VacinaVO consultarPorNome(String nome) {
 		return dao.consultarPorNome(nome);
 	}
-	public ArrayList<VacinaVO> consutarTodos() {
+	public ArrayList<VacinaVO> consultarTodos() {
 		return dao.consultarTodos();
 	}
 	public VacinaVO consultarPorId(Integer id) {

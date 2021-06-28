@@ -50,7 +50,7 @@ public class ControladoraVacina {
 		return bo.alterar(vacinaAlterada);
 	}
 	public ArrayList<VacinaVO> consultarTodos(){
-		return bo.consutarTodos();
+		return bo.consultarTodos();
 	}
 	public boolean excluir(Integer id) {
 		return bo.excluir(id);
