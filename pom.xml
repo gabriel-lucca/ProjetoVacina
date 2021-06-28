@@ -56,12 +56,16 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 
 
 
-<!-- Dependência para geração de planilhas com Apache POI -->
+<!-- Used to work with the older excel file format - `.xls` -->
+<!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
 <dependency>
 <groupId>org.apache.poi</groupId>
 <artifactId>poi</artifactId>
 <version>3.17</version>
 </dependency>
+
+<!-- Used to work with the newer excel file format - `.xlsx` -->
+<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
 <dependency>
 <groupId>org.apache.poi</groupId>
 <artifactId>poi-ooxml</artifactId>
@@ -69,3 +73,4 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 </dependency>
 </dependencies>
 </project>
+
