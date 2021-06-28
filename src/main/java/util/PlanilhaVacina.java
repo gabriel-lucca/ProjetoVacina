@@ -37,7 +37,7 @@ public class PlanilhaVacina {
 		// Criar o cabeÃ§alho (header)
 		String[] nomesColunas = { "#", "Nome Pesquisador Responsável", "Pais Origem", "Nome Vacina", "Data Inicio Pesquisa", "Quantidade de Doses", "Intervalo das doses" };
 		criarCabecalho(nomesColunas, aba, linhaAtual);
-
+		linhaAtual++;
 		// Preencher as linhas com os vacinas
 		criarLinhasVacinas(vacinas, aba, linhaAtual);
 

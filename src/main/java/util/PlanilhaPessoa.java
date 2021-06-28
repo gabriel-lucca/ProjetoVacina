@@ -23,31 +23,45 @@ public class PlanilhaPessoa {
 	 * 
 	 * @return uma mensagem informando ao usuario o que ocorreu
 	 */
+	XSSFWorkbook planilha = new XSSFWorkbook();
+	XSSFSheet aba ;
 	public String gerarPlanilhaPessoas(String caminhoArquivo, ArrayList<PessoaVO> pessoas) {
 		// Criar a planilha (Workbook)
-		XSSFWorkbook planilha = new XSSFWorkbook();
+		
 
 		// Criar uma aba (Sheet)
-		XSSFSheet aba = planilha.createSheet("Pessoas");
+		 aba = planilha.createSheet("Pessoas");
 
 		int linhaAtual = 0;
 
-		// Criar o cabeÃ§alho (header) 
-		String[] nomesColunas = { "#", "Nome Pessoa", "Cpf", "Email", "Telefone", "Data de Nascimento", "Cidade", "Estado", "Endereço" };
+		// Criar o cabeÃ§alho (header) 		
+		String[] nomesColunas = {"#", "Nome Pessoa", "Cpf", "E-mail", "Telefone", "Data de Nascimento", "Cidade", "Estado", "Endereço" };
 		criarCabecalho(nomesColunas, aba, linhaAtual);
-
-		// Preencher as linhas com os produtos
-		criarLinhasPessoas(pessoas, aba, linhaAtual);
+		linhaAtual++;
+		// Preencher as linhas com os pessoas
+		// Criar o cabeÃ§alho (header) 
+			criarLinhasPessoas(pessoas, aba, linhaAtual);
 
 		// Salvar o arquivo gerado no disco
 		return salvarNoDisco(planilha, caminhoArquivo, ".xlsx");
 	}
+	
+	private void criarCabecalho(String[] nomesColunas, XSSFSheet aba, int posicaoLinhaAtual) {
+		Row linhaAtual = aba.createRow(posicaoLinhaAtual);
 
+		posicaoLinhaAtual++;
+		// Para mudar o estilo:
+		// https://stackoverflow.com/questions/43467253/setting-style-in-apache-poi
+		for (int i = 0; i < nomesColunas.length; i++) {
+			Cell novaCelula = linhaAtual.createCell(i);
+			novaCelula.setCellValue(nomesColunas[i]);
+		}
+	}
+	
 	private void criarLinhasPessoas(ArrayList<PessoaVO> pessoas, XSSFSheet aba, int posicaoLinhaAtual) {
 		for (PessoaVO p : pessoas) {
 			// criar uma nova linha na planilha
 			XSSFRow linhaAtual = aba.createRow(posicaoLinhaAtual);
-
 			// Preencher as cÃ©lulas com os atributos Pessoa p
 			linhaAtual.createCell(0).setCellValue(p.getIdPessoa());
 			linhaAtual.createCell(1).setCellValue(p.getNome());
@@ -63,19 +77,6 @@ public class PlanilhaPessoa {
 		}
 
 	}
-
-	private void criarCabecalho(String[] nomesColunas, XSSFSheet aba, int posicaoLinhaAtual) {
-		Row linhaAtual = aba.createRow(posicaoLinhaAtual);
-
-		posicaoLinhaAtual++;
-		// Para mudar o estilo:
-		// https://stackoverflow.com/questions/43467253/setting-style-in-apache-poi
-		for (int i = 0; i < nomesColunas.length; i++) {
-			Cell novaCelula = linhaAtual.createCell(i);
-			novaCelula.setCellValue(nomesColunas[i]);
-		}
-	}
-
 	private String salvarNoDisco(XSSFWorkbook planilha, String caminhoArquivo, String extensao) {
 		String mensagem = "";
 		FileOutputStream saida = null;
