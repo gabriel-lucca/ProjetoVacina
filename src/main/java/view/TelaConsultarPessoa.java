@@ -261,8 +261,7 @@ public class TelaConsultarPessoa extends JFrame {
 		ArrayList<PessoaVO> list = new ArrayList<PessoaVO>();
 		FiltroPessoa seletor = new FiltroPessoa();
 		
-		if(verificarFiltroPreenchido()) {
-			
+		if(verificarFiltroPreenchido()) {		
 			if(txtNome.getText().toString().length()!=0) {
 				seletor.setNome(txtNome.getText().toString());
 			}
@@ -275,10 +274,9 @@ public class TelaConsultarPessoa extends JFrame {
 			if(txtCidade!=null) {
 				seletor.setCidade(txtCidade.getText());
 			}
-			
 			list = pController.consultarComFiltro(seletor);
+			JOptionPane.showMessageDialog(null, list.size()+" resultados encontrados");
 		} else {
-			JOptionPane.showMessageDialog(null, "Não encontrado");
 			list = pController.consultarTodos();
 		}		
 		for (PessoaVO p : list) {
