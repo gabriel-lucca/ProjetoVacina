@@ -6,7 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import model.vo.PessoaVO;
 import model.vo.VacinaVO;
+import seletor.FiltroVacina;
 
 public class VacinaDAO  {
 	public VacinaVO cadastrar(VacinaVO vacina) {
@@ -176,5 +178,27 @@ public class VacinaDAO  {
 			System.out.println("Erro ao consultar vacina por nome: \n" + e.getMessage());
 		}
 		return vacinaEncontrada;
+	}
+	public ArrayList<VacinaVO> consultarComFiltro(FiltroVacina seletor) {
+		ArrayList<VacinaVO> encontrado = new ArrayList<VacinaVO>();
+		Connection conn = Banco.getConnection();
+		String sql = "select * from vacina ";
+		
+		if(seletor.temFiltro()) {
+			sql += seletor.criarFiltros(seletor, sql);
+		}
+		PreparedStatement ps = Banco.getPreparedStatement(conn, sql);
+		try {
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				encontrado.add(construirDoResultSet(rs));
+			}
+		} catch(SQLException e) {
+			System.out.println("Erro ao buscar por filtro.\nErro: "+e.getMessage());
+		} finally {
+			Banco.closeConnection(conn);
+			Banco.closeConnection(conn);
+		}
+		return encontrado;
 	}
 }

@@ -8,6 +8,7 @@ import exception.exceptionVacina.PaisJaTemVacinaRegistradaException;
 import exception.exceptionVacina.VacinaJaExisteException;
 import model.dao.VacinaDAO;
 import model.vo.VacinaVO;
+import seletor.FiltroVacina;
 
 public class VacinaBO {
 	VacinaDAO dao = new VacinaDAO();
@@ -41,6 +42,11 @@ public class VacinaBO {
 	}
 	public VacinaVO consultarPorId(Integer id) {
 		return dao.consultarPorId(id);
+	}
+
+	public ArrayList<VacinaVO> consultarComFiltro(FiltroVacina seletor) {
+		// TODO Auto-generated method stub
+		return dao.consultarComFiltro(seletor);
 	}
 }
  

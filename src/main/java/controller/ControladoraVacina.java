@@ -8,6 +8,7 @@ import exception.exceptionVacina.PaisJaTemVacinaRegistradaException;
 import exception.exceptionVacina.VacinaJaExisteException;
 import model.bo.VacinaBO;
 import model.vo.VacinaVO;
+import seletor.FiltroVacina;
 
 public class ControladoraVacina {
 	private VacinaBO bo = new VacinaBO();
@@ -60,5 +61,8 @@ public class ControladoraVacina {
 	}
 	public VacinaVO consultarPorId(Integer id) {
 		return bo.consultarPorId(id);
+	}
+	public ArrayList<VacinaVO> consultarComFiltro(FiltroVacina seletor) {
+		return bo.consultarComFiltro(seletor);
 	}
 }
