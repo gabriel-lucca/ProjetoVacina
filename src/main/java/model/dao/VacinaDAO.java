@@ -34,12 +34,13 @@ public class VacinaDAO  {
 		}finally {
 			Banco.closeConnection(conn);
 			Banco.closePreparedStatement(ps);
+			Banco.closeResultSet(rs);
 		}
 		return vacina;
 	}
 	public boolean alterar(VacinaVO vacina) {
 		Connection conn = Banco.getConnection();
-		String sql = "update from vacina "
+		String sql = "update vacina "
 				+ "set nomePesquisadorResponsavel=?, paisOrigem=?, nomeVacina=?, dtInicioPesquisa=?, quantidadeDoses=?, intervaloDoses=?"
 				+ "where idVacina=?";
 		PreparedStatement ps = Banco.getPreparedStatement(conn, sql);
@@ -88,13 +89,13 @@ public class VacinaDAO  {
 		vacina.setIntervaloDoses(rs.getInt("intervaloDoses"));
 		return vacina;
 	}
-	public VacinaVO consultarPorId(Integer id) {
+	public VacinaVO consultarPorId(Integer idVacinaSelecionada) {
 		Connection conn= Banco.getConnection();
 		String sql = "select * from vacina where idVacina=?";
 		PreparedStatement ps = Banco.getPreparedStatement(conn, sql);
 		VacinaVO vacinaEncontrada = new VacinaVO();
 		try {
-			ps.setInt(1, id);
+			ps.setInt(1, idVacinaSelecionada);
 			ResultSet rs = ps.executeQuery();
 			if(rs.next()) {
 				vacinaEncontrada = construirDoResultSet(rs);
