@@ -42,7 +42,6 @@ public class TelaConsultarPessoa extends JFrame {
 	DefaultTableModel modelo = new DefaultTableModel();	
 	private int respostaExclusao;
 	private JTextField txtNome;
-	private JTextField txtDataNascimento;
 	private JButton btnAlterar;
 	private JButton btnExcluir;
 	private JButton btnCancelar;
@@ -51,6 +50,8 @@ public class TelaConsultarPessoa extends JFrame {
 	DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	Object[] opcoes = {"Sim", "Não"};
 	private JTextField txtCidade;
+	private JTextField txtIdadeMinima;
+	private JTextField txtIdadeMaxima;
 	/**
 	 * Launch the application.
 	 */
@@ -83,7 +84,7 @@ public class TelaConsultarPessoa extends JFrame {
 		JScrollPane scrollPane = new JScrollPane();
 		
 		scrollPane.setEnabled(false);
-		scrollPane.setBounds(25, 210, 956, 286);
+		scrollPane.setBounds(25, 210, 970, 286);
 		contentPane.add(scrollPane);
 		
 		table = new JTable(modelo);
@@ -161,28 +162,16 @@ public class TelaConsultarPessoa extends JFrame {
 		contentPane.add(btnConsultar);
 		
 		JLabel lblNomePessoa = new JLabel("Nome pessoa");
-		lblNomePessoa.setBounds(115, 59, 129, 14);
+		lblNomePessoa.setBounds(25, 59, 129, 14);
 		contentPane.add(lblNomePessoa);
 		
 		txtNome = new JTextField();
-		txtNome.setBounds(115, 84, 188, 37);
+		txtNome.setBounds(25, 84, 188, 37);
 		contentPane.add(txtNome);
 		txtNome.setColumns(10);
 		
-		JLabel lblDataNascimento = new JLabel("Data nascimento");
-		lblDataNascimento.setBounds(421, 59, 107, 14);
-		contentPane.add(lblDataNascimento);
-			try {
-				mascaraDtNascimento = new MaskFormatter("##/##/####");
-				txtDataNascimento = new JFormattedTextField(mascaraDtNascimento);
-			} catch (ParseException e1) {
-			}
-		txtDataNascimento.setColumns(10);
-		txtDataNascimento.setBounds(421, 84, 107, 37);
-		contentPane.add(txtDataNascimento);
-		
 		JLabel lblCidade = new JLabel("Cidade");
-		lblCidade.setBounds(671, 59, 87, 14);
+		lblCidade.setBounds(807, 59, 87, 14);
 		contentPane.add(lblCidade);
 		
 		JButton btnGerarPlanilha = new JButton("Gerar relatório");
@@ -215,13 +204,31 @@ public class TelaConsultarPessoa extends JFrame {
 		});
 		btnCancelar.setEnabled(false);
 		btnCancelar.setVisible(false);
-		btnCancelar.setBounds(832, 150, 149, 49);
+		btnCancelar.setBounds(846, 150, 149, 49);
 		contentPane.add(btnCancelar);
 		
 		txtCidade = new JTextField();
 		txtCidade.setColumns(10);
-		txtCidade.setBounds(671, 84, 188, 37);
+		txtCidade.setBounds(807, 84, 188, 37);
 		contentPane.add(txtCidade);
+		
+		txtIdadeMinima = new JTextField();
+		txtIdadeMinima.setColumns(10);
+		txtIdadeMinima.setBounds(372, 84, 95, 37);
+		contentPane.add(txtIdadeMinima);
+		
+		txtIdadeMaxima = new JTextField();
+		txtIdadeMaxima.setColumns(10);
+		txtIdadeMaxima.setBounds(509, 84, 95, 37);
+		contentPane.add(txtIdadeMaxima);
+		
+		JLabel lblIdadeMnima = new JLabel("Idade mínima");
+		lblIdadeMnima.setBounds(372, 59, 95, 14);
+		contentPane.add(lblIdadeMnima);
+		
+		JLabel lblIdadeMxima = new JLabel("Idade máxima");
+		lblIdadeMxima.setBounds(509, 59, 95, 14);
+		contentPane.add(lblIdadeMxima);
 		
 	}
 	public void excluir(Integer id) {
@@ -241,7 +248,8 @@ public class TelaConsultarPessoa extends JFrame {
 	public boolean verificarFiltroPreenchido() {
 		boolean resposta = false;
 		if(txtNome.getText().toString().length()!=0 ||
-				txtDataNascimento.getText().toString()!=null ||
+				!txtIdadeMinima.getText().isEmpty() ||
+				!txtIdadeMaxima.getText().isEmpty() ||
 				txtCidade.getText().toString().length()!=0) {
 			resposta = true;
 		}
@@ -258,12 +266,16 @@ public class TelaConsultarPessoa extends JFrame {
 			if(txtNome.getText().toString().length()!=0) {
 				seletor.setNome(txtNome.getText().toString());
 			}
-			//if(txtDataNascimento.getText().toString()!=null) {
-			//	seletor.setDtNascimento(LocalDate.parse(txtDataNascimento.getText().toString(), dataFormatter));
-			//}
-			if(txtCidade!=null) {
-				seletor.setCidade(txtCidade.getText().toString());
+			if(!txtIdadeMinima.getText().isEmpty()) {
+				seletor.setIdadeMinima(Integer.parseInt(txtIdadeMinima.getText()));
 			}
+			if(!txtIdadeMaxima.getText().isEmpty()) {
+				seletor.setIdadeMaxima(Integer.parseInt(txtIdadeMinima.getText()));
+			}
+			if(txtCidade!=null) {
+				seletor.setCidade(txtCidade.getText());
+			}
+			
 			list = pController.consultarComFiltro(seletor);
 		} else {
 			JOptionPane.showMessageDialog(null, "Não encontrado");

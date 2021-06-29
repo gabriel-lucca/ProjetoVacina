@@ -5,7 +5,8 @@ import java.time.LocalDate;
 public class FiltroPessoa {
 	//Atributos para filtragem:
 	private String nome;
-	private LocalDate dtNascimento;
+	private int idadeMinima;
+	private int idadeMaxima;
 	private String cidade;
 	//Atributos para possível pagição dos resultados;
 	private int limite;
@@ -21,11 +22,18 @@ public class FiltroPessoa {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	public LocalDate getDtNascimento() {
-		return dtNascimento;
+	
+	public int getIdadeMinima() {
+		return idadeMinima;
 	}
-	public void setDtNascimento(LocalDate dtNascimento) {
-		this.dtNascimento = dtNascimento;
+	public void setIdadeMinima(int idadeMinima) {
+		this.idadeMinima = idadeMinima;
+	}
+	public int getIdadeMaxima() {
+		return idadeMaxima;
+	}
+	public void setIdadeMaxima(int idadeMaxima) {
+		this.idadeMaxima = idadeMaxima;
 	}
 	public String getCidade() {
 		return cidade;
@@ -50,7 +58,10 @@ public class FiltroPessoa {
 		if(nome!=null&&!nome.isEmpty()) {
 			return true;
 		}
-		if(dtNascimento!=null) {
+		if(idadeMinima!=0) {
+			return true;
+		}
+		if(idadeMaxima!=0) {
 			return true;
 		}
 		if(cidade!=null&&!cidade.isEmpty()) {
@@ -74,11 +85,18 @@ public class FiltroPessoa {
 			sql+=" nomePessoa LIKE '%"+seletor.getNome()+"%'";
 			primeiro = false;
 		}
-		if(seletor.getDtNascimento()!=null) {
+		if(seletor.getIdadeMinima()!=0) {
 			if(!primeiro) {
 				sql += " and ";
 			}
-			sql+=" dtNascimento = "+seletor.getDtNascimento();
+			sql+=" timestampdiff(YEAR, dtNascimento, now()) >= "+seletor.getIdadeMinima();
+			primeiro = false;
+		}
+		if(seletor.getIdadeMaxima()!=0) {
+			if(!primeiro) {
+				sql += " and ";
+			}
+			sql+=" timestampdiff(YEAR, dtNascimento, now()) <= "+seletor.getIdadeMaxima();
 			primeiro = false;
 		}
 		if(seletor.getCidade()!=null && !seletor.getCidade().isEmpty()) {
@@ -90,11 +108,6 @@ public class FiltroPessoa {
 		}
 		return sql;
 	}
-	@Override
-	public String toString() {
-		return "FiltroPessoa [nome=" + nome + ", dtNascimento=" + dtNascimento + ", cidade=" + cidade + "]";
-	}
-	
 }
 
 
