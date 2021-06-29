@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -45,6 +46,8 @@ public class TelaCadastroPessoa extends JFrame {
 	private int respostaCadastro;
 	private int respostaAlteracao;
 	private int respostaExclusao;
+	private JButton btnCadastrarPessoa;
+	private JButton btnAlterar;
 	Object[] opcoes = {"Sim","Não"};
 
 
@@ -74,6 +77,18 @@ public class TelaCadastroPessoa extends JFrame {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 622, 495);
 		contentPane = new JPanel();
+		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				if(verificarCamposPreenchdidos()) {
+					btnCadastrarPessoa.setEnabled(true);
+					btnAlterar.setEnabled(true);
+				} else {
+					btnCadastrarPessoa.setEnabled(false);
+					btnAlterar.setEnabled(false);
+				}
+			}
+		});
 		contentPane.setBackground(new Color(204, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -156,7 +171,7 @@ public class TelaCadastroPessoa extends JFrame {
 		txtEmail.setColumns(10);
 		
 				
-		JButton btnCadastrarPessoa = new JButton("Cadastrar pessoa");
+		btnCadastrarPessoa = new JButton("Cadastrar pessoa");
 		btnCadastrarPessoa.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -189,7 +204,7 @@ public class TelaCadastroPessoa extends JFrame {
 		cbxEstado.setBounds(448, 267, 75, 29);
 		contentPane.add(cbxEstado);
 		
-		JButton btnAlterar = new JButton("Alterar");
+		btnAlterar = new JButton("Alterar");
 		btnAlterar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent me) {

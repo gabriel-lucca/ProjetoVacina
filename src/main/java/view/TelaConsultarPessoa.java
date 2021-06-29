@@ -52,6 +52,7 @@ public class TelaConsultarPessoa extends JFrame {
 	private JTextField txtCidade;
 	private JTextField txtIdadeMinima;
 	private JTextField txtIdadeMaxima;
+	private JLabel lblFiltros;
 	/**
 	 * Launch the application.
 	 */
@@ -229,6 +230,10 @@ public class TelaConsultarPessoa extends JFrame {
 		JLabel lblIdadeMxima = new JLabel("Idade máxima");
 		lblIdadeMxima.setBounds(509, 59, 95, 14);
 		contentPane.add(lblIdadeMxima);
+		
+		lblFiltros = new JLabel("Filtros:");
+		lblFiltros.setBounds(25, 21, 67, 14);
+		contentPane.add(lblFiltros);
 		
 	}
 	public void excluir(Integer id) {

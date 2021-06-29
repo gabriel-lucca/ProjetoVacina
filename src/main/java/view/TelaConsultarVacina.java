@@ -21,11 +21,9 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import controller.ControladoraVacina;
-import model.dao.PessoaDAO;
 import model.dao.VacinaDAO;
-import model.vo.PessoaVO;
 import model.vo.VacinaVO;
-import util.PlanilhaPessoa;
+import seletor.FiltroVacina;
 import util.PlanilhaVacina;
 
 import javax.swing.JButton;
@@ -46,12 +44,14 @@ public class TelaConsultarVacina extends JFrame {
 	private ControladoraVacina vController = new ControladoraVacina();
 	private int respostaExclusao;
 	Object[] opcoes = {"Sim", "Não"};
-	private JTextField textField;
+	private JTextField txtNomeVacina;
 	private JTextField txtPaisOrigem;
-	private JTextField txtDoses;
 	private JButton btnAlterar;
 	private JButton btnExcluir;
 	private JButton btnLimpar;
+	private JTextField txtDoses;
+	
+	
 	/**
 	 * Launch the application.
 	 */
@@ -163,10 +163,10 @@ public class TelaConsultarVacina extends JFrame {
 		lblNomeVacina.setBounds(174, 26, 114, 14);
 		contentPane.add(lblNomeVacina);
 		
-		textField = new JTextField();
-		textField.setBounds(174, 44, 139, 35);
-		contentPane.add(textField);
-		textField.setColumns(10);
+		txtNomeVacina = new JTextField();
+		txtNomeVacina.setBounds(174, 44, 139, 35);
+		contentPane.add(txtNomeVacina);
+		txtNomeVacina.setColumns(10);
 		
 		JLabel lblPaisOrigem = new JLabel("País origem");
 		lblPaisOrigem.setBounds(415, 26, 114, 14);
@@ -218,6 +218,10 @@ public class TelaConsultarVacina extends JFrame {
 		});
 		btnGerarPlanilha.setBounds(33, 108, 149, 41);
 		contentPane.add(btnGerarPlanilha);
+		
+		JLabel lblFiltros = new JLabel("Filtros:");
+		lblFiltros.setBounds(32, 26, 80, 14);
+		contentPane.add(lblFiltros);
 	}
 	
 	public void excluir(Integer id) {
@@ -234,10 +238,43 @@ public class TelaConsultarVacina extends JFrame {
 		}
 	}
 	
+	public boolean verificarFiltroPreenchido() {
+		boolean resposta = false;
+		if(txtNomeVacina.getText().toString().length()!=0 ||
+			!txtDoses.getText().isEmpty() ||
+			txtPaisOrigem.getText().toString().length()!=0) {
+			resposta = true;
+		}
+		return resposta;
+	}
+	
 	public void carregarTabela() {	
 		VacinaDAO vacina = new VacinaDAO();
 		ArrayList<VacinaVO> list = vacina.consultarTodos();
+		FiltroVacina seletor = new FiltroVacina();
+		
+		if(verificarFiltroPreenchido()) {		
+			if(txtNomeVacina.getText().toString().length()!=0) {
+				seletor.setNomeVacina(txtNomeVacina.getText().toString());
+			}
+			if(txtDoses!=null) {
+				seletor.setDoses(txtDoses.getText());
+			}
 			
+			if(txtPaisOrigem!=null) {
+				seletor.setPais(txtPaisOrigem.getText());
+			}
+			list = vController.consultarComFiltro(seletor);
+			String mensagem = "";
+			if(list.size()>0) {
+				mensagem = list.size()+" resultados encontrados";
+			} else {
+				mensagem = "Nenhum resultado encontrado";
+			}
+			JOptionPane.showMessageDialog(null, mensagem);
+		} else {
+			list = vController.consultarTodos();
+		}		
 		for (VacinaVO vac : list) {
 			modelo.addRow(new Object[]{vac.getIdVacina(),vac.getNomePesquisadorResponsavel(),vac.getPaisOrigem(),
 					vac.getNomeVacina(),vac.getDataInicioPesquisa(),vac.getQuantidadeDoses(),vac.getIntervaloDoses()});
