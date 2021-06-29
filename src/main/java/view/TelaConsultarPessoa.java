@@ -248,14 +248,13 @@ public class TelaConsultarPessoa extends JFrame {
 	public boolean verificarFiltroPreenchido() {
 		boolean resposta = false;
 		if(txtNome.getText().toString().length()!=0 ||
-				!txtIdadeMinima.getText().isEmpty() ||
-				!txtIdadeMaxima.getText().isEmpty() ||
-				txtCidade.getText().toString().length()!=0) {
+			!txtIdadeMinima.getText().isEmpty() ||
+			!txtIdadeMaxima.getText().isEmpty() ||
+			txtCidade.getText().toString().length()!=0) {
 			resposta = true;
 		}
 		return resposta;
 	}
-	
 	public void carregarTabela() {
 		PessoaDAO pessoa = new PessoaDAO();
 		ArrayList<PessoaVO> list = new ArrayList<PessoaVO>();
@@ -275,7 +274,13 @@ public class TelaConsultarPessoa extends JFrame {
 				seletor.setCidade(txtCidade.getText());
 			}
 			list = pController.consultarComFiltro(seletor);
-			JOptionPane.showMessageDialog(null, list.size()+" resultados encontrados");
+			String mensagem = "";
+			if(list.size()>0) {
+				mensagem = list.size()+" resultados encontrados";
+			} else {
+				mensagem = "Nenhum resultado encontrado";
+			}
+			JOptionPane.showMessageDialog(null, mensagem);
 		} else {
 			list = pController.consultarTodos();
 		}		
@@ -284,7 +289,6 @@ public class TelaConsultarPessoa extends JFrame {
 					p.getDataNascimento(), p.getCidade(), p.getEstado(), p.getEndereco() });
 		}
 	}
-
 	private void limparTabelaPessoa() {
 		modelo.setRowCount(0);
 	}
