@@ -82,10 +82,8 @@ public class TelaCadastroPessoa extends JFrame {
 			public void mouseMoved(MouseEvent e) {
 				if(verificarCamposPreenchdidos()) {
 					btnCadastrarPessoa.setEnabled(true);
-					btnAlterar.setEnabled(true);
 				} else {
 					btnCadastrarPessoa.setEnabled(false);
-					btnAlterar.setEnabled(false);
 				}
 			}
 		});
@@ -183,6 +181,7 @@ public class TelaCadastroPessoa extends JFrame {
 				}
 			}	
 		});
+		btnCadastrarPessoa.setEnabled(false);
 		btnCadastrarPessoa.setBounds(368, 380, 155, 46);
 		contentPane.add(btnCadastrarPessoa);
 		
@@ -215,6 +214,7 @@ public class TelaCadastroPessoa extends JFrame {
 				}
 			}
 		});
+		btnAlterar.setEnabled(false);
 		btnAlterar.setBounds(210, 380, 148, 46);
 		contentPane.add(btnAlterar);
 		}
@@ -299,6 +299,9 @@ public class TelaCadastroPessoa extends JFrame {
 			this.txtTelefone.setText(pessoa.getTelefone());
 			this.txtCpf.setText(pessoa.getCpf());
 			this.cbxEstado.setSelectedItem(pessoa.getEstado());
+			
+			btnCadastrarPessoa.setEnabled(false);
+			btnAlterar.setEnabled(true);
 		}
 		private void limparCampos() {
 			this.txtEmail.setText("");
