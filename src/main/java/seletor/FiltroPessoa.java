@@ -72,7 +72,7 @@ public class FiltroPessoa {
 		if(idadeMaxima!=0) {
 			return true;
 		}
-		if(opcao!=null&&!nome.isEmpty()) {
+		if(opcao!="Selecione uma opção") {
 			return true;
 		}
 		if(cidade!=null&&!cidade.isEmpty()) {
@@ -100,7 +100,7 @@ public class FiltroPessoa {
 			if(!primeiro) {
 				sql += " and ";
 			}
-			if(opcao!=null) {
+			if(opcao!="Selecione uma opção") {
 				switch(seletor.getOpcao()) {
 					case "Dias":
 						sql+=" timestampdiff(DAY, dtNascimento, now()) >= "+seletor.getIdadeMinima();

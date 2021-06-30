@@ -288,7 +288,7 @@ public class TelaConsultarPessoa extends JFrame {
 		if(txtNome.getText().toString().length()!=0 ||
 			cbIdadeMinima.getSelectedItem().toString() != "Selecione a idade"||
 			cbIdadeMaxima.getSelectedItem().toString() != "Selecione a idade" ||
-			cbIdadeMaxima.getSelectedItem().toString() !="Selecione uma opção"||
+			cbIdadeMaxima.getSelectedItem().toString() != "Selecione uma opção"||
 			txtCidade.getText().toString().length()!=0) {
 			resposta = true;
 		}
@@ -309,7 +309,7 @@ public class TelaConsultarPessoa extends JFrame {
 			if(cbIdadeMaxima.getSelectedItem().toString() != "Selecione a idade") {
 				seletor.setIdadeMaxima(Integer.parseInt(cbIdadeMaxima.getSelectedItem().toString()));
 			}
-			
+
 			if(cbIdadeMaxima.getSelectedItem().toString() !="Selecione uma opção") {
 				seletor.setOpcao(cbOpcoesIdade.getSelectedItem().toString());
 			}
