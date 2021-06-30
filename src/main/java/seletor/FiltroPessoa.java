@@ -124,15 +124,15 @@ public class FiltroPessoa {
 			if(opcao!="Selecione uma opção") {
 				switch(seletor.getOpcao()) {
 					case "Dias":
-						sql+=" timestampdiff(DAY, dtNascimento, now()) <= "+seletor.getIdadeMinima();
+						sql+=" timestampdiff(DAY, dtNascimento, now()) <= "+seletor.getIdadeMaxima();
 						primeiro = false;
 						break;
 					case "Mêses":
-						sql+=" timestampdiff(MONTH, dtNascimento, now()) <= "+seletor.getIdadeMinima();
+						sql+=" timestampdiff(MONTH, dtNascimento, now()) <= "+seletor.getIdadeMaxima();
 						primeiro = false;
 						break;
 					case "Anos":
-						sql+=" timestampdiff(YEAR, dtNascimento, now()) <= "+seletor.getIdadeMinima();
+						sql+=" timestampdiff(YEAR, dtNascimento, now()) <= "+seletor.getIdadeMaxima();
 						primeiro = false;
 						break;
 				}

@@ -82,7 +82,7 @@ public class TelaConsultarPessoa extends JFrame {
 		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseMoved(MouseEvent e) {
-				if(verificarFiltroPreenchido() || (Integer) table.getModel().getValueAt(table.getSelectedRow(), 0)>0) {
+				if(verificarFiltroPreenchido()) {
 					btnLimpar.setVisible(true);
 					btnLimpar.setEnabled(true);
 					btnLimparFiltros.setVisible(true);

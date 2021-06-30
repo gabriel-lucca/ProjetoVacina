@@ -36,11 +36,11 @@ public class AplicacaoVacinaBO {
 		//a) nao atingiu o limite de doses - olhar a quantidade de aplicacoes
 		//b) intervalo entre a ultima dose e HOJE > intervalo da vacina em questao -- olhar a ultima aplicacao
 		//pode receber nova aplicacao SE(e somente se)
-		if(aplicacoes.size() == v.getQuantidadeDoses()) {
-			mensagem += "\nEsta pessoa atingiu o limite de doses.\n Foram aplicadas "+aplicacoes.size();
-		} else if(tempoRestante > 0) {
-			mensagem += "\nAinda não pode aplicar.\nTempo restante "+tempoRestante;
-		}
+		//if(aplicacoes.size() == v.getQuantidadeDoses()) {
+	//		mensagem += "\nEsta pessoa atingiu o limite de doses.\n Foram aplicadas "+aplicacoes.size();
+		//} else if(tempoRestante > 0) {
+		//	mensagem += "\nAinda não pode aplicar.\nTempo restante "+tempoRestante;
+		//}
 		return mensagem;
 	}
 	public AplicacaoVacinaVO cadastrar(AplicacaoVacinaVO aplicacaoVacinaVO) throws AnalisarSePodeAplicarException {
