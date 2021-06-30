@@ -5,6 +5,7 @@ import java.time.LocalDate;
 public class FiltroPessoa {
 	//Atributos para filtragem:
 	private String nome;
+	private String opcao;
 	private int idadeMinima;
 	private int idadeMaxima;
 	private String cidade;
@@ -35,6 +36,13 @@ public class FiltroPessoa {
 	public void setIdadeMaxima(int idadeMaxima) {
 		this.idadeMaxima = idadeMaxima;
 	}
+	
+	public String getOpcao() {
+		return opcao;
+	}
+	public void setOpcao(String opcao) {
+		this.opcao = opcao;
+	}
 	public String getCidade() {
 		return cidade;
 	}
@@ -64,6 +72,9 @@ public class FiltroPessoa {
 		if(idadeMaxima!=0) {
 			return true;
 		}
+		if(opcao!=null&&!nome.isEmpty()) {
+			return true;
+		}
 		if(cidade!=null&&!cidade.isEmpty()) {
 			return true;
 		}
@@ -89,15 +100,43 @@ public class FiltroPessoa {
 			if(!primeiro) {
 				sql += " and ";
 			}
-			sql+=" timestampdiff(YEAR, dtNascimento, now()) >= "+seletor.getIdadeMinima();
-			primeiro = false;
+			if(opcao!=null) {
+				switch(seletor.getOpcao()) {
+					case "Dias":
+						sql+=" timestampdiff(DAY, dtNascimento, now()) >= "+seletor.getIdadeMinima();
+						primeiro = false;
+						break;
+					case "Mêses":
+						sql+=" timestampdiff(MONTH, dtNascimento, now()) >= "+seletor.getIdadeMinima();
+						primeiro = false;
+						break;
+					case "Anos":
+						sql+=" timestampdiff(YEAR, dtNascimento, now()) >= "+seletor.getIdadeMinima();
+						primeiro = false;
+						break;
+				}
+			}
 		}
 		if(seletor.getIdadeMaxima()!=0) {
 			if(!primeiro) {
 				sql += " and ";
 			}
-			sql+=" timestampdiff(YEAR, dtNascimento, now()) <= "+seletor.getIdadeMaxima();
-			primeiro = false;
+			if(opcao!=null) {
+				switch(seletor.getOpcao()) {
+					case "Dias":
+						sql+=" timestampdiff(DAY, dtNascimento, now()) <= "+seletor.getIdadeMinima();
+						primeiro = false;
+						break;
+					case "Mêses":
+						sql+=" timestampdiff(MONTH, dtNascimento, now()) <= "+seletor.getIdadeMinima();
+						primeiro = false;
+						break;
+					case "Anos":
+						sql+=" timestampdiff(YEAR, dtNascimento, now()) <= "+seletor.getIdadeMinima();
+						primeiro = false;
+						break;
+				}
+			}
 		}
 		if(seletor.getCidade()!=null && !seletor.getCidade().isEmpty()) {
 			if(!primeiro) {
