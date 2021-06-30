@@ -37,22 +37,25 @@ import java.awt.event.MouseEvent;
 
 public class TelaConsultarPessoa extends JFrame {
 
+	private DefaultTableModel modelo = new DefaultTableModel();	
 	private JPanel contentPane;
 	private JTable table;
-	DefaultTableModel modelo = new DefaultTableModel();	
 	private int respostaExclusao;
 	private JTextField txtNome;
 	private JButton btnAlterar;
 	private JButton btnExcluir;
 	private JButton btnCancelar;
 	private ControladoraPessoa pController = new ControladoraPessoa();
-	MaskFormatter mascaraDtNascimento;
-	DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-	Object[] opcoes = {"Sim", "Não"};
+	private MaskFormatter mascaraDtNascimento;
+	private DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+	private Object[] opcoes = {"Sim", "Não"};
 	private JTextField txtCidade;
-	private JTextField txtIdadeMinima;
-	private JTextField txtIdadeMaxima;
+	private JComboBox cbIdadeMinima;
+	private JComboBox cbIdadeMaxima;
+	private JComboBox cbOpcoesIdade;
 	private JLabel lblFiltros;
+	private JLabel lblIdadeMinima;
+	private JLabel lblIdadeMaxima;
 	/**
 	 * Launch the application.
 	 */
@@ -213,27 +216,57 @@ public class TelaConsultarPessoa extends JFrame {
 		txtCidade.setBounds(807, 84, 188, 37);
 		contentPane.add(txtCidade);
 		
-		txtIdadeMinima = new JTextField();
-		txtIdadeMinima.setColumns(10);
-		txtIdadeMinima.setBounds(372, 84, 95, 37);
-		contentPane.add(txtIdadeMinima);
+		int limiteIdade = 150;
+		String idades[] = new String[limiteIdade];
+		for(int i = 0; i < limiteIdade; i++) {
+			if(i==0) {
+				idades[i] = "Selecione a idade";
+			} else {
+				idades[i] = String.valueOf(i);
+			}
+		}
+		cbIdadeMinima = new JComboBox(idades);
+		cbIdadeMinima.setBounds(434, 84, 149, 37);
+		cbIdadeMinima.setEnabled(false);
+		contentPane.add(cbIdadeMinima);
 		
-		txtIdadeMaxima = new JTextField();
-		txtIdadeMaxima.setColumns(10);
-		txtIdadeMaxima.setBounds(509, 84, 95, 37);
-		contentPane.add(txtIdadeMaxima);
+		cbIdadeMaxima = new JComboBox(idades);
+		cbIdadeMaxima.setBounds(623, 84, 149, 37);
+		cbIdadeMaxima.setEnabled(false);
+		contentPane.add(cbIdadeMaxima);
 		
-		JLabel lblIdadeMnima = new JLabel("Idade mínima");
-		lblIdadeMnima.setBounds(372, 59, 95, 14);
-		contentPane.add(lblIdadeMnima);
+		lblIdadeMinima = new JLabel("Idade mínima");
+		lblIdadeMinima.setBounds(434, 59, 149, 14);
+		contentPane.add(lblIdadeMinima);
 		
-		JLabel lblIdadeMxima = new JLabel("Idade máxima");
-		lblIdadeMxima.setBounds(509, 59, 95, 14);
-		contentPane.add(lblIdadeMxima);
+		lblIdadeMaxima = new JLabel("Idade máxima");
+		lblIdadeMaxima.setBounds(623, 59, 149, 14);
+		contentPane.add(lblIdadeMaxima);
 		
 		lblFiltros = new JLabel("Filtros:");
 		lblFiltros.setBounds(25, 21, 67, 14);
 		contentPane.add(lblFiltros);
+		
+		String opcoes[] = {"Selecione uma opção", "Dias", "Meses", "Anos"};
+		cbOpcoesIdade = new JComboBox(opcoes);
+		cbOpcoesIdade.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String opcaoEscolhida = cbOpcoesIdade.getSelectedItem().toString();
+				if(cbOpcoesIdade.getSelectedItem().toString() != "Selecione uma opção") {
+					cbIdadeMinima.setEnabled(true);
+					cbIdadeMaxima.setEnabled(true);
+					lblIdadeMinima.setText("Idade mínima(em "+opcaoEscolhida+")");
+					lblIdadeMaxima.setText("Idade máxima(em "+opcaoEscolhida+")");
+				}
+			}
+		});	
+		cbOpcoesIdade.setBounds(247, 84, 149, 37);
+		cbOpcoesIdade.setVisible(true);
+		contentPane.add(cbOpcoesIdade);
+		
+		JLabel lblOpesDeIdade = new JLabel("Opções para idade");
+		lblOpesDeIdade.setBounds(247, 59, 149, 14);
+		contentPane.add(lblOpesDeIdade);
 		
 	}
 	public void excluir(Integer id) {
@@ -253,8 +286,9 @@ public class TelaConsultarPessoa extends JFrame {
 	public boolean verificarFiltroPreenchido() {
 		boolean resposta = false;
 		if(txtNome.getText().toString().length()!=0 ||
-			!txtIdadeMinima.getText().isEmpty() ||
-			!txtIdadeMaxima.getText().isEmpty() ||
+			cbIdadeMinima.getSelectedItem().toString() != "Selecione a idade"||
+			cbIdadeMaxima.getSelectedItem().toString() != "Selecione a idade" ||
+			cbIdadeMaxima.getSelectedItem().toString() !="Selecione uma opção"||
 			txtCidade.getText().toString().length()!=0) {
 			resposta = true;
 		}
@@ -269,11 +303,15 @@ public class TelaConsultarPessoa extends JFrame {
 			if(txtNome.getText().toString().length()!=0) {
 				seletor.setNome(txtNome.getText().toString());
 			}
-			if(!txtIdadeMinima.getText().isEmpty()) {
-				seletor.setIdadeMinima(Integer.parseInt(txtIdadeMinima.getText()));
+			if(cbIdadeMinima.getSelectedItem().toString() != "Selecione a idade") {
+				seletor.setIdadeMinima(Integer.parseInt(cbIdadeMinima.getSelectedItem().toString()));
 			}
-			if(!txtIdadeMaxima.getText().isEmpty()) {
-				seletor.setIdadeMaxima(Integer.parseInt(txtIdadeMinima.getText()));
+			if(cbIdadeMaxima.getSelectedItem().toString() != "Selecione a idade") {
+				seletor.setIdadeMaxima(Integer.parseInt(cbIdadeMaxima.getSelectedItem().toString()));
+			}
+			
+			if(cbIdadeMaxima.getSelectedItem().toString() !="Selecione uma opção") {
+				seletor.setOpcao(cbOpcoesIdade.getSelectedItem().toString());
 			}
 			if(txtCidade!=null) {
 				seletor.setCidade(txtCidade.getText());
