@@ -121,7 +121,7 @@ public class FiltroPessoa {
 			if(!primeiro) {
 				sql += " and ";
 			}
-			if(opcao!=null) {
+			if(opcao!="Selecione uma opção") {
 				switch(seletor.getOpcao()) {
 					case "Dias":
 						sql+=" timestampdiff(DAY, dtNascimento, now()) <= "+seletor.getIdadeMinima();

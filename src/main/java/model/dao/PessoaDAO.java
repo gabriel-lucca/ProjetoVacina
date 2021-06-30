@@ -28,8 +28,7 @@ public class PessoaDAO {
 			ps.setString(7, pessoa.getEstado());
 			ps.setString(8, pessoa.getEndereco());
 			ps.execute();
-
-			System.out.println("print" + ps.toString());
+			
 			rs = ps.getGeneratedKeys();
 			if (rs.next()) {
 				pessoa.setIdPessoa(rs.getInt(1));

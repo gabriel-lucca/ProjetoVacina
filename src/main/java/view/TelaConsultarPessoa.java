@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.ParseException;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
@@ -20,8 +18,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
 
 import controller.ControladoraPessoa;
-import controller.ControladoraVacina;
-import exception.exception_pessoa.AnalisarCamposPessoaException;
 import model.dao.PessoaDAO;
 import model.vo.PessoaVO;
 import seletor.FiltroPessoa;
@@ -31,23 +27,23 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
-import javax.swing.JFormattedTextField;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+
 
 public class TelaConsultarPessoa extends JFrame {
 
 	private DefaultTableModel modelo = new DefaultTableModel();	
+	JScrollPane scrollPane = new JScrollPane();
 	private JPanel contentPane;
 	private JTable table;
 	private int respostaExclusao;
 	private JTextField txtNome;
 	private JButton btnAlterar;
 	private JButton btnExcluir;
-	private JButton btnCancelar;
+	private JButton btnLimpar;
 	private ControladoraPessoa pController = new ControladoraPessoa();
-	private MaskFormatter mascaraDtNascimento;
-	private DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	private Object[] opcoes = {"Sim", "Não"};
 	private JTextField txtCidade;
 	private JComboBox cbIdadeMinima;
@@ -56,6 +52,7 @@ public class TelaConsultarPessoa extends JFrame {
 	private JLabel lblFiltros;
 	private JLabel lblIdadeMinima;
 	private JLabel lblIdadeMaxima;
+	private JButton btnLimparFiltros;
 	/**
 	 * Launch the application.
 	 */
@@ -77,40 +74,54 @@ public class TelaConsultarPessoa extends JFrame {
 	 * Create the frame.
 	 */
 	public TelaConsultarPessoa() {
+		setTitle("Consulta de pessoas");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1033, 634);
 		contentPane = new JPanel();
+		
+		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				if(verificarFiltroPreenchido() || (Integer) table.getModel().getValueAt(table.getSelectedRow(), 0)>0) {
+					btnLimpar.setVisible(true);
+					btnLimpar.setEnabled(true);
+					btnLimparFiltros.setVisible(true);
+					btnLimparFiltros.setEnabled(true);
+				} else {
+					btnLimpar.setVisible(false);
+					btnLimpar.setEnabled(false);
+					btnLimparFiltros.setVisible(false);
+					btnLimparFiltros.setEnabled(false);
+				}
+			}
+		});
 		contentPane.setBackground(new Color(204, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		JScrollPane scrollPane = new JScrollPane();
-		
 		scrollPane.setEnabled(false);
 		scrollPane.setBounds(25, 210, 970, 286);
 		contentPane.add(scrollPane);
 		
 		table = new JTable(modelo);
-		
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				System.out.println(table.getSelectedRow());
 				if((Integer) table.getModel().getValueAt(table.getSelectedRow(), 0)>0) {
 					btnAlterar.setEnabled(true);
 					btnExcluir.setEnabled(true);
-					btnCancelar.setVisible(true);
-					btnCancelar.setEnabled(true);
+					btnLimpar.setVisible(true);
+					btnLimpar.setEnabled(true);
 				} else {
 					btnAlterar.setEnabled(false);
 					btnExcluir.setEnabled(false);
-					btnCancelar.setVisible(false);
-					btnCancelar.setEnabled(false);
-				}
+					btnLimpar.setVisible(false);
+					btnLimpar.setEnabled(false);
+				}	
 			}
 		});
-		
+
 		table.setBackground(Color.WHITE);
 		scrollPane.setViewportView(table);
 		modelo.addColumn("idPessoa");
@@ -157,7 +168,7 @@ public class TelaConsultarPessoa extends JFrame {
 		JButton btnConsultar = new JButton("Consultar");
 		btnConsultar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {	
-				limparTabelaPessoa();
+				limparTabela();
 				carregarTabela();
 			}
 
@@ -197,19 +208,19 @@ public class TelaConsultarPessoa extends JFrame {
 		btnGerarPlanilha.setBounds(25, 150, 149, 49);
 		contentPane.add(btnGerarPlanilha);
 		
-		btnCancelar = new JButton("Limpar");
-		btnCancelar.addMouseListener(new MouseAdapter() {
+		btnLimpar = new JButton("Limpar tabela");
+		btnLimpar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				limparTabelaPessoa();
-				btnCancelar.setEnabled(false);
-				btnCancelar.setVisible(false);
+				limparTabela();
+				btnLimpar.setEnabled(false);
+				btnLimpar.setVisible(false);
 			}
 		});
-		btnCancelar.setEnabled(false);
-		btnCancelar.setVisible(false);
-		btnCancelar.setBounds(846, 150, 149, 49);
-		contentPane.add(btnCancelar);
+		btnLimpar.setEnabled(false);
+		btnLimpar.setVisible(false);
+		btnLimpar.setBounds(846, 150, 149, 49);
+		contentPane.add(btnLimpar);
 		
 		txtCidade = new JTextField();
 		txtCidade.setColumns(10);
@@ -247,7 +258,7 @@ public class TelaConsultarPessoa extends JFrame {
 		lblFiltros.setBounds(25, 21, 67, 14);
 		contentPane.add(lblFiltros);
 		
-		String opcoes[] = {"Selecione uma opção", "Dias", "Meses", "Anos"};
+		String opcoes[] = {"Selecione uma opção", "Dias", "Mêses", "Anos"};
 		cbOpcoesIdade = new JComboBox(opcoes);
 		cbOpcoesIdade.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -257,6 +268,9 @@ public class TelaConsultarPessoa extends JFrame {
 					cbIdadeMaxima.setEnabled(true);
 					lblIdadeMinima.setText("Idade mínima(em "+opcaoEscolhida+")");
 					lblIdadeMaxima.setText("Idade máxima(em "+opcaoEscolhida+")");
+				} else {
+					cbIdadeMinima.setEnabled(false);
+					cbIdadeMaxima.setEnabled(false);
 				}
 			}
 		});	
@@ -267,6 +281,16 @@ public class TelaConsultarPessoa extends JFrame {
 		JLabel lblOpesDeIdade = new JLabel("Opções para idade");
 		lblOpesDeIdade.setBounds(247, 59, 149, 14);
 		contentPane.add(lblOpesDeIdade);
+		
+		btnLimparFiltros = new JButton("Limpar filtros");
+		btnLimparFiltros.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				limparFiltros();
+			}
+		});
+		btnLimparFiltros.setBounds(434, 10, 112, 37);
+		contentPane.add(btnLimparFiltros);
 		
 	}
 	public void excluir(Integer id) {
@@ -288,7 +312,7 @@ public class TelaConsultarPessoa extends JFrame {
 		if(txtNome.getText().toString().length()!=0 ||
 			cbIdadeMinima.getSelectedItem().toString() != "Selecione a idade"||
 			cbIdadeMaxima.getSelectedItem().toString() != "Selecione a idade" ||
-			cbIdadeMaxima.getSelectedItem().toString() != "Selecione uma opção"||
+			cbOpcoesIdade.getSelectedItem().toString() != "Selecione uma opção"||
 			txtCidade.getText().toString().length()!=0) {
 			resposta = true;
 		}
@@ -309,8 +333,7 @@ public class TelaConsultarPessoa extends JFrame {
 			if(cbIdadeMaxima.getSelectedItem().toString() != "Selecione a idade") {
 				seletor.setIdadeMaxima(Integer.parseInt(cbIdadeMaxima.getSelectedItem().toString()));
 			}
-
-			if(cbIdadeMaxima.getSelectedItem().toString() !="Selecione uma opção") {
+			if(cbOpcoesIdade.getSelectedItem().toString() !="Selecione uma opção") {
 				seletor.setOpcao(cbOpcoesIdade.getSelectedItem().toString());
 			}
 			if(txtCidade!=null) {
@@ -332,7 +355,14 @@ public class TelaConsultarPessoa extends JFrame {
 					p.getDataNascimento(), p.getCidade(), p.getEstado(), p.getEndereco() });
 		}
 	}
-	private void limparTabelaPessoa() {
+	private void limparFiltros() {
+		txtNome.setText("");
+		cbIdadeMinima.setSelectedItem("Selecione a idade");
+		cbIdadeMaxima.setSelectedItem("Selecione a idade");
+		cbOpcoesIdade.setSelectedItem("Selecione uma opção");
+		txtCidade.setText("");
+	}
+	private void limparTabela() {
 		modelo.setRowCount(0);
 	}
 }

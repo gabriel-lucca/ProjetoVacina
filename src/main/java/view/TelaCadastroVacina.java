@@ -1,6 +1,5 @@
 package view;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -25,18 +24,13 @@ import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import javax.swing.DropMode;
 import javax.swing.event.CaretListener;
 import javax.swing.event.CaretEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+
 import java.awt.event.MouseMotionAdapter;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 
 public class TelaCadastroVacina extends JFrame {
 
@@ -56,7 +50,7 @@ public class TelaCadastroVacina extends JFrame {
 	private int respostaExclusao;
 	private Object[] opcoes = {"Sim", "Não"};
 	DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-	
+	private int id;
 	/**
 	 * Launch the application.
 	 */
@@ -179,7 +173,6 @@ public class TelaCadastroVacina extends JFrame {
 		cbxPais.setBounds(265, 88, 310, 33);
 		contentPane.add(cbxPais);
 		
-		
 		btnCadastrar = new JButton("Cadastrar");
 		btnCadastrar.setEnabled(false);
 		btnCadastrar.addMouseListener(new MouseAdapter() {
@@ -246,6 +239,13 @@ public class TelaCadastroVacina extends JFrame {
 		vacinaAlterada.setNomeVacina(txtNomeVacina.getText());
 		vacinaAlterada.setPaisOrigem(cbxPais.getSelectedItem().toString());
 		vacinaAlterada.setQuantidadeDoses(cbxDoses.getSelectedItem().toString());
+		if(id!=0) {
+			vacinaAlterada.setIdVacina(id);
+		} else {
+			vacinaAlterada.setIdVacina(controller.consultarPorNome(txtNomeVacina.getText()).getIdVacina());
+		}
+		
+		JOptionPane.showMessageDialog(null, vacinaAlterada);
 		controller.alterar(vacinaAlterada);
 		String resultadoValidacao = controller.validarCampos(vacinaAlterada);
 		if(resultadoValidacao!=null && !resultadoValidacao.isEmpty()) {
@@ -275,10 +275,10 @@ public class TelaCadastroVacina extends JFrame {
 		this.txtIntervalo.setText(String.valueOf(vacina.getIntervaloDoses()));
 		this.txtNomePesquisador.setText(vacina.getNomePesquisadorResponsavel());
 		this.txtNomeVacina.setText(vacina.getNomeVacina());
-		
+		JOptionPane.showMessageDialog(null, vacina.getIdVacina());
 		DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		String dataInicioPesquisaFormatada = formatador.format(vacina.getDataInicioPesquisa());
-		
+		id = vacina.getIdVacina();
 		this.txtDataInicio.setText(dataInicioPesquisaFormatada);
 		this.cbxDoses.setSelectedItem(vacina.getQuantidadeDoses());
 		this.cbxPais.setSelectedItem(vacina.getPaisOrigem());
@@ -301,33 +301,33 @@ public class TelaCadastroVacina extends JFrame {
 	};
     
 	public String[] listarPaises(){
-		String[] listaDePaises = new String[] {" --- Selecione --- ","Alb�nia", "Alemanha", "Andorra", "Angola", "Anguilla", "Ant�rtida", "Ant�gua e Barbuda", "Antilhas Holandesas",
-		"Ar�bia Saudita", "Arg�lia", "Argentina", "Arm�nia", "Aruba", "Austr�lia", "�ustria", "Azerbaij�o", "Bahamas", "Bahrein", "Bangladesh", "Barbados",
-		"Belarus", "B�lgica", "Belize", "Benin", "Bermudas", "Bol�via", "B�snia-Herzeg�vina", "Botsuana", "Brasil", "Brunei", "Bulg�ria", "Burkina Fasso",
-		"Burundi", "But�o", "Cabo Verde", "Camar�es", "Camboja", "Canad�", "Cazaquist�o", "Chade", "Chile", "China", "Chipre", "Cingapura", "Col�mbia",
-		"Congo", "Cor�ia do Norte", "Cor�ia do Sul", "Costa do Marfim", "Costa Rica", "Cro�cia (Hrvatska)", "Cuba", "Dinamarca", "Djibuti", "Dominica",
-		"Egito", "El Salvador", "Emirados �rabes Unidos", "Equador", "Eritr�ia", "Eslov�quia", "Eslov�nia", "Espanha", "Estados Unidos","Est�nia", "Eti�pia",
-		"Fiji", "Filipinas", "Finl�ndia", "Fran�a", "Gab�o", "G�mbia", "Gana", "Ge�rgia", "Gibraltar", "Gr�-Bretanha (Reino Unido, UK)", "Granada", "Gr�cia",
-		"Groel�ndia", "Guadalupe", "Guam (Territ�rio dos Estados Unidos)", "Guatemala", "Guernsey", "Guiana", "Guiana Francesa", "Guin�", "Guin� Equatorial",
-		"Guin�-Bissau", "Haiti", "Holanda", "Honduras", "Hong Kong", "Hungria", "I�men", "Ilha Bouvet (Territ�rio da Noruega)", "Ilha do Homem", "Ilha Natal",
-		"Ilha Pitcairn", "Ilha Reuni�o", "Ilhas Aland", "Ilhas Cayman", "Ilhas Cocos", "Ilhas Comores", "Ilhas Cook", "Ilhas Faroes", "Ilhas Falkland (Malvinas)",
-		"Ilhas Ge�rgia do Sul e Sandwich do Sul", "Ilhas Heard e McDonald (Territ�rio da Austr�lia)", "Ilhas Marianas do Norte", "Ilhas Marshall",
-		"Ilhas Menores dos Estados Unidos", "Ilhas Norfolk", "Ilhas Seychelles", "Ilhas Solom�o", "Ilhas Svalbard e Jan Mayen", "Ilhas Tokelau", "Ilhas Turks e Caicos",
-		"Ilhas Virgens (Estados Unidos)", "Ilhas Virgens (Inglaterra)", "Ilhas Wallis e Futuna", "�ndia", "Indon�sia", "Iraque", "Irlanda", "Isl�ndia", "Israel",
-		"It�lia", "Jamaica", "Jap�o", "Jersey", "Jord�nia", "K�nia", "Kiribati", "Kuait", "Laos", "L�tvia", "Lesoto", "L�bano", "Lib�ria",
-		"L�bia", "Liechtenstein", "Litu�nia", "Luxemburgo", "Macau", "Maced�nia (Rep�blica Yugoslava)", "Madagascar", "Mal�sia", "Malaui", "Maldivas",
-		"Mali", "Malta", "Marrocos", "Martinica", "Maur�cio", "Maurit�nia", "Mayotte", "M�xico", "Micron�sia", "Mo�ambique", "Moldova", "M�naco","Mong�lia",
-		"Montenegro", "Montserrat", "Myanma", "Nam�bia", "Nauru", "Nepal", "Nicar�gua", "N�ger", "Nig�ria", "Niue","Noruega", "Nova Caled�nia",
-		"Nova Zel�ndia", "Om�", "Palau", "Panam�", "Papua-Nova Guin�", "Paquist�o", "Paraguai", "Peru", "Polin�sia Francesa", "Pol�nia", "Porto Rico",
-		"Portugal", "Qatar", "Quirguist�o", "Rep�blica Centro-Africana", "Rep�blica Democr�tica do Congo", "Rep�blica Dominicana", "Rep�blica Tcheca","Rom�nia",
-		"Ruanda", "R�ssia (antiga URSS) - Federa��o Russa", "Saara Ocidental", "Saint Vincente e Granadinas", "Samoa Americana", "Samoa Ocidental", "San Marino",
-		"Santa Helena", "Santa L�cia", "S�o Bartolomeu", "S�o Crist�v�o e N�vis", "S�o Martim", "S�o Tom� e Pr�ncipe", "Senegal", "Serra Leoa", "S�rvia", "S�ria",
-		"Som�lia", "Sri Lanka", "St. Pierre and Miquelon", "Suazil�ndia", "Sud�o", "Su�cia", "Su��a", "Suriname", "Tadjiquist�o", "Tail�ndia", "Taiwan",
-		"Tanz�nia", "Territ�rios do Sul da Fran�a", "Territ�rios Palestinos Ocupados", "Timor Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tun�sia",
-		"Turcomenist�o", "Turquia", "Tuvalu", "Ucr�nia", "Uganda", "Uzbequist�o", "Vanuatu", "Vaticano", "Venezuela","Vietn�","Z�mbia","Zimb�bue"};
-
-		return listaDePaises;
-		};
+		String[] listaDePaises = new String[] {"Albânia", "Alemanha", "Andorra", "Angola", "Anguilla", "Antártida", "Antígua e Barbuda", "Antilhas Holandesas",
+	    "Arábia Saudita", "Argélia", "Argentina", "Armênia", "Aruba", "Austrália", "Áustria", "Azerbaijão", "Bahamas", "Bahrein", "Bangladesh", "Barbados",
+	    "Belarus", "Bélgica", "Belize", "Benin", "Bermudas", "Bolívia", "Bósnia-Herzegóvina", "Botsuana", "Brasil", "Brunei", "Bulgária", "Burkina Fasso",
+	    "Burundi", "Butão", "Cabo Verde", "Camarões", "Camboja", "Canadá", "Cazaquistão", "Chade", "Chile", "China", "Chipre", "Cingapura", "Colômbia",
+	    "Congo", "Coréia do Norte", "Coréia do Sul", "Costa do Marfim", "Costa Rica", "Croácia (Hrvatska)", "Cuba", "Dinamarca", "Djibuti", "Dominica",
+	    "Egito", "El Salvador", "Emirados Árabes Unidos", "Equador", "Eritréia", "Eslováquia", "Eslovênia", "Espanha", "Estados Unidos","Estônia", "Etiópia",
+	    "Fiji", "Filipinas", "Finlândia", "França", "Gabão", "Gâmbia", "Gana", "Geórgia", "Gibraltar", "Grã-Bretanha (Reino Unido, UK)", "Granada", "Grécia",
+	    "Groelândia", "Guadalupe", "Guam (Território dos Estados Unidos)", "Guatemala", "Guernsey", "Guiana", "Guiana Francesa", "Guiné", "Guiné Equatorial",
+	    "Guiné-Bissau", "Haiti", "Holanda", "Honduras", "Hong Kong", "Hungria", "Iêmen", "Ilha Bouvet (Território da Noruega)", "Ilha do Homem", "Ilha Natal", 
+	    "Ilha Pitcairn", "Ilha Reunião", "Ilhas Aland", "Ilhas Cayman", "Ilhas Cocos", "Ilhas Comores", "Ilhas Cook", "Ilhas Faroes", "Ilhas Falkland (Malvinas)", 
+	    "Ilhas Geórgia do Sul e Sandwich do Sul", "Ilhas Heard e McDonald (Território da Austrália)", "Ilhas Marianas do Norte", "Ilhas Marshall", 
+	    "Ilhas Menores dos Estados Unidos", "Ilhas Norfolk", "Ilhas Seychelles", "Ilhas Solomão", "Ilhas Svalbard e Jan Mayen", "Ilhas Tokelau", "Ilhas Turks e Caicos", 
+	    "Ilhas Virgens (Estados Unidos)", "Ilhas Virgens (Inglaterra)", "Ilhas Wallis e Futuna", "índia", "Indonésia", "Iraque", "Irlanda", "Islândia", "Israel", 
+	    "Itália", "Jamaica", "Japão", "Jersey", "Jordânia", "Kênia", "Kiribati", "Kuait", "Laos", "Látvia", "Lesoto", "Líbano", "Libéria", 
+	    "Líbia", "Liechtenstein", "Lituânia", "Luxemburgo", "Macau", "Macedônia (República Yugoslava)", "Madagascar", "Malásia", "Malaui", "Maldivas", 
+	    "Mali", "Malta", "Marrocos", "Martinica", "Maurício", "Mauritânia", "Mayotte", "México", "Micronésia", "Moçambique", "Moldova", "Mônaco","Mongólia", 
+	    "Montenegro", "Montserrat", "Myanma", "Namíbia", "Nauru", "Nepal", "Nicarágua", "Níger", "Nigéria", "Niue","Noruega", "Nova Caledônia", 
+        "Nova Zelândia", "Omã", "Palau", "Panamá", "Papua-Nova Guiné", "Paquistão", "Paraguai", "Peru", "Polinésia Francesa", "Polônia", "Porto Rico",
+	    "Portugal", "Qatar", "Quirguistão", "República Centro-Africana", "República Democrática do Congo", "República Dominicana", "República Tcheca","Romênia",
+	    "Ruanda", "Rússia (antiga URSS) - Federação Russa", "Saara Ocidental", "Saint Vincente e Granadinas", "Samoa Americana", "Samoa Ocidental", "San Marino",
+	    "Santa Helena", "Santa Lúcia", "São Bartolomeu", "São Cristóvão e Névis", "São Martim", "São Tomé e Príncipe", "Senegal", "Serra Leoa", "Sérvia", "Síria",
+	    "Somália", "Sri Lanka", "St. Pierre and Miquelon", "Suazilândia", "Sudão", "Suécia", "Suíça", "Suriname", "Tadjiquistão", "Tailândia", "Taiwan",
+	    "Tanzânia", "Territórios do Sul da França", "Territórios Palestinos Ocupados", "Timor Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunísia",
+	    "Turcomenistão", "Turquia", "Tuvalu", "Ucrânia", "Uganda", "Uzbequistão", "Vanuatu", "Vaticano", "Venezuela","Vietnã","Zâmbia","Zimbábue"};
+	   
+	    return listaDePaises;
+	}
 	
 	public boolean validarNumero(JTextField numero) { 	
 		long valor; 

@@ -21,6 +21,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import controller.ControladoraVacina;
+import exception.exceptionVacina.AnalisarCamposVacinaException;
 import model.dao.VacinaDAO;
 import model.vo.VacinaVO;
 import seletor.FiltroVacina;
@@ -35,6 +36,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.JComboBox;
+import java.awt.event.MouseMotionAdapter;
 
 public class TelaConsultarVacina extends JFrame {
 
@@ -45,11 +48,13 @@ public class TelaConsultarVacina extends JFrame {
 	private int respostaExclusao;
 	Object[] opcoes = {"Sim", "Não"};
 	private JTextField txtNomeVacina;
-	private JTextField txtPaisOrigem;
+	private JComboBox cbxPais;
+	private JComboBox cbxDoses;
 	private JButton btnAlterar;
 	private JButton btnExcluir;
 	private JButton btnLimpar;
-	private JTextField txtDoses;
+	private JButton btnLimparFiltros;
+
 	
 	
 	/**
@@ -76,6 +81,18 @@ public class TelaConsultarVacina extends JFrame {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1001, 476);
 		contentPane = new JPanel();
+		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				if(verificarFiltroPreenchido()) {
+					btnLimparFiltros.setVisible(true);
+					btnLimparFiltros.setEnabled(true);
+				} else {
+					btnLimparFiltros.setVisible(false);
+					btnLimparFiltros.setEnabled(false);
+				}
+			}
+		});
 		contentPane.setBackground(new Color(204, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -84,7 +101,7 @@ public class TelaConsultarVacina extends JFrame {
 		JScrollPane scrollPane = new JScrollPane();
 		
 		scrollPane.setEnabled(false);
-		scrollPane.setBounds(33, 160, 942, 149);
+		scrollPane.setBounds(33, 210, 942, 149);
 		contentPane.add(scrollPane);
 		
 		table = new JTable(modelo);
@@ -92,17 +109,19 @@ public class TelaConsultarVacina extends JFrame {
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				System.out.println(table.getSelectedRow());
-				if((Integer) table.getModel().getValueAt(table.getSelectedRow(), 0)>0) {
+				
+				if(verificarSetabelaTemItemSelecionado()) {
 					btnAlterar.setEnabled(true);
 					btnExcluir.setEnabled(true);
 					btnLimpar.setVisible(true);
 					btnLimpar.setEnabled(true);
+					btnLimparFiltros.setEnabled(true);
 				} else {
 					btnAlterar.setEnabled(false);
 					btnExcluir.setEnabled(false);
 					btnLimpar.setVisible(false);
 					btnLimpar.setEnabled(false);
+					btnLimparFiltros.setEnabled(false);
 				}
 			}
 		});
@@ -132,7 +151,7 @@ public class TelaConsultarVacina extends JFrame {
 //				carregarTabela();
 			}
 		});
-		btnAlterar.setBounds(280, 336, 210, 56);
+		btnAlterar.setBounds(277, 370, 210, 56);
 		contentPane.add(btnAlterar);
 		
 		
@@ -146,7 +165,7 @@ public class TelaConsultarVacina extends JFrame {
 				excluir(idVacinaSelecionada);
 			}
 		});
-		btnExcluir.setBounds(498, 336, 210, 56);
+		btnExcluir.setBounds(497, 370, 210, 56);
 		contentPane.add(btnExcluir);
 		
 		JButton btnConsultar = new JButton("Consultar");
@@ -156,15 +175,15 @@ public class TelaConsultarVacina extends JFrame {
 				carregarTabela();
 			}
 		});
-		btnConsultar.setBounds(415, 108, 174, 41);
+		btnConsultar.setBounds(415, 158, 174, 41);
 		contentPane.add(btnConsultar);
 		
 		JLabel lblNomeVacina = new JLabel("Nome vacina");
-		lblNomeVacina.setBounds(174, 26, 114, 14);
+		lblNomeVacina.setBounds(152, 19, 114, 14);
 		contentPane.add(lblNomeVacina);
 		
 		txtNomeVacina = new JTextField();
-		txtNomeVacina.setBounds(174, 44, 139, 35);
+		txtNomeVacina.setBounds(152, 44, 139, 35);
 		contentPane.add(txtNomeVacina);
 		txtNomeVacina.setColumns(10);
 		
@@ -172,19 +191,16 @@ public class TelaConsultarVacina extends JFrame {
 		lblPaisOrigem.setBounds(415, 26, 114, 14);
 		contentPane.add(lblPaisOrigem);
 		
-		txtPaisOrigem = new JTextField();
-		txtPaisOrigem.setBounds(415, 43, 174, 36);
-		contentPane.add(txtPaisOrigem);
-		txtPaisOrigem.setColumns(10);
+		cbxPais = new JComboBox();
+		for(int i = 0; i<listarPaises().length; i++) {
+	    	cbxPais.addItem(listarPaises()[i]);
+	    }
+		cbxPais.setBounds(415, 43, 174, 36);
+		contentPane.add(cbxPais);
 		
 		JLabel lblDoses = new JLabel("Doses");
 		lblDoses.setBounds(686, 26, 119, 14);
 		contentPane.add(lblDoses);
-		
-		txtDoses = new JTextField();
-		txtDoses.setBounds(686, 44, 86, 35);
-		contentPane.add(txtDoses);
-		txtDoses.setColumns(10);
 		
 		btnLimpar = new JButton("Limpar");
 		btnLimpar.addMouseListener(new MouseAdapter() {
@@ -222,6 +238,26 @@ public class TelaConsultarVacina extends JFrame {
 		JLabel lblFiltros = new JLabel("Filtros:");
 		lblFiltros.setBounds(32, 26, 80, 14);
 		contentPane.add(lblFiltros);
+		
+		cbxDoses = new JComboBox();
+		for(int i = 0; i<listarDoses().length; i++) {
+			cbxDoses.addItem(listarDoses()[i]);
+	    }	
+		cbxDoses.setBounds(686, 44, 174, 35);
+		contentPane.add(cbxDoses);
+		
+		btnLimparFiltros = new JButton("Limpar filtros");
+		btnLimparFiltros.setEnabled(false);
+		btnLimparFiltros.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				limparFiltros();
+				btnLimparFiltros.setEnabled(false);
+			}
+		});
+		btnLimparFiltros.setEnabled(false);
+		btnLimparFiltros.setBounds(447, 117, 114, 23);
+		contentPane.add(btnLimparFiltros);
 	}
 	
 	public void excluir(Integer id) {
@@ -241,8 +277,8 @@ public class TelaConsultarVacina extends JFrame {
 	public boolean verificarFiltroPreenchido() {
 		boolean resposta = false;
 		if(txtNomeVacina.getText().toString().length()!=0 ||
-			!txtDoses.getText().isEmpty() ||
-			txtPaisOrigem.getText().toString().length()!=0) {
+			cbxDoses.getSelectedItem().toString()!="Selecione a quantidade" ||
+			cbxPais.getSelectedItem().toString()!="Selecione o país") {
 			resposta = true;
 		}
 		return resposta;
@@ -257,12 +293,12 @@ public class TelaConsultarVacina extends JFrame {
 			if(txtNomeVacina.getText().toString().length()!=0) {
 				seletor.setNomeVacina(txtNomeVacina.getText().toString());
 			}
-			if(txtDoses!=null) {
-				seletor.setDoses(txtDoses.getText());
+			if(cbxDoses.getSelectedItem().toString()!="Selecione a quantidade") {
+				seletor.setDoses(cbxDoses.getSelectedItem().toString());
 			}
 			
-			if(txtPaisOrigem!=null) {
-				seletor.setPais(txtPaisOrigem.getText());
+			if(cbxPais.getSelectedItem().toString()!="Selecione o país") {
+				seletor.setPais(cbxPais.getSelectedItem().toString());
 			}
 			list = vController.consultarComFiltro(seletor);
 			String mensagem = "";
@@ -280,8 +316,50 @@ public class TelaConsultarVacina extends JFrame {
 					vac.getNomeVacina(),vac.getDataInicioPesquisa(),vac.getQuantidadeDoses(),vac.getIntervaloDoses()});
 		}
 	}
-	
+	private boolean verificarSetabelaTemItemSelecionado() {
+		boolean resposta = (Integer) table.getModel().getValueAt(table.getSelectedRow(), 0) > 0;
+		
+		return resposta;
+	}
 	private void limparTabelaVacina() {
 		modelo.setRowCount(0);		
+	}
+	private void limparFiltros() {
+		txtNomeVacina.setText("");
+		cbxPais.setSelectedItem("Selecione o país");
+		cbxDoses.setSelectedItem("Selecione a quantidade");
+	}
+	public String[] listarDoses(){
+		String[] listaDeDoses = new String[] {"Selecione a quantidade", "1", "2", "3", "4", "5"};
+		
+		return listaDeDoses;
+	};
+	public String[] listarPaises(){
+		String[] listaDePaises = new String[] {"Selecione o país", "Albânia", "Alemanha", "Andorra", "Angola", "Anguilla", "Antártida", "Antígua e Barbuda", "Antilhas Holandesas",
+	    "Arábia Saudita", "Argélia", "Argentina", "Armênia", "Aruba", "Austrália", "Áustria", "Azerbaijão", "Bahamas", "Bahrein", "Bangladesh", "Barbados",
+	    "Belarus", "Bélgica", "Belize", "Benin", "Bermudas", "Bolívia", "Bósnia-Herzegóvina", "Botsuana", "Brasil", "Brunei", "Bulgária", "Burkina Fasso",
+	    "Burundi", "Butão", "Cabo Verde", "Camarões", "Camboja", "Canadá", "Cazaquistão", "Chade", "Chile", "China", "Chipre", "Cingapura", "Colômbia",
+	    "Congo", "Coréia do Norte", "Coréia do Sul", "Costa do Marfim", "Costa Rica", "Croácia (Hrvatska)", "Cuba", "Dinamarca", "Djibuti", "Dominica",
+	    "Egito", "El Salvador", "Emirados Árabes Unidos", "Equador", "Eritréia", "Eslováquia", "Eslovênia", "Espanha", "Estados Unidos","Estônia", "Etiópia",
+	    "Fiji", "Filipinas", "Finlândia", "França", "Gabão", "Gâmbia", "Gana", "Geórgia", "Gibraltar", "Grã-Bretanha (Reino Unido, UK)", "Granada", "Grécia",
+	    "Groelândia", "Guadalupe", "Guam (Território dos Estados Unidos)", "Guatemala", "Guernsey", "Guiana", "Guiana Francesa", "Guiné", "Guiné Equatorial",
+	    "Guiné-Bissau", "Haiti", "Holanda", "Honduras", "Hong Kong", "Hungria", "Iêmen", "Ilha Bouvet (Território da Noruega)", "Ilha do Homem", "Ilha Natal", 
+	    "Ilha Pitcairn", "Ilha Reunião", "Ilhas Aland", "Ilhas Cayman", "Ilhas Cocos", "Ilhas Comores", "Ilhas Cook", "Ilhas Faroes", "Ilhas Falkland (Malvinas)", 
+	    "Ilhas Geórgia do Sul e Sandwich do Sul", "Ilhas Heard e McDonald (Território da Austrália)", "Ilhas Marianas do Norte", "Ilhas Marshall", 
+	    "Ilhas Menores dos Estados Unidos", "Ilhas Norfolk", "Ilhas Seychelles", "Ilhas Solomão", "Ilhas Svalbard e Jan Mayen", "Ilhas Tokelau", "Ilhas Turks e Caicos", 
+	    "Ilhas Virgens (Estados Unidos)", "Ilhas Virgens (Inglaterra)", "Ilhas Wallis e Futuna", "índia", "Indonésia", "Iraque", "Irlanda", "Islândia", "Israel", 
+	    "Itália", "Jamaica", "Japão", "Jersey", "Jordânia", "Kênia", "Kiribati", "Kuait", "Laos", "Látvia", "Lesoto", "Líbano", "Libéria", 
+	    "Líbia", "Liechtenstein", "Lituânia", "Luxemburgo", "Macau", "Macedônia (República Yugoslava)", "Madagascar", "Malásia", "Malaui", "Maldivas", 
+	    "Mali", "Malta", "Marrocos", "Martinica", "Maurício", "Mauritânia", "Mayotte", "México", "Micronésia", "Moçambique", "Moldova", "Mônaco","Mongólia", 
+	    "Montenegro", "Montserrat", "Myanma", "Namíbia", "Nauru", "Nepal", "Nicarágua", "Níger", "Nigéria", "Niue","Noruega", "Nova Caledônia", 
+        "Nova Zelândia", "Omã", "Palau", "Panamá", "Papua-Nova Guiné", "Paquistão", "Paraguai", "Peru", "Polinésia Francesa", "Polônia", "Porto Rico",
+	    "Portugal", "Qatar", "Quirguistão", "República Centro-Africana", "República Democrática do Congo", "República Dominicana", "República Tcheca","Romênia",
+	    "Ruanda", "Rússia (antiga URSS) - Federação Russa", "Saara Ocidental", "Saint Vincente e Granadinas", "Samoa Americana", "Samoa Ocidental", "San Marino",
+	    "Santa Helena", "Santa Lúcia", "São Bartolomeu", "São Cristóvão e Névis", "São Martim", "São Tomé e Príncipe", "Senegal", "Serra Leoa", "Sérvia", "Síria",
+	    "Somália", "Sri Lanka", "St. Pierre and Miquelon", "Suazilândia", "Sudão", "Suécia", "Suíça", "Suriname", "Tadjiquistão", "Tailândia", "Taiwan",
+	    "Tanzânia", "Territórios do Sul da França", "Territórios Palestinos Ocupados", "Timor Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunísia",
+	    "Turcomenistão", "Turquia", "Tuvalu", "Ucrânia", "Uganda", "Uzbequistão", "Vanuatu", "Vaticano", "Venezuela","Vietnã","Zâmbia","Zimbábue"};
+	   
+	    return listaDePaises;
 	}
 }
