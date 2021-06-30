@@ -40,9 +40,9 @@ public class VacinaDAO  {
 	}
 	public boolean alterar(VacinaVO vacina) {
 		Connection conn = Banco.getConnection();
-		String sql = "update vacina "
-				+ "set nomePesquisadorResponsavel=?, paisOrigem=?, nomeVacina=?, dtInicioPesquisa=?, quantidadeDoses=?, intervaloDoses=?"
-				+ "where idVacina=?";
+		String sql = " update vacina "
+				+ " set nomePesquisadorResponsavel=?, paisOrigem=?, nomeVacina=?, dtInicioPesquisa=?, quantidadeDoses=?, intervaloDoses=?"
+				+ " where idVacina=?";
 		PreparedStatement ps = Banco.getPreparedStatement(conn, sql);
 		boolean resposta = false;
 		try {
