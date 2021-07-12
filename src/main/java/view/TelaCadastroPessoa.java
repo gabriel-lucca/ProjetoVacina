@@ -171,9 +171,8 @@ public class TelaCadastroPessoa extends JFrame {
 		
 				
 		btnCadastrarPessoa = new JButton("Cadastrar pessoa");
-		btnCadastrarPessoa.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
+		btnCadastrarPessoa.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
 				Object[] opcoes = {"Sim", "Não"};
 				try {
 					cadastrar();
@@ -205,9 +204,8 @@ public class TelaCadastroPessoa extends JFrame {
 		contentPane.add(cbxEstado);
 		
 		btnAlterar = new JButton("Alterar");
-		btnAlterar.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent me) {
+		btnAlterar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
 				try {
 					alterar();
 				} catch (AnalisarCamposPessoaException e) {
@@ -220,7 +218,8 @@ public class TelaCadastroPessoa extends JFrame {
 		contentPane.add(btnAlterar);
 		}
 		
-		public void cadastrar() throws AnalisarCamposPessoaException {			
+	
+		public void cadastrar() throws AnalisarCamposPessoaException {	
 			//Instanciar uma nova vacina (de VacinaVO)
 			//Preencher a nova vacina com todos os campos da tela
 			PessoaVO novaPessoa = new PessoaVO();
@@ -291,8 +290,10 @@ public class TelaCadastroPessoa extends JFrame {
 			this.txtCpf.setText(pessoa.getCpf());
 			this.cbxEstado.setSelectedItem(pessoa.getEstado());
 			
+			
 			ativaBotao = false;
 			btnAlterar.setEnabled(true);
+			
 		}
 		private void limparCampos() {
 			this.txtEmail.setText("");

@@ -25,6 +25,9 @@ import java.time.format.DateTimeFormatter;
 
 import javax.swing.event.CaretListener;
 import javax.swing.event.CaretEvent;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JComboBox;
@@ -175,9 +178,8 @@ public class TelaCadastroVacina extends JFrame {
 		
 		btnCadastrar = new JButton("Cadastrar");
 		btnCadastrar.setEnabled(false);
-		btnCadastrar.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
+		btnCadastrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
 				try {
 					cadastrar();
 				} catch (AnalisarCamposVacinaException | VacinaJaExisteException  e) {
@@ -190,9 +192,8 @@ public class TelaCadastroVacina extends JFrame {
 
 		btnAlterar = new JButton("Alterar");
 		btnAlterar.setEnabled(false);
-		btnAlterar.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent me) {
+		btnAlterar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
 				try {
 					alterar();
 				} catch (AnalisarCamposVacinaException e) {
