@@ -146,25 +146,7 @@ public class VacinaDAO  {
 		}
 		return resposta;
 	}
-	public boolean paisJaTemVacinaCadastrada(VacinaVO vacina) {
-		Connection conn = Banco.getConnection();
-		String sql = "select * from vacina where paisOrigem = ?";
-		PreparedStatement ps = Banco.getPreparedStatement(conn, sql);
-		boolean resposta = false;
-		try {
-			ps.setString(1, vacina.getPaisOrigem());
-			ResultSet rs = ps.executeQuery();
-			if(rs.next()) {
-				resposta = true;
-			}
-		} catch(SQLException e) {
-			System.out.println("Erro ao verificar se vacina existe.\nErro: "+e.getMessage());
-		} finally {
-			Banco.closeConnection(conn);
-			Banco.closePreparedStatement(ps);
-		}
-		return resposta;
-	}
+	
 	public VacinaVO consultarPorNome(String nome) {
 		VacinaVO vacinaEncontrada = new VacinaVO();	
 		String sql = "select * from vacina where nomeVacina = ?";

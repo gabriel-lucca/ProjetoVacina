@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
-import exception.exceptionVacina.PaisJaTemVacinaRegistradaException;
 import exception.exceptionVacina.VacinaJaExisteException;
 import model.dao.VacinaDAO;
 import model.vo.VacinaVO;
@@ -13,16 +12,13 @@ import seletor.FiltroVacina;
 public class VacinaBO {
 	VacinaDAO dao = new VacinaDAO();
 	
-	public String cadastrar(VacinaVO vacina) throws VacinaJaExisteException, PaisJaTemVacinaRegistradaException{
+	public String cadastrar(VacinaVO vacina) throws VacinaJaExisteException {
 		String mensagem = "";
 		//N�o deve repetir nomes de vacinas:
 		if(dao.vacinaJaExiste(vacina)) {
 			throw new VacinaJaExisteException("\nVacina já existe.");
 		}
-		//N�o deve haver mais de uma vacina por país;
-		if(dao.paisJaTemVacinaCadastrada(vacina)) {
-			throw new VacinaJaExisteException("\nEste país já possui vacina cadastrada.");
-		}
+		
 		dao.cadastrar(vacina);
 		return mensagem;
 	}
