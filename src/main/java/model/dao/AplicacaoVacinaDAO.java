@@ -79,7 +79,7 @@ public class AplicacaoVacinaDAO {
 		aplicacaoVacina.setIdAplicacaoVacina(rs.getInt("idAplicacao"));
 		aplicacaoVacina.setDataAplicacao(rs.getDate("dtAplicacao").toLocalDate());
 		PessoaDAO pessoaDAO = new PessoaDAO();
-		PessoaVO pessoaVO = pessoaDAO.buscarPorId(rs.getInt("fkIdPessoa"));
+		PessoaVO pessoaVO = pessoaDAO.buscarPorId(rs.getInt("IdPessoa"));
 		aplicacaoVacina.setPessoa(pessoaVO);
 		
 		VacinaDAO vacinaDao = new VacinaDAO();
@@ -125,20 +125,20 @@ public class AplicacaoVacinaDAO {
 		}
 		return aplicacoes;
 	}
-	public ArrayList<AplicacaoVacinaVO> consultarAplicacoes(PessoaVO p) {
+	public ArrayList<AplicacaoVacinaVO> consultarAplicacoes(Integer id) {
 		Connection conn = Banco.getConnection();
-		String sql = "select * from aplicacaoVacina where fkIdPessoa= ?";
-		PreparedStatement ps = Banco.getPreparedStatementWithPk(conn, sql);
+		String sql = "select * from aplicacaoVacina where IdPessoa= ?";
+		PreparedStatement ps = Banco.getPreparedStatement(conn, sql);
 		ArrayList<AplicacaoVacinaVO> aplicacoesEncontradas = new ArrayList<AplicacaoVacinaVO>();
 		try {
-			ps.setInt(1, p.getIdPessoa());
+			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {
 				AplicacaoVacinaVO aplicacaoEncontrada = construirDoResultSet(rs);
 				aplicacoesEncontradas.add(aplicacaoEncontrada);
 			}
 		} catch(SQLException e) {
-			System.out.println("Erro ao buscar aplica��es de "+p.getNome()+ "\nErro: "+e.getMessage());
+			System.out.println("Erro ao buscar aplicações.  \nErro: "+e.getMessage());
 		}
 		return aplicacoesEncontradas;
 	}

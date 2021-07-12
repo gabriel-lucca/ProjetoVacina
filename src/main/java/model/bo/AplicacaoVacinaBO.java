@@ -28,7 +28,7 @@ public class AplicacaoVacinaBO {
 		PessoaVO avVO = new PessoaVO();
 		PessoaVO p = pDAO.consultarPorCpf(cpf);
 		VacinaVO v = vDAO.consultarPorId(id);
-		ArrayList<AplicacaoVacinaVO> aplicacoes = avDAO.consultarAplicacoes(p);
+		ArrayList<AplicacaoVacinaVO> aplicacoes = avDAO.consultarAplicacoes(id);
 		Integer dosesAplicadas = aplicacoes.size();
 		LocalDate dtProximaAplicacao = aplicacoes.get(dosesAplicadas).getDataAplicacao().plusDays(v.getIntervaloDoses());
 		int tempoRestante = dtProximaAplicacao.compareTo(dtProximaAplicacao);
@@ -59,8 +59,8 @@ public class AplicacaoVacinaBO {
 	public boolean excluir(Integer id) {
 		return avDAO.excluir(id);
 	}
-	public ArrayList<AplicacaoVacinaVO> consultarAplicacoes(PessoaVO p) {
-		return avDAO.consultarAplicacoes(p);
+	public ArrayList<AplicacaoVacinaVO> consultarAplicacoes(Integer id) {
+		return avDAO.consultarAplicacoes(id);
 
 	}
 	public AplicacaoVacinaVO consultarPorId(Integer id) {

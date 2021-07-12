@@ -105,13 +105,8 @@ public class TelaAplicacaoVacina extends JFrame {
 				txtNome.setEnabled(true);
 				txtNome.setEditable(false);
 				txtNome.setText(encontrada.getNome());
-				ArrayList<AplicacaoVacinaVO> historicoAplicacoes = avController.consultarAplicacoes(encontrada);
-				int i = 1;
-				for (AplicacaoVacinaVO av : historicoAplicacoes) {
-						modelo.addRow(new Object[] {i,av.getDataAplicacao()});
-						i++;
-				}
-				
+			
+				carregarTabela(encontrada.getIdPessoa());
 				preencherCbxVacina();
 				btnVacinar.setEnabled(true);
 			}
@@ -166,11 +161,13 @@ public class TelaAplicacaoVacina extends JFrame {
 		scrollPane.setBounds(36, 273, 441, 57);
 		contentPane.add(scrollPane);
 
+		modelo.addColumn("Dose");
+		modelo.addColumn("Data aplicacao");
+		
 		table = new JTable(modelo);
 		scrollPane.setViewportView(table);
 
-		modelo.addColumn("Dose");
-		modelo.addColumn("Data aplica��o");
+		
 	}
 
 	public void consultarPorCpf() {
@@ -205,13 +202,17 @@ public class TelaAplicacaoVacina extends JFrame {
 
 	}
 
-	public void carregarTabela() throws SQLException {
+	public void carregarTabela(Integer id) {
 
+		
 		AplicacaoVacinaDAO avDAO = new AplicacaoVacinaDAO();
 
-		// List<AplicacaoVacinaVO> list = avDAO.buscarAplicacoes();
+		ArrayList<AplicacaoVacinaVO> listaAplicacoes = avController.consultarAplicacoes(id);
+	
 
-		// for (AplicacaoVacinaVO apvac : list) {
-		// modelo.addRow(new Object[]{apvac.getDataAplicacao()});
+		for (AplicacaoVacinaVO apvac : listaAplicacoes) {
+			int i=1;
+		modelo.addRow(new Object[]{i++, apvac.getDataAplicacao()});
+		}
 	}
 }
