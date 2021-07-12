@@ -9,7 +9,6 @@ import javax.swing.text.MaskFormatter;
 
 import controller.ControladoraVacina;
 import exception.exceptionVacina.AnalisarCamposVacinaException;
-import exception.exceptionVacina.PaisJaTemVacinaRegistradaException;
 import exception.exceptionVacina.VacinaJaExisteException;
 import model.vo.VacinaVO;
 
@@ -51,6 +50,9 @@ public class TelaCadastroVacina extends JFrame {
 	private Object[] opcoes = {"Sim", "Não"};
 	DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	private int id;
+	private boolean ativaBotao = true;
+	
+	
 	/**
 	 * Launch the application.
 	 */
@@ -80,11 +82,9 @@ public class TelaCadastroVacina extends JFrame {
 			@Override
 			public void mouseMoved(MouseEvent e) {
 				if(verificarCamposPreenchdidos()) {
-					btnCadastrar.setEnabled(true);
-					btnAlterar.setEnabled(true);
+					btnCadastrar.setEnabled(ativaBotao);
 				} else {
 					btnCadastrar.setEnabled(false);
-					btnAlterar.setEnabled(false);
 				}
 			}
 		});
@@ -180,7 +180,7 @@ public class TelaCadastroVacina extends JFrame {
 			public void mouseClicked(MouseEvent arg0) {
 				try {
 					cadastrar();
-				} catch (AnalisarCamposVacinaException | VacinaJaExisteException | PaisJaTemVacinaRegistradaException e) {
+				} catch (AnalisarCamposVacinaException | VacinaJaExisteException  e) {
 					respostaCadastro = JOptionPane.showOptionDialog(null, e+"\nDeseja editar as informações?", "Aviso", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opcoes, opcoes[0]);		
 				}
 			}	
@@ -206,7 +206,7 @@ public class TelaCadastroVacina extends JFrame {
 	}
 	
 	//Métodos e funções:
-	public void cadastrar() throws AnalisarCamposVacinaException, VacinaJaExisteException, PaisJaTemVacinaRegistradaException {
+	public void cadastrar() throws AnalisarCamposVacinaException, VacinaJaExisteException {
 		//Instanciar uma nova vacina (de VacinaVO)
 		//Preencher a nova vacina com todos os campos da tela
 		VacinaVO novaVacina = new VacinaVO();
@@ -220,16 +220,11 @@ public class TelaCadastroVacina extends JFrame {
 		//Chamar o controller para cadastrar
 		controller.cadastrar(novaVacina);
 		String resultadoValidacao = controller.validarCampos(novaVacina);
-		if(resultadoValidacao!=null && !resultadoValidacao.isEmpty()) {
-			if(respostaCadastro == 0) {
-				setVisible(false);
-				setVisible(false);
-			} else {
-				setVisible(false);
-			}
-		} else {
+		if(resultadoValidacao==null) {
 			JOptionPane.showMessageDialog(null, "Cadastrado com sucesso");	
 		}
+		setVisible(false);
+		
 	}
 	public void alterar() throws AnalisarCamposVacinaException {
 		VacinaVO vacinaAlterada = new VacinaVO();
@@ -245,20 +240,14 @@ public class TelaCadastroVacina extends JFrame {
 			vacinaAlterada.setIdVacina(controller.consultarPorNome(txtNomeVacina.getText()).getIdVacina());
 		}
 		
-		JOptionPane.showMessageDialog(null, vacinaAlterada);
 		controller.alterar(vacinaAlterada);
 		String resultadoValidacao = controller.validarCampos(vacinaAlterada);
-		if(resultadoValidacao!=null && !resultadoValidacao.isEmpty()) {
-			if(respostaCadastro == 1) {
-				setVisible(false);
-				setVisible(false);
-			} else {
-				setVisible(false);
-			}
-		} else {
+		if(resultadoValidacao==null) {
 			JOptionPane.showMessageDialog(null, "Alterado com sucesso");
 		}
+		setVisible(false);
 	}
+	
 	public boolean verificarCamposPreenchdidos() {
 		boolean resposta = false;
 		if(!txtIntervalo.getText().isEmpty() &&
@@ -275,13 +264,15 @@ public class TelaCadastroVacina extends JFrame {
 		this.txtIntervalo.setText(String.valueOf(vacina.getIntervaloDoses()));
 		this.txtNomePesquisador.setText(vacina.getNomePesquisadorResponsavel());
 		this.txtNomeVacina.setText(vacina.getNomeVacina());
-		JOptionPane.showMessageDialog(null, vacina.getIdVacina());
 		DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		String dataInicioPesquisaFormatada = formatador.format(vacina.getDataInicioPesquisa());
 		id = vacina.getIdVacina();
 		this.txtDataInicio.setText(dataInicioPesquisaFormatada);
 		this.cbxDoses.setSelectedItem(vacina.getQuantidadeDoses());
 		this.cbxPais.setSelectedItem(vacina.getPaisOrigem());
+		
+		ativaBotao = false;
+		btnAlterar.setEnabled(true);
 	}
 
 	private void limparCampos() {
@@ -319,8 +310,8 @@ public class TelaCadastroVacina extends JFrame {
 	    "Mali", "Malta", "Marrocos", "Martinica", "Maurício", "Mauritânia", "Mayotte", "México", "Micronésia", "Moçambique", "Moldova", "Mônaco","Mongólia", 
 	    "Montenegro", "Montserrat", "Myanma", "Namíbia", "Nauru", "Nepal", "Nicarágua", "Níger", "Nigéria", "Niue","Noruega", "Nova Caledônia", 
         "Nova Zelândia", "Omã", "Palau", "Panamá", "Papua-Nova Guiné", "Paquistão", "Paraguai", "Peru", "Polinésia Francesa", "Polônia", "Porto Rico",
-	    "Portugal", "Qatar", "Quirguistão", "República Centro-Africana", "República Democrática do Congo", "República Dominicana", "República Tcheca","Romênia",
-	    "Ruanda", "Rússia (antiga URSS) - Federação Russa", "Saara Ocidental", "Saint Vincente e Granadinas", "Samoa Americana", "Samoa Ocidental", "San Marino",
+	    "Portugal", "Qatar", "Quirguistão", "Reino Unido", "República Centro-Africana", "República Democrática do Congo", "República Dominicana", "República Tcheca","Romênia",
+	    "Ruanda", "Rússia", "Saara Ocidental", "Saint Vincente e Granadinas", "Samoa Americana", "Samoa Ocidental", "San Marino",
 	    "Santa Helena", "Santa Lúcia", "São Bartolomeu", "São Cristóvão e Névis", "São Martim", "São Tomé e Príncipe", "Senegal", "Serra Leoa", "Sérvia", "Síria",
 	    "Somália", "Sri Lanka", "St. Pierre and Miquelon", "Suazilândia", "Sudão", "Suécia", "Suíça", "Suriname", "Tadjiquistão", "Tailândia", "Taiwan",
 	    "Tanzânia", "Territórios do Sul da França", "Territórios Palestinos Ocupados", "Timor Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunísia",

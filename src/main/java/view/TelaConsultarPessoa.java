@@ -83,13 +83,11 @@ public class TelaConsultarPessoa extends JFrame {
 			@Override
 			public void mouseMoved(MouseEvent e) {
 				if(verificarFiltroPreenchido()) {
-					btnLimpar.setVisible(true);
-					btnLimpar.setEnabled(true);
+					
 					btnLimparFiltros.setVisible(true);
 					btnLimparFiltros.setEnabled(true);
 				} else {
-					btnLimpar.setVisible(false);
-					btnLimpar.setEnabled(false);
+					
 					btnLimparFiltros.setVisible(false);
 					btnLimparFiltros.setEnabled(false);
 				}

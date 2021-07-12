@@ -48,7 +48,8 @@ public class TelaCadastroPessoa extends JFrame {
 	private int respostaExclusao;
 	private JButton btnCadastrarPessoa;
 	private JButton btnAlterar;
-	Object[] opcoes = {"Sim","Não"};
+	private Object[] opcoes = {"Sim","Não"};
+	private boolean ativaBotao = true;
 
 
 	DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -81,7 +82,7 @@ public class TelaCadastroPessoa extends JFrame {
 			@Override
 			public void mouseMoved(MouseEvent e) {
 				if(verificarCamposPreenchdidos()) {
-					btnCadastrarPessoa.setEnabled(true);
+					btnCadastrarPessoa.setEnabled(ativaBotao);
 				} else {
 					btnCadastrarPessoa.setEnabled(false);
 				}
@@ -235,17 +236,12 @@ public class TelaCadastroPessoa extends JFrame {
 			//Chamar o controller para cadastrar
 			controller.cadastrar(novaPessoa);
 			String resultadoValidacao = controller.validarCampos(novaPessoa);
-			if(resultadoValidacao!=null && !resultadoValidacao.isEmpty()) {
-				if(respostaCadastro == 0) {
-					setVisible(false);
-					setVisible(false);
-				} else {
-					setVisible(false);
-				}
-			} else {
-				JOptionPane.showMessageDialog(null, "Cadastrado com sucesso");	
+			if(resultadoValidacao==null) {
+					JOptionPane.showMessageDialog(null, "Cadastrado com sucesso");	
 			}
+			setVisible(false);
 		}
+		
 		public void alterar() throws AnalisarCamposPessoaException {
 			
 			PessoaVO pessoaAlterada = new PessoaVO();
@@ -261,16 +257,11 @@ public class TelaCadastroPessoa extends JFrame {
 			
 			controller.alterar(pessoaAlterada);
 			String resultadoValidacao = controller.validarCampos(pessoaAlterada);
-			if(resultadoValidacao!=null && !resultadoValidacao.isEmpty()) {
-				if(respostaCadastro == 1) {
-					setVisible(false);
-					setVisible(false);
-				} else {
-					setVisible(false);
-				}
-			} else {
-				JOptionPane.showMessageDialog(null, "Alterado com sucesso");	
+			if(resultadoValidacao==null ) {
+				JOptionPane.showMessageDialog(null, "Alterado com sucesso");
 			}
+			
+			setVisible(false);
 		}
 		public boolean verificarCamposPreenchdidos() {
 			boolean resposta = false;
@@ -300,7 +291,7 @@ public class TelaCadastroPessoa extends JFrame {
 			this.txtCpf.setText(pessoa.getCpf());
 			this.cbxEstado.setSelectedItem(pessoa.getEstado());
 			
-			btnCadastrarPessoa.setEnabled(false);
+			ativaBotao = false;
 			btnAlterar.setEnabled(true);
 		}
 		private void limparCampos() {
