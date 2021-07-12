@@ -4,7 +4,6 @@ package controller;
 import java.util.ArrayList;
 
 import exception.exceptionVacina.AnalisarCamposVacinaException;
-import exception.exceptionVacina.PaisJaTemVacinaRegistradaException;
 import exception.exceptionVacina.VacinaJaExisteException;
 import model.bo.VacinaBO;
 import model.vo.VacinaVO;
@@ -13,7 +12,7 @@ import seletor.FiltroVacina;
 public class ControladoraVacina {
 	private VacinaBO bo = new VacinaBO();
 	
-	public String cadastrar(VacinaVO novaVacina) throws AnalisarCamposVacinaException, VacinaJaExisteException, PaisJaTemVacinaRegistradaException {
+	public String cadastrar(VacinaVO novaVacina) throws AnalisarCamposVacinaException, VacinaJaExisteException {
 		String respostaValidacao = validarCampos(novaVacina);
 		if(respostaValidacao != null && !respostaValidacao.isEmpty()) {
 			throw new AnalisarCamposVacinaException(respostaValidacao);

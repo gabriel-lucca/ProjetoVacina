@@ -41,8 +41,8 @@ public class ControladoraAplicacaoVacina {
 		}
 		return bo.alterar(aplicacaoAlterada);
 	}
-	public ArrayList<AplicacaoVacinaVO> consultarAplicacoes(PessoaVO p) {
-		return bo.consultarAplicacoes(p);
+	public ArrayList<AplicacaoVacinaVO> consultarAplicacoes(Integer id) {
+		return bo.consultarAplicacoes(id);
 	}
 	public AplicacaoVacinaVO consultarPorId(Integer id) {
 		return bo.consultarPorId(id);
