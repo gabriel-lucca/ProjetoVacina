@@ -33,6 +33,8 @@ import java.awt.event.MouseEvent;
 import javax.swing.JComboBox;
 
 import java.awt.event.MouseMotionAdapter;
+import java.awt.event.InputMethodListener;
+import java.awt.event.InputMethodEvent;
 
 public class TelaCadastroVacina extends JFrame {
 
@@ -50,12 +52,11 @@ public class TelaCadastroVacina extends JFrame {
 	private int respostaCadastro;
 	private int respostaAlteracao;
 	private int respostaExclusao;
+	private JLabel jlAvisoDose;
+	
 	private Object[] opcoes = {"Sim", "Não"};
 	DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	private int id;
-	private boolean ativaBotao = true;
-	
-	
 	/**
 	 * Launch the application.
 	 */
@@ -85,9 +86,21 @@ public class TelaCadastroVacina extends JFrame {
 			@Override
 			public void mouseMoved(MouseEvent e) {
 				if(verificarCamposPreenchdidos()) {
-					btnCadastrar.setEnabled(ativaBotao);
+					btnCadastrar.setEnabled(true);
+					btnAlterar.setEnabled(true);
 				} else {
 					btnCadastrar.setEnabled(false);
+					btnAlterar.setEnabled(false);
+				}
+				
+				if(txtIntervalo.getText().length()>0) {
+					boolean resosta = validarCampo(txtIntervalo);
+					if(!resosta) {
+						String numeroString = txtIntervalo.getText().toString();
+						StringBuilder intervalo = new StringBuilder(numeroString);
+						numeroString = String.valueOf(intervalo.deleteCharAt(numeroString.length()-1));
+						txtIntervalo.setText(numeroString);
+					}
 				}
 			}
 		});
@@ -147,17 +160,8 @@ public class TelaCadastroVacina extends JFrame {
 		lblIntervalo.setBounds(265, 278, 224, 14);
 		contentPane.add(lblIntervalo);
 		
-		try {
-			txtIntervalo = new JTextField();
-		} catch(NumberFormatException nfe) {
-			JOptionPane.showMessageDialog(null, nfe.getMessage());
-		}
-		txtIntervalo.addCaretListener(new CaretListener() {
-			public void caretUpdate(CaretEvent e) {
-				validarNumero(txtIntervalo);
-				
-			}
-		});
+		txtIntervalo = new JTextField();
+		
 		txtIntervalo.setBounds(501, 270, 74, 31);
 		contentPane.add(txtIntervalo);
 		txtIntervalo.setColumns(10);		
@@ -178,11 +182,12 @@ public class TelaCadastroVacina extends JFrame {
 		
 		btnCadastrar = new JButton("Cadastrar");
 		btnCadastrar.setEnabled(false);
-		btnCadastrar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+		btnCadastrar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
 				try {
 					cadastrar();
-				} catch (AnalisarCamposVacinaException | VacinaJaExisteException  e) {
+				} catch (AnalisarCamposVacinaException | VacinaJaExisteException e) {
 					respostaCadastro = JOptionPane.showOptionDialog(null, e+"\nDeseja editar as informações?", "Aviso", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opcoes, opcoes[0]);		
 				}
 			}	
@@ -192,8 +197,9 @@ public class TelaCadastroVacina extends JFrame {
 
 		btnAlterar = new JButton("Alterar");
 		btnAlterar.setEnabled(false);
-		btnAlterar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+		btnAlterar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent me) {
 				try {
 					alterar();
 				} catch (AnalisarCamposVacinaException e) {
@@ -203,6 +209,13 @@ public class TelaCadastroVacina extends JFrame {
 		});
 		btnAlterar.setBounds(259, 331, 153, 47);
 		contentPane.add(btnAlterar);
+		
+	    jlAvisoDose = new JLabel("Insira apenas valores inteiros*");
+		jlAvisoDose.setForeground(Color.RED);
+		jlAvisoDose.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		jlAvisoDose.setBounds(501, 300, 129, 14);
+		jlAvisoDose.setVisible(false);
+		contentPane.add(jlAvisoDose);
 		
 	}
 	
@@ -221,11 +234,16 @@ public class TelaCadastroVacina extends JFrame {
 		//Chamar o controller para cadastrar
 		controller.cadastrar(novaVacina);
 		String resultadoValidacao = controller.validarCampos(novaVacina);
-		if(resultadoValidacao==null) {
+		if(resultadoValidacao!=null && !resultadoValidacao.isEmpty()) {
+			if(respostaCadastro == 0) {
+				setVisible(false);
+				setVisible(false);
+			} else {
+				setVisible(false);
+			}
+		} else {
 			JOptionPane.showMessageDialog(null, "Cadastrado com sucesso");	
 		}
-		setVisible(false);
-		
 	}
 	public void alterar() throws AnalisarCamposVacinaException {
 		VacinaVO vacinaAlterada = new VacinaVO();
@@ -241,14 +259,20 @@ public class TelaCadastroVacina extends JFrame {
 			vacinaAlterada.setIdVacina(controller.consultarPorNome(txtNomeVacina.getText()).getIdVacina());
 		}
 		
+		JOptionPane.showMessageDialog(null, vacinaAlterada);
 		controller.alterar(vacinaAlterada);
 		String resultadoValidacao = controller.validarCampos(vacinaAlterada);
-		if(resultadoValidacao==null) {
+		if(resultadoValidacao!=null && !resultadoValidacao.isEmpty()) {
+			if(respostaCadastro == 1) {
+				setVisible(false);
+				setVisible(false);
+			} else {
+				setVisible(false);
+			}
+		} else {
 			JOptionPane.showMessageDialog(null, "Alterado com sucesso");
 		}
-		setVisible(false);
 	}
-	
 	public boolean verificarCamposPreenchdidos() {
 		boolean resposta = false;
 		if(!txtIntervalo.getText().isEmpty() &&
@@ -265,15 +289,13 @@ public class TelaCadastroVacina extends JFrame {
 		this.txtIntervalo.setText(String.valueOf(vacina.getIntervaloDoses()));
 		this.txtNomePesquisador.setText(vacina.getNomePesquisadorResponsavel());
 		this.txtNomeVacina.setText(vacina.getNomeVacina());
+		JOptionPane.showMessageDialog(null, vacina.getIdVacina());
 		DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		String dataInicioPesquisaFormatada = formatador.format(vacina.getDataInicioPesquisa());
 		id = vacina.getIdVacina();
 		this.txtDataInicio.setText(dataInicioPesquisaFormatada);
 		this.cbxDoses.setSelectedItem(vacina.getQuantidadeDoses());
 		this.cbxPais.setSelectedItem(vacina.getPaisOrigem());
-		
-		ativaBotao = false;
-		btnAlterar.setEnabled(true);
 	}
 
 	private void limparCampos() {
@@ -311,8 +333,8 @@ public class TelaCadastroVacina extends JFrame {
 	    "Mali", "Malta", "Marrocos", "Martinica", "Maurício", "Mauritânia", "Mayotte", "México", "Micronésia", "Moçambique", "Moldova", "Mônaco","Mongólia", 
 	    "Montenegro", "Montserrat", "Myanma", "Namíbia", "Nauru", "Nepal", "Nicarágua", "Níger", "Nigéria", "Niue","Noruega", "Nova Caledônia", 
         "Nova Zelândia", "Omã", "Palau", "Panamá", "Papua-Nova Guiné", "Paquistão", "Paraguai", "Peru", "Polinésia Francesa", "Polônia", "Porto Rico",
-	    "Portugal", "Qatar", "Quirguistão", "Reino Unido", "República Centro-Africana", "República Democrática do Congo", "República Dominicana", "República Tcheca","Romênia",
-	    "Ruanda", "Rússia", "Saara Ocidental", "Saint Vincente e Granadinas", "Samoa Americana", "Samoa Ocidental", "San Marino",
+	    "Portugal", "Qatar", "Quirguistão", "República Centro-Africana", "República Democrática do Congo", "República Dominicana", "República Tcheca","Romênia",
+	    "Ruanda", "Rússia (antiga URSS) - Federação Russa", "Saara Ocidental", "Saint Vincente e Granadinas", "Samoa Americana", "Samoa Ocidental", "San Marino",
 	    "Santa Helena", "Santa Lúcia", "São Bartolomeu", "São Cristóvão e Névis", "São Martim", "São Tomé e Príncipe", "Senegal", "Serra Leoa", "Sérvia", "Síria",
 	    "Somália", "Sri Lanka", "St. Pierre and Miquelon", "Suazilândia", "Sudão", "Suécia", "Suíça", "Suriname", "Tadjiquistão", "Tailândia", "Taiwan",
 	    "Tanzânia", "Territórios do Sul da França", "Territórios Palestinos Ocupados", "Timor Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunísia",
@@ -321,20 +343,26 @@ public class TelaCadastroVacina extends JFrame {
 	    return listaDePaises;
 	}
 	
-	public boolean validarNumero(JTextField numero) { 	
+	public boolean validarCampo(JTextField numero) {
+		String mensagem;
 		long valor; 
 		boolean resposta = false;
+		boolean inteiro = true;
+		
+		jlAvisoDose.setVisible(resposta);
 		String numeroString = numero.getText().toString();
 		if (numero.getText().length() != 0){ 
 			try { 
 				valor = Integer.parseInt(numero.getText()); 
 			}catch(NumberFormatException ex){ 
-				JOptionPane.showMessageDialog(null, "Este campo aceita apenas números inteiros." ,"Informação",JOptionPane.INFORMATION_MESSAGE); 
-				numero.grabFocus(); 
+				inteiro = false;
 			}
-//			numero.setText(numeroString.substring(numero.getText().length()));
-		} else {
+		}
+		
+		if(inteiro) {
 			resposta = true;
+		} else {
+			resposta = false;
 		}
 		return resposta;
 	}
