@@ -1,6 +1,7 @@
 package controller;
 
 import java.util.ArrayList;
+
 import exception.exception_aplicacao_vacina.AnalisarCamposAplicacaoException;
 import exception.exception_aplicacao_vacina.AnalisarSePodeAplicarException;
 import model.bo.AplicacaoVacinaBO;

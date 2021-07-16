@@ -1,4 +1,4 @@
-package view;
+ package view;
 
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -35,6 +35,10 @@ import model.dao.VacinaDAO;
 import model.vo.AplicacaoVacinaVO;
 import model.vo.PessoaVO;
 import model.vo.VacinaVO;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.event.CaretListener;
+import javax.swing.event.CaretEvent;
 
 public class TelaAplicacaoVacina extends JFrame {
 
@@ -50,7 +54,11 @@ public class TelaAplicacaoVacina extends JFrame {
 	private String nome = "";
 	JButton btnVacinar = new JButton("Vacinar");
 	PessoaVO encontrada = new PessoaVO();
-
+	private Object[] opcoes = {"Sim", "Não"};
+	private Object[] opcoes2 = {"Voltar a tela inicial","Sair"};
+	private int respostaCadastro;
+	private Integer resposta = null;
+	private JButton btnBuscar;
 	/**
 	 * Launch the application.
 	 */
@@ -89,31 +97,35 @@ public class TelaAplicacaoVacina extends JFrame {
 		try {
 			mascaraCPF = new MaskFormatter("###.###.###-##");
 			txtCpf = new JFormattedTextField(mascaraCPF);
+			txtCpf.addCaretListener(new CaretListener() {
+				public void caretUpdate(CaretEvent e) {
+					if(txtCpf.getText().toString().equals("   .   .   -  ")!=true && txtCpf.getText().toString().length()==14) {
+						btnBuscar.setEnabled(true);
+					}
+				}
+			});
 		} catch (ParseException e1) {
+			
 		}
 		txtCpf.setColumns(10);
 		txtCpf.setBounds(124, 31, 187, 29);
 		contentPane.add(txtCpf);
 
-		JButton btnBuscar = new JButton("Buscar");
+	    btnBuscar = new JButton("Buscar");
 		btnBuscar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				// System.out.println(txtCpf.getText());
-				// System.out.println(controller.consultarPorCpf(txtCpf.getText()).toString());
-				PessoaVO encontrada = pessoaDAO.consultarPorCpf(txtCpf.getText());
-				txtNome.setEnabled(true);
-				txtNome.setEditable(false);
-				txtNome.setText(encontrada.getNome());
-			
-				carregarTabela(encontrada.getIdPessoa());
-				preencherCbxVacina();
-				btnVacinar.setEnabled(true);
+					encontrada = pessoaDAO.consultarPorCpf(txtCpf.getText());
+					txtNome.setEnabled(true);
+					txtNome.setText(encontrada.getNome());
+					carregarTabela(encontrada.getIdPessoa());
+					preencherCbxVacina();
+					btnVacinar.setEnabled(true);
 			}
 		});
-
 		btnBuscar.setBounds(378, 30, 99, 29);
 		contentPane.add(btnBuscar);
+		btnBuscar.setEnabled(false);
 
 		JLabel lblNome = new JLabel("Nome:");
 		lblNome.setBounds(36, 95, 46, 14);
@@ -121,6 +133,7 @@ public class TelaAplicacaoVacina extends JFrame {
 
 		txtNome = new JTextField();
 		txtNome.setEnabled(false);
+		txtNome.setEditable(false);
 		txtNome.setBackground(Color.WHITE);
 		txtNome.setBounds(124, 91, 352, 22);
 		contentPane.add(txtNome);
@@ -134,20 +147,19 @@ public class TelaAplicacaoVacina extends JFrame {
 		cbxVacina.setBounds(124, 138, 352, 29);
 		contentPane.add(cbxVacina);
 
-		JButton btnVacinar = new JButton("Vacinar");
+		btnVacinar = new JButton("Vacinar");
 		btnVacinar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				try {
 					cadastrarAplicacao();
 				} catch (AnalisarSePodeAplicarException | AnalisarCamposAplicacaoException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					respostaCadastro = JOptionPane.showOptionDialog(null, e1.getMessage()+"\nDeseja editar as informações?", "Aviso", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opcoes, opcoes[0]);
 				}
 			}
 		});
-		
 		btnVacinar.setBounds(378, 352, 99, 51);
+		btnVacinar.setEnabled(false);
 		contentPane.add(btnVacinar);
 
 		JLabel lblHistrico = new JLabel("Hist\u00F3rico:");
@@ -194,25 +206,50 @@ public class TelaAplicacaoVacina extends JFrame {
 	private void cadastrarAplicacao() throws AnalisarSePodeAplicarException, AnalisarCamposAplicacaoException {
 		AplicacaoVacinaVO aplicacaoVacina = new AplicacaoVacinaVO();
 		aplicacaoVacina.setPessoa(encontrada); 
-		
 		aplicacaoVacina.setVacina(controllerVacina.consultarPorNome(cbxVacina.getSelectedItem().toString()));
 		aplicacaoVacina.setDataAplicacao(LocalDate.now());
-		System.out.println(avController.cadastrar(aplicacaoVacina));
-
-
+		if(avController.validarCampos(aplicacaoVacina)!=null) {		
+			int respostaOpcao2;
+			if(respostaCadastro==1) {			
+				respostaOpcao2 = JOptionPane.showOptionDialog(null, "Selecione uma opção" , "Opções", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opcoes2, opcoes2[0]);
+				if(respostaOpcao2==0) {
+					TelaPrincipal telaPrincipal = new TelaPrincipal();
+					dispose();
+					telaPrincipal.setVisible(true);
+				} else if(respostaOpcao2==1){
+					dispose();
+				}
+			}
+		} else {
+			JOptionPane.showMessageDialog(null, "Cadastrado com sucesso");
+		}
 	}
-
-	public void carregarTabela(Integer id) {
-
-		
+	public void carregarTabela(Integer id) {	
 		AplicacaoVacinaDAO avDAO = new AplicacaoVacinaDAO();
-
 		ArrayList<AplicacaoVacinaVO> listaAplicacoes = avController.consultarAplicacoes(id);
-	
-
 		for (AplicacaoVacinaVO apvac : listaAplicacoes) {
 			int i=1;
 		modelo.addRow(new Object[]{i++, apvac.getDataAplicacao()});
 		}
 	}
+	
+	public boolean verificarCamposPreenchidos() {
+		boolean resposta = false;
+		if(encontrada!=null && txtNome.getText().toString().length()>0 && cbxVacina.getSelectedItem().toString().length()>0) {
+			resposta = true;
+		}
+		return resposta;
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+

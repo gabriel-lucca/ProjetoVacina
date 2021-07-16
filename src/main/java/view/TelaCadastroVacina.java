@@ -55,7 +55,7 @@ public class TelaCadastroVacina extends JFrame {
 	private JLabel jlAvisoDose;
 	
 	private Object[] opcoes = {"Sim", "Não"};
-	DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+	private DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	private int id;
 	/**
 	 * Launch the application.
@@ -126,7 +126,7 @@ public class TelaCadastroVacina extends JFrame {
 		
 		JLabel lblDataIncioE = new JLabel("Data inicio pesquisa:");
 		lblDataIncioE.setFont(new Font("Dialog", Font.BOLD, 13));
-		lblDataIncioE.setBounds(265, 192, 137, 14);
+		lblDataIncioE.setBounds(265, 183, 137, 14);
 		contentPane.add(lblDataIncioE);
 		
 //		MaskFormatter mascaraDataInicio;
@@ -137,7 +137,7 @@ public class TelaCadastroVacina extends JFrame {
 		}
 		
 		txtDataInicio.setColumns(10);
-		txtDataInicio.setBounds(501, 184, 74, 31);
+		txtDataInicio.setBounds(501, 176, 74, 31);
 		contentPane.add(txtDataInicio);
 		
 		JLabel lblQntDoses = new JLabel("Quantidade de doses:");
@@ -216,6 +216,12 @@ public class TelaCadastroVacina extends JFrame {
 		jlAvisoDose.setBounds(501, 300, 129, 14);
 		jlAvisoDose.setVisible(false);
 		contentPane.add(jlAvisoDose);
+		
+		JLabel jlAvisoData = new JLabel("New label");
+		jlAvisoData.setForeground(Color.RED);
+		jlAvisoData.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		jlAvisoData.setBounds(501, 207, 46, 14);
+		contentPane.add(jlAvisoData);
 		
 	}
 	
