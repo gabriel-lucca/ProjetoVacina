@@ -53,6 +53,7 @@ public class TelaCadastroVacina extends JFrame {
 	private int respostaAlteracao;
 	private int respostaExclusao;
 	private JLabel jlAvisoDose;
+	private boolean ativaBotao = true;
 	
 	private Object[] opcoes = {"Sim", "Não"};
 	private DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -86,11 +87,9 @@ public class TelaCadastroVacina extends JFrame {
 			@Override
 			public void mouseMoved(MouseEvent e) {
 				if(verificarCamposPreenchdidos()) {
-					btnCadastrar.setEnabled(true);
-					btnAlterar.setEnabled(true);
+					btnCadastrar.setEnabled(ativaBotao);
 				} else {
 					btnCadastrar.setEnabled(false);
-					btnAlterar.setEnabled(false);
 				}
 				
 				if(txtIntervalo.getText().length()>0) {
@@ -181,10 +180,8 @@ public class TelaCadastroVacina extends JFrame {
 		contentPane.add(cbxPais);
 		
 		btnCadastrar = new JButton("Cadastrar");
-		btnCadastrar.setEnabled(false);
-		btnCadastrar.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
+		btnCadastrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
 				try {
 					cadastrar();
 				} catch (AnalisarCamposVacinaException | VacinaJaExisteException e) {
@@ -192,14 +189,13 @@ public class TelaCadastroVacina extends JFrame {
 				}
 			}	
 		});
+		btnCadastrar.setEnabled(false);
 		btnCadastrar.setBounds(422, 331, 153, 47);
 		contentPane.add(btnCadastrar);
 
 		btnAlterar = new JButton("Alterar");
-		btnAlterar.setEnabled(false);
-		btnAlterar.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent me) {
+		btnAlterar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
 				try {
 					alterar();
 				} catch (AnalisarCamposVacinaException e) {
@@ -207,6 +203,7 @@ public class TelaCadastroVacina extends JFrame {
 				}
 			}
 		});
+		btnAlterar.setEnabled(false);
 		btnAlterar.setBounds(259, 331, 153, 47);
 		contentPane.add(btnAlterar);
 		
@@ -216,12 +213,6 @@ public class TelaCadastroVacina extends JFrame {
 		jlAvisoDose.setBounds(501, 300, 129, 14);
 		jlAvisoDose.setVisible(false);
 		contentPane.add(jlAvisoDose);
-		
-		JLabel jlAvisoData = new JLabel("New label");
-		jlAvisoData.setForeground(Color.RED);
-		jlAvisoData.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		jlAvisoData.setBounds(501, 207, 46, 14);
-		contentPane.add(jlAvisoData);
 		
 	}
 	
@@ -302,6 +293,9 @@ public class TelaCadastroVacina extends JFrame {
 		this.txtDataInicio.setText(dataInicioPesquisaFormatada);
 		this.cbxDoses.setSelectedItem(vacina.getQuantidadeDoses());
 		this.cbxPais.setSelectedItem(vacina.getPaisOrigem());
+		
+		ativaBotao = false;
+		btnAlterar.setEnabled(true);
 	}
 
 	private void limparCampos() {
