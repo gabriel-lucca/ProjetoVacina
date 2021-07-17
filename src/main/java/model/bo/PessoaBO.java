@@ -18,33 +18,31 @@ public class PessoaBO {
 			//Os campos devem possuir no m�nimo d�gitos 3 e no m�ximo 100
 			//Nome:
 			if(pessoa.getNome().length() < 3) {
-				mensagem += "O nome deve conter no m�nimo 3 caracteres";
+				mensagem += "\nO nome deve conter no m�nimo 3 caracteres";
 			}else if(pessoa.getNome().length() > 100) {
-				mensagem += "O nome n�o pode passar de 100 caracteres";
+				mensagem += "\nO nome n�o pode passar de 100 caracteres";
 			}
 			//Email:
 			if(pessoa.getEmail().length() < 3) {
-				mensagem += "O email deve conter no m�nimo 3 caracteres";
+				mensagem += "\nO email deve conter no m�nimo 3 caracteres";
 			}else if(pessoa.getEmail().length() > 100) {
-				mensagem += "O email n�o pode passar de 100 caracteres";
+				mensagem += "\nO email n�o pode passar de 100 caracteres";
 			}
 			//Endereco:
 			if(pessoa.getEndereco().length() < 3) {
-				mensagem += "O endere�o deve conter no m�nimo 3 caracteres";
+				mensagem += "\nO endere�o deve conter no m�nimo 3 caracteres";
 			}else if(pessoa.getEndereco().length() > 100) {
-				mensagem += "O endere�o n�o pode passar de 100 caracteres";
+				mensagem += "\nO endere�o n�o pode passar de 100 caracteres";
 			}
-			
 			//Os campos devem possuir no m�nimo d�gitos 3 e no m�ximo 50
 			//Cidade:
 			if(pessoa.getCidade().length() < 3) {
-				mensagem += "A cidade deve conter no m�nimo 3 caracteres";
+				mensagem += "\nA cidade deve conter no m�nimo 3 caracteres";
 			}else if(pessoa.getNome().length() > 50) {
-				mensagem += "A cidade n�o pode passar de 50 caracteres";
+				mensagem += "\nA cidade n�o pode passar de 50 caracteres";
 			}
-			
 			if(mensagem.isEmpty()) {
-				mensagem = "Pessoa cadastrada com sucesso!";
+				mensagem = "\nPessoa cadastrada com sucesso!";
 			}
 			dao.cadastrar(pessoa);
 			return mensagem;

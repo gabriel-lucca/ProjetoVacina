@@ -2,7 +2,10 @@ package model.bo;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
 
 import model.dao.AplicacaoVacinaDAO;
 import model.dao.PessoaDAO;
@@ -46,13 +49,18 @@ public class AplicacaoVacinaBO {
 	public AplicacaoVacinaVO cadastrar(AplicacaoVacinaVO aplicacaoVacinaVO) throws AnalisarSePodeAplicarException {
 		VacinaVO vVO = aplicacaoVacinaVO.getVacina();
 		PessoaVO pVO = aplicacaoVacinaVO.getPessoa();
-		
-		String resultadoPodeVacinar=null;
-		if(resultadoPodeVacinar != null && !resultadoPodeVacinar.isEmpty()) {
-			throw new AnalisarSePodeAplicarException(resultadoPodeVacinar);
+		ArrayList<AplicacaoVacinaVO> listaAplicacoes = consultarAplicacoes(pVO.getIdPessoa());
+		AplicacaoVacinaVO ultimaAPlicacao = listaAplicacoes.get(listaAplicacoes.size()-1);
+		LocalDate dtUltimaAplicacao = ultimaAPlicacao.getDataAplicacao();
+		LocalDate dtNovaAplicacao = LocalDate.now();
+		String mensagem = null;
+		long diferencaDias = ChronoUnit.DAYS.between(dtUltimaAplicacao, dtNovaAplicacao);
+		if(diferencaDias<vVO.getIntervaloDoses()) {
+			throw new AnalisarSePodeAplicarException("Não é possível vacinar.\nRestam "+(vVO.getIntervaloDoses()-diferencaDias)+" dias para a próxima aplicação.");
 		}
-		return aplicacaoVacinaVO;
+		return avDAO.cadastrar(aplicacaoVacinaVO);
 	}
+	
 	public boolean alterar(AplicacaoVacinaVO aplicacaoAlterada) {
 		return avDAO.alterar(aplicacaoAlterada);
 	}
