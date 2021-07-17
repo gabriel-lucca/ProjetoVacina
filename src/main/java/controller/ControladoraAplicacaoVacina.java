@@ -17,13 +17,14 @@ public class ControladoraAplicacaoVacina {
 	
 	public AplicacaoVacinaVO cadastrar(AplicacaoVacinaVO novaAplicacaoVacina) throws AnalisarCamposAplicacaoException, AnalisarSePodeAplicarException {
 		String resultadoValidacao = validarCampos(novaAplicacaoVacina);
-		if(resultadoValidacao != null && !resultadoValidacao.isEmpty()) {
+		if(resultadoValidacao != null) {
 			throw new AnalisarCamposAplicacaoException(resultadoValidacao);
 		}
 		return bo.cadastrar(novaAplicacaoVacina);
 	}
+	
 	public String validarCampos(AplicacaoVacinaVO aplicacaoVacina) {
-		String mensagem = " ";
+		String mensagem = null;
 		if(aplicacaoVacina.getPessoa() == null) {
 			mensagem += "\nInforme o nome da pessoa à ser aplicada.";
 		}
@@ -32,6 +33,7 @@ public class ControladoraAplicacaoVacina {
 		}
 		return mensagem;
 	}
+	
 	public boolean excluir(Integer id) {
 		return bo.excluir(id);
 	}

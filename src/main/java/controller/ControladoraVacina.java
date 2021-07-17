@@ -14,7 +14,7 @@ public class ControladoraVacina {
 	
 	public String cadastrar(VacinaVO novaVacina) throws AnalisarCamposVacinaException, VacinaJaExisteException {
 		String respostaValidacao = validarCampos(novaVacina);
-		if(respostaValidacao != null && !respostaValidacao.isEmpty()) {
+		if(respostaValidacao != null) {
 			throw new AnalisarCamposVacinaException(respostaValidacao);
 		}
 		return bo.cadastrar(novaVacina);

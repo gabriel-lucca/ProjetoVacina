@@ -13,15 +13,13 @@ import model.vo.VacinaVO;
 public class AplicacaoVacinaDAO {
 	public AplicacaoVacinaVO cadastrar(AplicacaoVacinaVO novaAplicacao) {
 		Connection conn = Banco.getConnection();
-		String sql = "insert into aplicacaoVacina(fkIdPessoa, idVacina, dtAplicacao)"
+		String sql = "insert into aplicacaoVacina(idPessoa, idVacina, dtAplicacao)"
 				+ "values(?, ?, ?)";
 		PreparedStatement ps = Banco.getPreparedStatement(conn, sql);
-		PessoaVO pessoa = new PessoaVO();
-		VacinaVO vacina = new VacinaVO();
 		ResultSet rs = null;
 		try {
-			ps.setInt(1, pessoa.getIdPessoa());
-			ps.setInt(2, vacina.getIdVacina());
+			ps.setInt(1, novaAplicacao.getIdPessoa().getIdPessoa());
+			ps.setInt(2, novaAplicacao.getVacina().getIdVacina());
 			ps.setDate(3, java.sql.Date.valueOf(novaAplicacao.getDataAplicacao()));
 			ps.execute();
 			rs = ps.getGeneratedKeys();
@@ -29,7 +27,7 @@ public class AplicacaoVacinaDAO {
 				novaAplicacao.setIdAplicacaoVacina(rs.getInt(1));
 			}
 		}catch(SQLException e) {
-			System.out.println("Erro ao cadastrar aplica��o vacina.\nErro: "+e.getMessage());
+			System.out.println("Erro ao cadastrar aplicação vacina.\nErro: "+e.getMessage());
 		}finally {
 			Banco.closeConnection(conn);
 			Banco.closePreparedStatement(ps);
