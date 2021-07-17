@@ -7,6 +7,8 @@ import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -53,7 +55,7 @@ public class TelaAplicacaoVacina extends JFrame {
 	DefaultTableModel modelo = new DefaultTableModel();
 	private String nome = "";
 	JButton btnVacinar = new JButton("Vacinar");
-	PessoaVO encontrada = new PessoaVO();
+	PessoaVO pessoaEncontrada = new PessoaVO();
 	private Object[] opcoes = {"Sim", "Não"};
 	private Object[] opcoes2 = {"Voltar a tela inicial","Sair"};
 	private int respostaCadastro;
@@ -115,10 +117,10 @@ public class TelaAplicacaoVacina extends JFrame {
 		btnBuscar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-					encontrada = pessoaDAO.consultarPorCpf(txtCpf.getText());
+					pessoaEncontrada = pessoaDAO.consultarPorCpf(txtCpf.getText());
 					txtNome.setEnabled(true);
-					txtNome.setText(encontrada.getNome());
-					carregarTabela(encontrada.getIdPessoa());
+					txtNome.setText(pessoaEncontrada.getNome());
+					carregarTabela(pessoaEncontrada.getIdPessoa());
 					preencherCbxVacina();
 					btnVacinar.setEnabled(true);
 			}
@@ -154,7 +156,8 @@ public class TelaAplicacaoVacina extends JFrame {
 				try {
 					cadastrarAplicacao();
 				} catch (AnalisarSePodeAplicarException | AnalisarCamposAplicacaoException e1) {
-					respostaCadastro = JOptionPane.showOptionDialog(null, e1.getMessage()+"\nDeseja editar as informações?", "Aviso", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opcoes, opcoes[0]);
+					JOptionPane.showMessageDialog(null, e1.getMessage());
+					dispose();
 				}
 			}
 		});
@@ -205,20 +208,24 @@ public class TelaAplicacaoVacina extends JFrame {
 	
 	private void cadastrarAplicacao() throws AnalisarSePodeAplicarException, AnalisarCamposAplicacaoException {
 		AplicacaoVacinaVO aplicacaoVacina = new AplicacaoVacinaVO();
-		aplicacaoVacina.setPessoa(encontrada); 
+		aplicacaoVacina.setPessoa(pessoaEncontrada); 
 		aplicacaoVacina.setVacina(controllerVacina.consultarPorNome(cbxVacina.getSelectedItem().toString()));
-		aplicacaoVacina.setDataAplicacao(LocalDate.now());
+		
+		ArrayList<AplicacaoVacinaVO> listaAplicacoes = avController.consultarAplicacoes(pessoaEncontrada.getIdPessoa());
+		AplicacaoVacinaVO ultimaAPlicacao = listaAplicacoes.get(listaAplicacoes.size()-1);
+		LocalDate dtUltimaAplicacao = ultimaAPlicacao.getDataAplicacao();
+		LocalDate dtNovaAplicacao = LocalDate.now();
+		
+		aplicacaoVacina.setDataAplicacao(dtNovaAplicacao);
+		avController.cadastrar(aplicacaoVacina);
 		if(avController.validarCampos(aplicacaoVacina)!=null) {		
-			int respostaOpcao2;
-			if(respostaCadastro==1) {			
-				respostaOpcao2 = JOptionPane.showOptionDialog(null, "Selecione uma opção" , "Opções", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opcoes2, opcoes2[0]);
-				if(respostaOpcao2==0) {
-					TelaPrincipal telaPrincipal = new TelaPrincipal();
-					dispose();
-					telaPrincipal.setVisible(true);
-				} else if(respostaOpcao2==1){
-					dispose();
-				}
+			int respostaOpcao2;	
+			respostaOpcao2 = JOptionPane.showOptionDialog(null, "Selecione uma opção" , "Opções", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opcoes2, opcoes2[0]);
+			if(respostaOpcao2==0) {
+				TelaPrincipal telaPrincipal = new TelaPrincipal();
+				telaPrincipal.setVisible(true);
+			} else if(respostaOpcao2==1){
+				dispose();
 			}
 		} else {
 			JOptionPane.showMessageDialog(null, "Cadastrado com sucesso");
@@ -235,7 +242,7 @@ public class TelaAplicacaoVacina extends JFrame {
 	
 	public boolean verificarCamposPreenchidos() {
 		boolean resposta = false;
-		if(encontrada!=null && txtNome.getText().toString().length()>0 && cbxVacina.getSelectedItem().toString().length()>0) {
+		if(pessoaEncontrada!=null && txtNome.getText().toString().length()>0 && cbxVacina.getSelectedItem().toString().length()>0) {
 			resposta = true;
 		}
 		return resposta;
