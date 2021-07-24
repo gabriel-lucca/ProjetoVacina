@@ -24,22 +24,31 @@ public class ControladoraVacina {
 		//Os campos devem possuir no m�nimo d�gitos 3 e no m�ximo 100
 		//NomePesquisador:
 		if(vacina.getNomePesquisadorResponsavel().length() < 3) {
-			mensagem += "\nO nome do deve possuir no mínimo 3 caracteres";
+			mensagem += "\nO nome do pesquisador responsavel deve possuir no mínimo 3 caracteres";
 		}else if(vacina.getNomePesquisadorResponsavel().length() > 100) {
-			mensagem += "\nO nome não deve possuir mais de 100 caracteres";
+			mensagem += "\nO nome do pesquisador responsavel não deve possuir mais de 100 caracteres";
 		}
 		//paisOrigem:
-		if(vacina.getPaisOrigem().length() < 3) {
-			mensagem += "\nO pas de origem deve possuir no mínimo 3 caracteres";
-		}else if(vacina.getPaisOrigem().length() > 100) {
-			mensagem += "\nO ps de origem deve possuir mais de 100 caracteres";
-		}
+		//if(vacina.getPaisOrigem().length() < 3) {
+		//	mensagem += "\nO pais de origem deve possuir no mínimo 3 caracteres";
+		//}else if(vacina.getPaisOrigem().length() > 100) {
+		//	mensagem += "\nO pais de origem não deve possuir mais de 100 caracteres";
+		//}
+		
 		//NomeVacina:
 		if(vacina.getNomeVacina().length() < 3) {
-			mensagem += "\nO nome da vacina pdeve possuir no mínimo 3 caracteres";
-		}else if(vacina.getNomeVacina().length() > 100) {
-			mensagem += "\nO nome da deve possuir mais de 100 caracteres";
+			mensagem += "\nO nome da vacina deve possuir no mínimo 3 caracteres";
+		}else if(vacina.getNomeVacina().length() > 50) {
+			mensagem += "\nO nome da vacina nao deve possuir mais de 50 caracteres";
 		}
+		
+		//Intervalo doses:
+		if(vacina.getIntervaloDoses() < 1) {
+			mensagem += "\nO Intervalo de doses deve possuir no mínimo 1 caracteres";
+		}else if(vacina.getIntervaloDoses() > 4) {
+			mensagem += "\nO Intervalo de doses não deve possuir mais de 4 caracteres";
+		}
+		
 		return mensagem;
 	}
 	public boolean alterar(VacinaVO vacinaAlterada) throws AnalisarCamposVacinaException{
