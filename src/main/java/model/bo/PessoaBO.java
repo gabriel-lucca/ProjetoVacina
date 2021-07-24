@@ -18,28 +18,28 @@ public class PessoaBO {
 			//Os campos devem possuir no m�nimo d�gitos 3 e no m�ximo 100
 			//Nome:
 			if(pessoa.getNome().length() < 3) {
-				mensagem += "\nO nome deve conter no m�nimo 3 caracteres";
+				mensagem += "\nO nome deve conter no minimo 3 caracteres";
 			}else if(pessoa.getNome().length() > 100) {
-				mensagem += "\nO nome n�o pode passar de 100 caracteres";
+				mensagem += "\nO nome nao pode passar de 100 caracteres";
 			}
 			//Email:
 			if(pessoa.getEmail().length() < 3) {
-				mensagem += "\nO email deve conter no m�nimo 3 caracteres";
+				mensagem += "\nO email deve conter no minimo 3 caracteres";
 			}else if(pessoa.getEmail().length() > 100) {
-				mensagem += "\nO email n�o pode passar de 100 caracteres";
+				mensagem += "\nO email nao pode passar de 100 caracteres";
 			}
 			//Endereco:
 			if(pessoa.getEndereco().length() < 3) {
-				mensagem += "\nO endere�o deve conter no m�nimo 3 caracteres";
+				mensagem += "\nO endereco deve conter no minimo 3 caracteres";
 			}else if(pessoa.getEndereco().length() > 100) {
-				mensagem += "\nO endere�o n�o pode passar de 100 caracteres";
+				mensagem += "\nO endereco nao pode passar de 100 caracteres";
 			}
 			//Os campos devem possuir no m�nimo d�gitos 3 e no m�ximo 50
 			//Cidade:
 			if(pessoa.getCidade().length() < 3) {
-				mensagem += "\nA cidade deve conter no m�nimo 3 caracteres";
-			}else if(pessoa.getNome().length() > 50) {
-				mensagem += "\nA cidade n�o pode passar de 50 caracteres";
+				mensagem += "\nA cidade deve conter no minimo 3 caracteres";
+			}else if(pessoa.getCidade().length() > 50) {
+				mensagem += "\nA cidade nao pode passar de 50 caracteres";
 			}
 			if(mensagem.isEmpty()) {
 				mensagem = "\nPessoa cadastrada com sucesso!";
@@ -66,7 +66,6 @@ public class PessoaBO {
 			return dao.buscarTodos();
 		}
 		public ArrayList<PessoaVO> consultarComFiltro(FiltroPessoa seletor) {
-			// TODO Auto-generated method stub
 			return dao.consultarComFiltro(seletor);
 		}
 		

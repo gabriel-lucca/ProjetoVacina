@@ -102,7 +102,7 @@ public class TelaCadastroPessoa extends JFrame {
 		contentPane.add(txtNome);
 		txtNome.setColumns(10);
 		
-		JLabel lblCpf = new JLabel("Cpf:");
+		JLabel lblCpf = new JLabel("CPF:");
 		lblCpf.setBounds(42, 99, 46, 14);
 		contentPane.add(lblCpf);
 		
@@ -117,7 +117,7 @@ public class TelaCadastroPessoa extends JFrame {
 		contentPane.add(txtTelefone);
 		
 		
-		JLabel lblTelefone = new JLabel("Telefone:");
+		JLabel lblTelefone = new JLabel("Celular:");
 		lblTelefone.setBounds(42, 183, 98, 14);
 		contentPane.add(lblTelefone);
 		
