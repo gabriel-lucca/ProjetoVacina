@@ -30,11 +30,11 @@ create table aplicacaoVacina(
     dtAplicacao date not null
 );
 -- Inserts:
-insert into pessoa(nomePessoa, cpf, email, telefone, dtNascimento, cidade, estado, endereco) values("Roberto Augusto", "111.111.111-11", "robertoool123@gmail.com", "(21)911111111", '1970-06-04', "Florianopolis", "SC", "Servidão Araquari"); 
-insert into pessoa(nomePessoa, cpf, email, telefone, dtNascimento, cidade, estado, endereco) values("André Araujo Lopes", "245.046.289-11", "andrefilipe@gmail.com", "(48)911648911", '2000-08-08', "Florianopolis", "SC", "Rodovia Barreiros");
-insert into pessoa(nomePessoa, cpf, email, telefone, dtNascimento, cidade, estado, endereco) values("Frederico Martins de Almeida", "245.046.760-11", "gabrielmarti@gmail.com", "(48)911648333", '2001-08-01', "Florianopolis", "SC", "Rodovia Gonzaga");
-insert into pessoa(nomePessoa, cpf, email, telefone, dtNascimento, cidade, estado, endereco) values("Rodolfo bawbis", "215.489.289-11", "rodolfobawbis@gmail.com", "(48)911677911", '1980-05-08', "Florianopolis", "SC", "Avenida Ropi");
-insert into pessoa(nomePessoa, cpf, email, telefone, dtNascimento, cidade, estado, endereco) values("Arlindo Rodrigues", "479.046.222-40", "andrefilipe@gmail.com", "(48)911998911", '1999-06-02', "Florianopolis", "SC", "Rua São Paulo");
+insert into pessoa(nomePessoa, cpf, email, telefone, dtNascimento, cidade, estado, endereco) values("Roberto Augusto", "111.111.111-11", "robertoool123@gmail.com", "(21)91111-1111", '1970-06-04', "Florianopolis", "SC", "Servidão Araquari"); 
+insert into pessoa(nomePessoa, cpf, email, telefone, dtNascimento, cidade, estado, endereco) values("André Araujo Lopes", "245.046.289-11", "andrefilipe@gmail.com", "(48)91164-8911", '2000-08-08', "Florianopolis", "SC", "Rodovia Barreiros");
+insert into pessoa(nomePessoa, cpf, email, telefone, dtNascimento, cidade, estado, endereco) values("Frederico Martins de Almeida", "245.046.760-11", "gabrielmarti@gmail.com", "(48)91164-8333", '2001-08-01', "Florianopolis", "SC", "Rodovia Gonzaga");
+insert into pessoa(nomePessoa, cpf, email, telefone, dtNascimento, cidade, estado, endereco) values("Rodolfo bawbis", "215.489.289-11", "rodolfobawbis@gmail.com", "(48)91167-7911", '1980-05-08', "Florianopolis", "SC", "Avenida Ropi");
+insert into pessoa(nomePessoa, cpf, email, telefone, dtNascimento, cidade, estado, endereco) values("Arlindo Rodrigues", "479.046.222-40", "andrefilipe@gmail.com", "(48)91199-8911", '1999-06-02', "Florianopolis", "SC", "Rua São Paulo");
 insert into pessoa(nomePessoa, cpf, email, telefone, dtNascimento, cidade, estado, endereco) values("Luiz Vicente Viana", "052.989.637-06", "lluizvicenteviana@imagemeaudio.com.br", "(84)98578-0813", '1970-09-02', "Natal", "RN", "Travessa São Pedro");
 insert into pessoa(nomePessoa, cpf, email, telefone, dtNascimento, cidade, estado, endereco) values("Guilherme Ryan Nicolas Brito", "769.509.372-61", "gguilhermeryannicolasbrito@kascher.com.br", "(84)99078-0813", '1990-09-11', "Manaus", "AM", "Beco São Geraldo");
 insert into pessoa(nomePessoa, cpf, email, telefone, dtNascimento, cidade, estado, endereco) values("Lúcia Carla Fogaça", "170.331.931-14", "luciacarlafogaca__luciacarlafogaca@terrabrasil.com.br", "(41)99791-6258", '1980-10-11', "Fazenda Rio Grande", "PR", "Rua Baraúna");
