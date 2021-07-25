@@ -241,6 +241,7 @@ public class TelaCadastroVacina extends JFrame {
 		} else {
 			JOptionPane.showMessageDialog(null, "Cadastrado com sucesso");	
 		}
+		setVisible(false);
 	}
 	public void alterar() throws AnalisarCamposVacinaException {
 		VacinaVO vacinaAlterada = new VacinaVO();
