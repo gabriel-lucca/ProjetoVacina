@@ -2,47 +2,20 @@ package model.bo;
 
 import java.util.ArrayList;
 
-import javax.swing.JOptionPane;
 
+import exception.exception_pessoa.AnalisarCamposPessoaException;
 import model.dao.PessoaDAO;
 import model.vo.PessoaVO;
-import model.vo.VacinaVO;
 import seletor.FiltroPessoa;
 
 public class PessoaBO {
 	
 		PessoaDAO dao = new PessoaDAO();
-		public String cadastrarPessoaBO(PessoaVO pessoa) {
+		public String cadastrarPessoaBO(PessoaVO pessoa) throws AnalisarCamposPessoaException {
 			String mensagem = "";
-
-			//Os campos devem possuir no m�nimo d�gitos 3 e no m�ximo 100
-			//Nome:
-			if(pessoa.getNome().length() < 3) {
-				mensagem += "\nO nome deve conter no minimo 3 caracteres";
-			}else if(pessoa.getNome().length() > 100) {
-				mensagem += "\nO nome nao pode passar de 100 caracteres";
-			}
-			//Email:
-			if(pessoa.getEmail().length() < 3) {
-				mensagem += "\nO email deve conter no minimo 3 caracteres";
-			}else if(pessoa.getEmail().length() > 100) {
-				mensagem += "\nO email nao pode passar de 100 caracteres";
-			}
-			//Endereco:
-			if(pessoa.getEndereco().length() < 3) {
-				mensagem += "\nO endereco deve conter no minimo 3 caracteres";
-			}else if(pessoa.getEndereco().length() > 100) {
-				mensagem += "\nO endereco nao pode passar de 100 caracteres";
-			}
-			//Os campos devem possuir no m�nimo d�gitos 3 e no m�ximo 50
-			//Cidade:
-			if(pessoa.getCidade().length() < 3) {
-				mensagem += "\nA cidade deve conter no minimo 3 caracteres";
-			}else if(pessoa.getCidade().length() > 50) {
-				mensagem += "\nA cidade nao pode passar de 50 caracteres";
-			}
-			if(mensagem.isEmpty()) {
-				mensagem = "\nPessoa cadastrada com sucesso!";
+			//Nao deve repetir cpf :
+			if(dao.cpfJaExiste(pessoa)) {
+				throw new AnalisarCamposPessoaException("\nCPF já existe.");
 			}
 			dao.cadastrar(pessoa);
 			return mensagem;
