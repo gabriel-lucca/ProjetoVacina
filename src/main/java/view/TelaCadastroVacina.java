@@ -251,13 +251,9 @@ public class TelaCadastroVacina extends JFrame {
 		vacinaAlterada.setNomeVacina(txtNomeVacina.getText());
 		vacinaAlterada.setPaisOrigem(cbxPais.getSelectedItem().toString());
 		vacinaAlterada.setQuantidadeDoses(cbxDoses.getSelectedItem().toString());
-		if(id!=0) {
-			vacinaAlterada.setIdVacina(id);
-		} else {
-			vacinaAlterada.setIdVacina(controller.consultarPorNome(txtNomeVacina.getText()).getIdVacina());
-		}
+		vacinaAlterada.setIdVacina(controller.consultarPorNome(txtNomeVacina.getText()).getIdVacina());
 		
-		JOptionPane.showMessageDialog(null, vacinaAlterada);
+		
 		controller.alterar(vacinaAlterada);
 		String resultadoValidacao = controller.validarCampos(vacinaAlterada);
 		if(resultadoValidacao!=null && !resultadoValidacao.isEmpty()) {
@@ -270,6 +266,8 @@ public class TelaCadastroVacina extends JFrame {
 		} else {
 			JOptionPane.showMessageDialog(null, "Alterado com sucesso");
 		}
+		
+		setVisible(false);
 	}
 	public boolean verificarCamposPreenchdidos() {
 		boolean resposta = false;
@@ -287,10 +285,8 @@ public class TelaCadastroVacina extends JFrame {
 		this.txtIntervalo.setText(String.valueOf(vacina.getIntervaloDoses()));
 		this.txtNomePesquisador.setText(vacina.getNomePesquisadorResponsavel());
 		this.txtNomeVacina.setText(vacina.getNomeVacina());
-		JOptionPane.showMessageDialog(null, vacina.getIdVacina());
 		DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		String dataInicioPesquisaFormatada = formatador.format(vacina.getDataInicioPesquisa());
-		id = vacina.getIdVacina();
 		this.txtDataInicio.setText(dataInicioPesquisaFormatada);
 		this.cbxDoses.setSelectedItem(vacina.getQuantidadeDoses());
 		this.cbxPais.setSelectedItem(vacina.getPaisOrigem());
