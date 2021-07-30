@@ -44,7 +44,7 @@ public class ControladoraVacina {
 		
 		//Intervalo doses:
 		if(vacina.getIntervaloDoses() < 0) {
-			mensagem += "\nO Intervalo de doses deve possuir no mínimo 1 digito";
+			mensagem += "\nO Intervalo de doses deve possuir no mínimo 0 dias";
 		}else if(vacina.getIntervaloDoses() > 365) {
 			mensagem += "\nO Intervalo de doses tem um limite de 365 dias";
 		}
