@@ -233,6 +233,26 @@ public class PessoaDAO {
 		}
 		return resposta;
 	}
+
+	public boolean celularJaExiste(PessoaVO pessoa) {
+		Connection conn = Banco.getConnection();
+		String sql = "select * from pessoa where telefone = ?";
+		PreparedStatement ps = Banco.getPreparedStatement(conn, sql);
+		boolean resposta = false;
+		try {
+			ps.setString(1, pessoa.getTelefone());
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				resposta = true;
+			}
+		} catch(SQLException e) {
+			System.out.println("Erro ao verificar se celular existe.\nErro: "+e.getMessage());
+		} finally {
+			Banco.closeConnection(conn);
+			Banco.closePreparedStatement(ps);
+		}
+		return resposta;
+	}
 	
 }
 

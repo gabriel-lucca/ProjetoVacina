@@ -17,6 +17,12 @@ public class PessoaBO {
 			if(dao.cpfJaExiste(pessoa)) {
 				throw new AnalisarCamposPessoaException("\nCPF já existe.");
 			}
+			
+			//Nao deve repetir celular :
+			if(dao.celularJaExiste(pessoa)) {
+				throw new AnalisarCamposPessoaException("\nCelular já cadastrado.");
+			}
+			
 			dao.cadastrar(pessoa);
 			return mensagem;
 		}
