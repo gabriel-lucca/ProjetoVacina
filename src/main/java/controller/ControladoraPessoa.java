@@ -31,11 +31,23 @@ private PessoaDAO dao = new PessoaDAO();
 			mensagem += "\nO nome nao pode passar de 100 caracteres";
 		}
 		//Email:
-		if(pessoa.getEmail().length() < 3) {
-			mensagem += "\nO email deve conter no minimo 3 caracteres";
-		}else if(pessoa.getEmail().length() > 100) {
-			mensagem += "nO email nao pode passar de 100 caracteres";
-		}
+			String email = pessoa.getEmail();
+			String[] arrayEmail = null;
+			boolean respostaVerificacao = false;
+			for(int i = 0;i<email.length();i++) {
+				while(String.valueOf(email.charAt(i)) != "@" || respostaVerificacao == true) {
+					if(i==email.length()) {
+						respostaVerificacao = false;
+					}
+				}
+			}
+			if(pessoa.getEmail().length() < 3) {
+				mensagem += "\nO email deve conter no m�nimo 3 caracteres";
+			}else if(pessoa.getEmail().length() > 100) {
+				mensagem += "\nO email n�o pode passar de 100 caracteres";
+			} else if(respostaVerificacao==true){
+				mensagem +="\nO email deve conter (@)";
+			}
 		//Endereco:
 		if(pessoa.getEndereco().length() < 3) {
 			mensagem += "\nO endereco deve conter no minimo 3 caracteres";
