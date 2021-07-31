@@ -220,7 +220,7 @@ public class TelaConsultarVacina extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				JFileChooser jfc = new JFileChooser();
 				jfc.setDialogTitle("Salvar relatório como...");
-				ArrayList<VacinaVO> list = vController.consultarTodos();
+				ArrayList<VacinaVO> list = vController.consultarTodosRelatorio();
 				int resultado = jfc.showSaveDialog(null);
 				if(resultado == JFileChooser.APPROVE_OPTION) {
 					String caminhoEscolhido = jfc.getSelectedFile().getAbsolutePath();
