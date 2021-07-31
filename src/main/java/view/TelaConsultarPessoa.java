@@ -193,7 +193,7 @@ public class TelaConsultarPessoa extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				JFileChooser jfc = new JFileChooser();
 				jfc.setDialogTitle("Salvar relatoório como...");
-				ArrayList<PessoaVO> list = pController.consultarTodos();
+				ArrayList<PessoaVO> list = pController.consultarTodosRelatorio();
 				int resultado = jfc.showSaveDialog(null);
 				if(resultado == JFileChooser.APPROVE_OPTION) {
 					String caminhoEscolhido = jfc.getSelectedFile().getAbsolutePath();
