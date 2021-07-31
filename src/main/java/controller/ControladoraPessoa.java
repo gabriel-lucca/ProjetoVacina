@@ -80,6 +80,10 @@ private PessoaDAO dao = new PessoaDAO();
 		return bo.consultarComFiltro(seletor);
 		
 	}
+
+	public ArrayList<PessoaVO> consultarTodosRelatorio() {
+		return bo.consultarTodosRelatorio();
+	}
 	
 
 }

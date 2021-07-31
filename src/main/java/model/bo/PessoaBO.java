@@ -47,5 +47,8 @@ public class PessoaBO {
 		public ArrayList<PessoaVO> consultarComFiltro(FiltroPessoa seletor) {
 			return dao.consultarComFiltro(seletor);
 		}
+		public ArrayList<PessoaVO> consultarTodosRelatorio() {
+			return dao.consultarTodosRelatorio();
+		}
 		
 }

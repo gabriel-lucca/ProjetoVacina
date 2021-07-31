@@ -253,6 +253,26 @@ public class PessoaDAO {
 		}
 		return resposta;
 	}
+
+	public ArrayList<PessoaVO> consultarTodosRelatorio() {
+		Connection conn = Banco.getConnection();
+		String sql = "select * from pessoa order by nomePessoa asc";
+		PreparedStatement ps = Banco.getPreparedStatementWithPk(conn, sql);
+		ArrayList<PessoaVO> pessoas = new ArrayList<PessoaVO>();
+		try {
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				PessoaVO pessoa = construirDoResultSet(rs);
+				pessoas.add(pessoa);
+			}
+		} catch (SQLException e) {
+			System.out.println("Erro ao buscar todas pessoas.\nErro: " + e.getMessage());
+		} finally {
+			Banco.closeConnection(conn);
+			Banco.closePreparedStatement(ps);
+		}
+		return pessoas;
+	}
 	
 }
 
