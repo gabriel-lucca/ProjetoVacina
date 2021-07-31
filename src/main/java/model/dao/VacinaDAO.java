@@ -184,4 +184,23 @@ public class VacinaDAO  {
 		}
 		return encontrado;
 	}
+	public ArrayList<VacinaVO> consultarTodosRelatorio() {
+		Connection conn = Banco.getConnection();
+		String sql = "select * from vacina order by nomeVacina asc";
+		PreparedStatement ps = Banco.getPreparedStatementWithPk(conn, sql);
+		ArrayList<VacinaVO> vacinas = new ArrayList<VacinaVO>();
+		try {
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				VacinaVO vacina = construirDoResultSet(rs);
+				vacinas.add(vacina);
+			}
+		}catch(SQLException e) {
+			System.out.println("Erro ao buscar todas vacinas.\nErro: "+e.getMessage());
+		}finally {
+			Banco.closeConnection(conn);
+			Banco.closePreparedStatement(ps);
+		}
+		return vacinas;
+	}
 }

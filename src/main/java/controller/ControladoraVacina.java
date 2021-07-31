@@ -73,4 +73,7 @@ public class ControladoraVacina {
 	public ArrayList<VacinaVO> consultarComFiltro(FiltroVacina seletor) {
 		return bo.consultarComFiltro(seletor);
 	}
+	public ArrayList<VacinaVO> consultarTodosRelatorio() {
+		return bo.consultarTodosRelatorio();
+	}
 }

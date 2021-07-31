@@ -44,5 +44,9 @@ public class VacinaBO {
 		// TODO Auto-generated method stub
 		return dao.consultarComFiltro(seletor);
 	}
+
+	public ArrayList<VacinaVO> consultarTodosRelatorio() {
+		return dao.consultarTodosRelatorio();
+	}
 }
  
