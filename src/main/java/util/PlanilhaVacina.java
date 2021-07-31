@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -37,7 +36,7 @@ public class PlanilhaVacina {
 		int linhaAtual = 0;
 
 		// Criar o cabeÃ§alho (header)
-		String[] nomesColunas = { "#", "Nome Pesquisador Responsável", "Pais Origem", "Nome Vacina", "Data Inicio Pesquisa", "Quantidade de Doses", "Intervalo das doses" };
+		String[] nomesColunas = { "Nome Vacina", "Nome Pesquisador Responsável", "Pais Origem", "Data Inicio Pesquisa", "Quantidade de Doses", "Intervalo das doses", "ID" };
 		criarCabecalho(nomesColunas, aba, linhaAtual);
 		linhaAtual++;
 		// Preencher as linhas com as vacinas
@@ -65,13 +64,13 @@ public class PlanilhaVacina {
 			XSSFRow linhaAtual = aba.createRow(posicaoLinhaAtual);
 
 			// Preencher as celulas com os atributos Vacina v
-			linhaAtual.createCell(0).setCellValue(v.getIdVacina());
+			linhaAtual.createCell(0).setCellValue(v.getNomeVacina());
 			linhaAtual.createCell(1).setCellValue(v.getNomePesquisadorResponsavel());
 			linhaAtual.createCell(2).setCellValue(v.getPaisOrigem());
-			linhaAtual.createCell(3).setCellValue(v.getNomeVacina());
-			linhaAtual.createCell(4).setCellValue(java.sql.Date.valueOf(v.getDataInicioPesquisa()));
-			linhaAtual.createCell(5).setCellValue(v.getQuantidadeDoses());
-			linhaAtual.createCell(6).setCellValue(v.getIntervaloDoses());
+			linhaAtual.createCell(3).setCellValue(java.sql.Date.valueOf(v.getDataInicioPesquisa()));
+			linhaAtual.createCell(4).setCellValue(v.getQuantidadeDoses());
+			linhaAtual.createCell(5).setCellValue(v.getIntervaloDoses());
+			linhaAtual.createCell(6).setCellValue(v.getIdVacina());
 
 			posicaoLinhaAtual++;
 		}

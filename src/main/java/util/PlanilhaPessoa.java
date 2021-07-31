@@ -35,7 +35,7 @@ public class PlanilhaPessoa {
 		int linhaAtual = 0;
 
 		// Criar o cabeÃ§alho (header) 		
-		String[] nomesColunas = {"#", "Nome Pessoa", "CPF", "Email", "Celular", "Data de Nascimento", "Cidade", "Estado", "Endereço" };
+		String[] nomesColunas = {"Nome Pessoa", "ID", "CPF", "Email", "Celular", "Data de Nascimento", "Cidade", "Estado", "Endereço" };
 		criarCabecalho(nomesColunas, aba, linhaAtual);
 		linhaAtual++;
 		// Preencher as linhas com os pessoas
@@ -63,8 +63,8 @@ public class PlanilhaPessoa {
 			// criar uma nova linha na planilha
 			XSSFRow linhaAtual = aba.createRow(posicaoLinhaAtual);
 			// Preencher as cÃ©lulas com os atributos Pessoa p
-			linhaAtual.createCell(0).setCellValue(p.getIdPessoa());
-			linhaAtual.createCell(1).setCellValue(p.getNome());
+			linhaAtual.createCell(0).setCellValue(p.getNome());
+			linhaAtual.createCell(1).setCellValue(p.getIdPessoa());
 			linhaAtual.createCell(2).setCellValue(p.getCpf());
 			linhaAtual.createCell(3).setCellValue(p.getEmail());
 			linhaAtual.createCell(4).setCellValue(p.getTelefone());
