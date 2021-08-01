@@ -50,7 +50,7 @@ public class TelaCadastroPessoa extends JFrame {
 	private JButton btnAlterar;
 	private Object[] opcoes = {"Sim","Não"};
 	private boolean ativaBotao = true;
-
+	private String cpfAntigo = null;
 
 	DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
@@ -252,11 +252,11 @@ public class TelaCadastroPessoa extends JFrame {
 			pessoaAlterada.setEstado(cbxEstado.getSelectedItem().toString());
 			pessoaAlterada.setNome(txtNome.getText());
 			pessoaAlterada.setTelefone(txtTelefone.getText());
-			pessoaAlterada.setIdPessoa(controller.consultarPorCpf(pessoaAlterada.getCpf()).getIdPessoa());
+			pessoaAlterada.setIdPessoa(controller.consultarPorCpf(cpfAntigo).getIdPessoa());
 			
-			controller.alterar(pessoaAlterada);
+			
 			String resultadoValidacao = controller.validarCampos(pessoaAlterada);
-			if(resultadoValidacao==null ) {
+			if(controller.alterar(pessoaAlterada) ) {
 				JOptionPane.showMessageDialog(null, "Alterado com sucesso");
 			}
 			
@@ -288,6 +288,7 @@ public class TelaCadastroPessoa extends JFrame {
 			this.txtDataNascimento.setText(dataNascimentoFormatada);
 			this.txtTelefone.setText(pessoa.getTelefone());
 			this.txtCpf.setText(pessoa.getCpf());
+			this.cpfAntigo=txtCpf.getText();
 			this.cbxEstado.setSelectedItem(pessoa.getEstado());
 			
 			

@@ -43,7 +43,7 @@ public class PessoaDAO {
 		return pessoa;
 	}
 
-	public boolean alterar(PessoaVO PessoaAlterada) {
+	public boolean alterar(PessoaVO pessoaAlterada) {
 		Connection conn = Banco.getConnection();
 		String sql = "update pessoa "
 				+ "set nomePessoa=?, cpf=?, email=?, telefone=?, dtNascimento=?, cidade=?, estado=?, endereco=?"
@@ -51,15 +51,15 @@ public class PessoaDAO {
 		PreparedStatement ps = Banco.getPreparedStatement(conn, sql);
 		boolean resposta = false;
 		try {
-			ps.setString(1, PessoaAlterada.getNome());
-			ps.setString(2, PessoaAlterada.getCpf());
-			ps.setString(3, PessoaAlterada.getEmail());
-			ps.setString(4, PessoaAlterada.getTelefone());
-			ps.setDate(5, java.sql.Date.valueOf(PessoaAlterada.getDataNascimento()));
-			ps.setString(6, PessoaAlterada.getCidade());
-			ps.setString(7, PessoaAlterada.getEstado());
-			ps.setString(8, PessoaAlterada.getEndereco());
-			ps.setInt(9, PessoaAlterada.getIdPessoa());
+			ps.setString(1, pessoaAlterada.getNome());
+			ps.setString(2, pessoaAlterada.getCpf());
+			ps.setString(3, pessoaAlterada.getEmail());
+			ps.setString(4, pessoaAlterada.getTelefone());
+			ps.setDate(5, java.sql.Date.valueOf(pessoaAlterada.getDataNascimento()));
+			ps.setString(6, pessoaAlterada.getCidade());
+			ps.setString(7, pessoaAlterada.getEstado());
+			ps.setString(8, pessoaAlterada.getEndereco());
+			ps.setInt(9, pessoaAlterada.getIdPessoa());
 			resposta = ps.executeUpdate() > 0;
 		} catch (SQLException e) {
 			System.out.println("Erro ao alterar pessoa.\nErro: " + e.getMessage());
@@ -143,7 +143,7 @@ public class PessoaDAO {
 
 	public boolean pessoaJaExiste(PessoaVO pessoa) {
 		Connection conn = Banco.getConnection();
-		String sql = "select * from pessoa where nomePessoa = ?";
+		String sql = "select * from pessoa where nomePessoa =?";
 		PreparedStatement ps = Banco.getPreparedStatement(conn, sql);
 		boolean resposta = false;
 		try {
@@ -161,18 +161,23 @@ public class PessoaDAO {
 		return resposta;
 	}
 	public PessoaVO consultarPorCpf(String cpf) {
-		PessoaVO pessoaVacinaConsultada = new PessoaVO();
-		String sql = "select * from pessoa where cpf = ?";
-		try (Connection conn = Banco.getConnection(); PreparedStatement stmt = Banco.getPreparedStatement(conn, sql);) {
-			stmt.setString(1, cpf);
-			ResultSet resultadoConsulta = stmt.executeQuery();
-			if (resultadoConsulta.next()) {
-				pessoaVacinaConsultada = this.construirDoResultSet(resultadoConsulta);
+		Connection conn = Banco.getConnection();
+		String sql = "select * from pessoa where cpf=?";
+		PreparedStatement ps = Banco.getPreparedStatement(conn, sql);
+		PessoaVO pessoaEncontrada = new PessoaVO();
+		try {
+			ps.setString(1, cpf);
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				pessoaEncontrada = construirDoResultSet(rs);
 			}
-		} catch (SQLException e) {
-			System.out.println("Erro ao consultar pessoa por CPF: \n" + e.getMessage());
+		} catch(SQLException e) {
+			System.out.println("Erro ao buscar CPF.\nErro: "+e.getMessage());
+		} finally {
+			Banco.closeConnection(conn);
+			Banco.closePreparedStatement(ps);
 		}
-		return pessoaVacinaConsultada;
+		return pessoaEncontrada;
 	}
 
 	public PessoaVO consultarPorNome(String nome) {

@@ -29,6 +29,10 @@ public class PessoaBO {
 		public boolean alterar(PessoaVO pessoaAlterada) {
 			return dao.alterar(pessoaAlterada);
 		}
+		
+		public PessoaVO consultarPorCpf(String cpf) {
+			return dao.consultarPorCpf(cpf);
+		}
 	
 		public boolean excluir(Integer id) {
 			return dao.excluir(id);
