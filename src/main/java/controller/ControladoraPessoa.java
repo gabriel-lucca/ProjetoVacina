@@ -32,7 +32,7 @@ private PessoaDAO dao = new PessoaDAO();
 		}
 		
 		
-		/*Email:
+		/* Email:
 			String email = pessoa.getEmail();
 			boolean respostaVerificacao = false;
 			for(int i = 0;i<email.length();i++) {
