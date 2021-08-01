@@ -30,26 +30,21 @@ private PessoaDAO dao = new PessoaDAO();
 		}else if(pessoa.getNome().length() > 100) {
 			mensagem += "\nO nome nao pode passar de 100 caracteres";
 		}
-		
-		
-		/* Email:
-			String email = pessoa.getEmail();
-			boolean respostaVerificacao = false;
-			for(int i = 0;i<email.length();i++) {
-				while(String.valueOf(email.charAt(i)) != "@" || respostaVerificacao == true) {
-					if(i==email.length()) {
-						respostaVerificacao = false;
-					}
-				}
+		//Email:
+		String email = pessoa.getEmail();		
+		boolean respostaVerificacao = false;
+		for(int i = 0;i<email.length();i++) {
+			if(String.valueOf(email.charAt(i)).equalsIgnoreCase("@")){
+				respostaVerificacao = true;
 			}
-			 */
-			if(pessoa.getEmail().length() < 3) {
-				mensagem += "\nO email deve conter no minimo 3 caracteres";
-			}else if(pessoa.getEmail().length() > 100) {
-				mensagem += "\nO email não pode passar de 100 caracteres";
-			//} else if(respostaVerificacao==true){
-			//	mensagem +="\nO email deve conter '@'";
 			}
+		if(pessoa.getEmail().length() < 3) {
+			mensagem += "\nO email deve conter no m�nimo 3 caracteres";
+		}else if(pessoa.getEmail().length() > 100) {
+			mensagem += "\nO email n�o pode passar de 100 caracteres";
+		}else if(!respostaVerificacao){
+			mensagem +="\nO email deve conter '@' ";
+		}
 		//Endereco:
 		if(pessoa.getEndereco().length() < 3) {
 			mensagem += "\nO endereco deve conter no minimo 3 caracteres";
