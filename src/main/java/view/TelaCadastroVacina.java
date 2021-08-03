@@ -82,7 +82,7 @@ public class TelaCadastroVacina extends JFrame {
 		setBackground(Color.BLACK);
 		setTitle("Tela cadastro de vacina");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 656, 486);
+		setBounds(100, 100, 656, 488);
 		contentPane = new JPanel();
 		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
@@ -107,26 +107,28 @@ public class TelaCadastroVacina extends JFrame {
 		contentPane.setBackground(new Color(204, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
+		setLocationRelativeTo(null);
 		contentPane.setLayout(null);
+		
 		
 		JLabel lblPasDeOrigem = new JLabel("Pais de origem:");
 		lblPasDeOrigem.setFont(new Font("Dialog", Font.BOLD, 13));
-		lblPasDeOrigem.setBounds(30, 101, 175, 18);
+		lblPasDeOrigem.setBounds(26, 118, 175, 18);
 		contentPane.add(lblPasDeOrigem);
 		
 		txtNomeVacina = new JTextField();
-		txtNomeVacina.setBounds(265, 130, 310, 35);
+		txtNomeVacina.setBounds(261, 147, 310, 35);
 		contentPane.add(txtNomeVacina);
 		txtNomeVacina.setColumns(10);
 		
 		JLabel lblNomeDaVacina = new JLabel("Nome da vacina:");
 		lblNomeDaVacina.setFont(new Font("Dialog", Font.BOLD, 13));
-		lblNomeDaVacina.setBounds(30, 139, 175, 14);
+		lblNomeDaVacina.setBounds(26, 156, 175, 14);
 		contentPane.add(lblNomeDaVacina);
 		
 		JLabel lblDataIncioE = new JLabel("Data inicio pesquisa:");
 		lblDataIncioE.setFont(new Font("Dialog", Font.BOLD, 13));
-		lblDataIncioE.setBounds(265, 183, 137, 14);
+		lblDataIncioE.setBounds(261, 200, 137, 14);
 		contentPane.add(lblDataIncioE);
 		
 //		MaskFormatter mascaraDataInicio;
@@ -137,32 +139,32 @@ public class TelaCadastroVacina extends JFrame {
 		}
 		
 		txtDataInicio.setColumns(10);
-		txtDataInicio.setBounds(501, 176, 74, 31);
+		txtDataInicio.setBounds(497, 193, 74, 31);
 		contentPane.add(txtDataInicio);
 		
 		JLabel lblQntDoses = new JLabel("Quantidade de doses:");
 		lblQntDoses.setFont(new Font("Dialog", Font.BOLD, 13));
-		lblQntDoses.setBounds(265, 235, 184, 14);
+		lblQntDoses.setBounds(261, 252, 184, 14);
 		contentPane.add(lblQntDoses);
 		
 		JLabel lblNomePesquisador = new JLabel("Nome do pesquisador respons\u00E1vel:");
 		lblNomePesquisador.setFont(new Font("Dialog", Font.BOLD, 13));
-		lblNomePesquisador.setBounds(30, 63, 240, 14);
+		lblNomePesquisador.setBounds(26, 80, 240, 14);
 		contentPane.add(lblNomePesquisador);
 		
 		txtNomePesquisador = new JTextField();
 		txtNomePesquisador.setColumns(10);
-		txtNomePesquisador.setBounds(265, 43, 310, 34);
+		txtNomePesquisador.setBounds(261, 60, 310, 34);
 		contentPane.add(txtNomePesquisador);
 		
 		JLabel lblIntervalo = new JLabel("Intervalo entre as doses (em dias):");
 		lblIntervalo.setFont(new Font("Dialog", Font.BOLD, 13));
-		lblIntervalo.setBounds(265, 278, 224, 14);
+		lblIntervalo.setBounds(261, 295, 224, 14);
 		contentPane.add(lblIntervalo);
 		
 		txtIntervalo = new JTextField();
 		
-		txtIntervalo.setBounds(501, 270, 74, 31);
+		txtIntervalo.setBounds(497, 287, 74, 31);
 		contentPane.add(txtIntervalo);
 		txtIntervalo.setColumns(10);		
 		
@@ -170,14 +172,14 @@ public class TelaCadastroVacina extends JFrame {
 		for(int i = 0; i<listarDoses().length; i++) {
 			cbxDoses.addItem(listarDoses()[i]);
 	    }		
-		cbxDoses.setBounds(501, 226, 74, 33);
+		cbxDoses.setBounds(497, 243, 74, 33);
 		contentPane.add(cbxDoses);
 		
 		cbxPais = new JComboBox();
 		for(int i = 0; i<listarPaises().length; i++) {
 	    	cbxPais.addItem(listarPaises()[i]);
 	    }
-		cbxPais.setBounds(265, 88, 310, 33);
+		cbxPais.setBounds(261, 105, 310, 33);
 		contentPane.add(cbxPais);
 		
 		btnCadastrar = new JButton("Cadastrar");
@@ -191,7 +193,7 @@ public class TelaCadastroVacina extends JFrame {
 			}	
 		});
 		btnCadastrar.setEnabled(false);
-		btnCadastrar.setBounds(422, 331, 153, 47);
+		btnCadastrar.setBounds(418, 348, 153, 47);
 		contentPane.add(btnCadastrar);
 
 		btnAlterar = new JButton("Alterar");
@@ -205,13 +207,13 @@ public class TelaCadastroVacina extends JFrame {
 			}
 		});
 		btnAlterar.setEnabled(false);
-		btnAlterar.setBounds(259, 331, 153, 47);
+		btnAlterar.setBounds(255, 348, 153, 47);
 		contentPane.add(btnAlterar);
 		
 	    jlAvisoDose = new JLabel("Insira apenas valores inteiros*");
 		jlAvisoDose.setForeground(Color.RED);
 		jlAvisoDose.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		jlAvisoDose.setBounds(501, 300, 129, 14);
+		jlAvisoDose.setBounds(497, 317, 129, 14);
 		jlAvisoDose.setVisible(false);
 		contentPane.add(jlAvisoDose);
 		

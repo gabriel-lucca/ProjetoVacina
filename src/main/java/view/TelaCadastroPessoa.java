@@ -76,7 +76,7 @@ public class TelaCadastroPessoa extends JFrame {
 	public TelaCadastroPessoa() {
 		setTitle("Cadastro de pessoa");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 622, 495);
+		setBounds(100, 100, 656, 513);
 		contentPane = new JPanel();
 		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
@@ -91,19 +91,20 @@ public class TelaCadastroPessoa extends JFrame {
 		contentPane.setBackground(new Color(204, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
+		setLocationRelativeTo(null);
 		contentPane.setLayout(null);
 		
 		JLabel lblNome = new JLabel("Nome:");
-		lblNome.setBounds(42, 53, 46, 14);
+		lblNome.setBounds(66, 53, 46, 14);
 		contentPane.add(lblNome);
 		
 		txtNome = new JTextField();
-		txtNome.setBounds(176, 50, 347, 29);
+		txtNome.setBounds(200, 50, 347, 29);
 		contentPane.add(txtNome);
 		txtNome.setColumns(10);
 		
 		JLabel lblCpf = new JLabel("CPF:");
-		lblCpf.setBounds(42, 99, 46, 14);
+		lblCpf.setBounds(66, 99, 46, 14);
 		contentPane.add(lblCpf);
 		
 		MaskFormatter mascaraTelefone;
@@ -113,35 +114,35 @@ public class TelaCadastroPessoa extends JFrame {
 		} catch (ParseException e1) {
 		}
 		txtTelefone.setColumns(10);
-		txtTelefone.setBounds(176, 176, 347, 29);
+		txtTelefone.setBounds(200, 176, 347, 29);
 		contentPane.add(txtTelefone);
 		
 		
 		JLabel lblTelefone = new JLabel("Celular:");
-		lblTelefone.setBounds(42, 183, 98, 14);
+		lblTelefone.setBounds(66, 183, 98, 14);
 		contentPane.add(lblTelefone);
 		
 		
 		txtEndereco = new JTextField();
-		txtEndereco.setBounds(176, 318, 347, 29);
+		txtEndereco.setBounds(200, 318, 347, 29);
 		contentPane.add(txtEndereco);
 		txtEndereco.setColumns(10);
 		
 		JLabel lblEndereo = new JLabel("Endere\u00E7o:");
-		lblEndereo.setBounds(42, 325, 98, 14);
+		lblEndereo.setBounds(66, 325, 98, 14);
 		contentPane.add(lblEndereo);
 		
 		JLabel lblCidade = new JLabel("Cidade:");
-		lblCidade.setBounds(42, 274, 46, 14);
+		lblCidade.setBounds(66, 274, 46, 14);
 		contentPane.add(lblCidade);
 		
 		txtCidade = new JTextField();
-		txtCidade.setBounds(176, 267, 168, 29);
+		txtCidade.setBounds(200, 267, 193, 29);
 		contentPane.add(txtCidade);
 		txtCidade.setColumns(10);
 		
 		JLabel lblEstado = new JLabel("Estado:");
-		lblEstado.setBounds(396, 274, 46, 14);
+		lblEstado.setBounds(420, 274, 46, 14);
 		contentPane.add(lblEstado);
 		
 	//	MaskFormatter mascaraDtNascimento;
@@ -152,20 +153,20 @@ public class TelaCadastroPessoa extends JFrame {
 			
 		}
 		txtDataNascimento.setColumns(10);
-		txtDataNascimento.setBounds(176, 218, 75, 29);
+		txtDataNascimento.setBounds(200, 218, 75, 29);
 		contentPane.add(txtDataNascimento);
 		
 		JLabel lblDataDeNascimento = new JLabel("Data de nascimento:");
-		lblDataDeNascimento.setBounds(42, 225, 136, 14);
+		lblDataDeNascimento.setBounds(66, 225, 136, 14);
 		contentPane.add(lblDataDeNascimento);
 		
 		
 		JLabel lblEmail = new JLabel("Email:");
-		lblEmail.setBounds(42, 141, 46, 14);
+		lblEmail.setBounds(66, 141, 46, 14);
 		contentPane.add(lblEmail);
 		
 		txtEmail = new JTextField();
-		txtEmail.setBounds(176, 134, 347, 29);
+		txtEmail.setBounds(200, 134, 347, 29);
 		contentPane.add(txtEmail);
 		txtEmail.setColumns(10);
 		
@@ -182,7 +183,7 @@ public class TelaCadastroPessoa extends JFrame {
 			}	
 		});
 		btnCadastrarPessoa.setEnabled(false);
-		btnCadastrarPessoa.setBounds(368, 380, 155, 46);
+		btnCadastrarPessoa.setBounds(392, 380, 155, 46);
 		contentPane.add(btnCadastrarPessoa);
 		
 		MaskFormatter mascaraCPF;
@@ -192,7 +193,7 @@ public class TelaCadastroPessoa extends JFrame {
 		} catch (ParseException e1) {
 		}
 		txtCpf.setColumns(10);
-		txtCpf.setBounds(176, 92, 347, 29);
+		txtCpf.setBounds(200, 92, 347, 29);
 		contentPane.add(txtCpf);
 		
 		
@@ -200,7 +201,7 @@ public class TelaCadastroPessoa extends JFrame {
 		
 		cbxEstado = new JComboBox();
 		cbxEstado.setModel(new DefaultComboBoxModel(new String[] {"AC", "AL", "AP", "AM", "BA", "CE", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO", "DF"}));
-		cbxEstado.setBounds(448, 267, 75, 29);
+		cbxEstado.setBounds(472, 267, 75, 29);
 		contentPane.add(cbxEstado);
 		
 		btnAlterar = new JButton("Alterar");
@@ -214,7 +215,7 @@ public class TelaCadastroPessoa extends JFrame {
 			}
 		});
 		btnAlterar.setEnabled(false);
-		btnAlterar.setBounds(210, 380, 148, 46);
+		btnAlterar.setBounds(234, 380, 148, 46);
 		contentPane.add(btnAlterar);
 		}
 		

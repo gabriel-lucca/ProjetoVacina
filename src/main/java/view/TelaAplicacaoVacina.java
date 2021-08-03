@@ -83,15 +83,16 @@ public class TelaAplicacaoVacina extends JFrame {
 	public TelaAplicacaoVacina() {
 		setTitle("Aplica\u00E7\u00E3o Vacina");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 553, 470);
+		setBounds(100, 100, 636, 510);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(204, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		setLocationRelativeTo(null);
 
 		JLabel lblCpf = new JLabel("Cpf:");
-		lblCpf.setBounds(36, 34, 46, 14);
+		lblCpf.setBounds(77, 54, 46, 14);
 		contentPane.add(lblCpf);
 		
 
@@ -110,7 +111,7 @@ public class TelaAplicacaoVacina extends JFrame {
 			
 		}
 		txtCpf.setColumns(10);
-		txtCpf.setBounds(124, 31, 187, 29);
+		txtCpf.setBounds(165, 51, 187, 28);
 		contentPane.add(txtCpf);
 
 	    btnBuscar = new JButton("Buscar");
@@ -125,28 +126,28 @@ public class TelaAplicacaoVacina extends JFrame {
 					btnVacinar.setEnabled(true);
 			}
 		});
-		btnBuscar.setBounds(378, 30, 99, 29);
+		btnBuscar.setBounds(419, 50, 99, 29);
 		contentPane.add(btnBuscar);
 		btnBuscar.setEnabled(false);
 
 		JLabel lblNome = new JLabel("Nome:");
-		lblNome.setBounds(36, 95, 46, 14);
+		lblNome.setBounds(77, 115, 46, 14);
 		contentPane.add(lblNome);
 
 		txtNome = new JTextField();
 		txtNome.setEnabled(false);
 		txtNome.setEditable(false);
 		txtNome.setBackground(Color.WHITE);
-		txtNome.setBounds(124, 91, 352, 22);
+		txtNome.setBounds(165, 111, 352, 29);
 		contentPane.add(txtNome);
 		txtNome.setColumns(10);
 
 		JLabel lblVacina = new JLabel("Vacina:");
-		lblVacina.setBounds(36, 145, 46, 14);
+		lblVacina.setBounds(77, 165, 46, 14);
 		contentPane.add(lblVacina);
 
 		cbxVacina.setForeground(Color.BLACK);
-		cbxVacina.setBounds(124, 138, 352, 29);
+		cbxVacina.setBounds(165, 158, 352, 29);
 		contentPane.add(cbxVacina);
 
 		btnVacinar = new JButton("Vacinar");
@@ -161,19 +162,19 @@ public class TelaAplicacaoVacina extends JFrame {
 				}
 			}
 		});
-		btnVacinar.setBounds(378, 352, 99, 51);
+		btnVacinar.setBounds(419, 376, 99, 51);
 		btnVacinar.setEnabled(false);
 		contentPane.add(btnVacinar);
 
 		JLabel lblHistrico = new JLabel("Hist\u00F3rico:");
-		lblHistrico.setBounds(36, 240, 76, 14);
+		lblHistrico.setBounds(77, 260, 76, 14);
 		contentPane.add(lblHistrico);
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportBorder(new EmptyBorder(0, 0, 0, 0));
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		scrollPane.setEnabled(false);
-		scrollPane.setBounds(36, 273, 441, 57);
+		scrollPane.setBounds(77, 294, 441, 57);
 		contentPane.add(scrollPane);
 
 		modelo.addColumn("Dose");

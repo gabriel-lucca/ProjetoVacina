@@ -46,6 +46,7 @@ public class TelaPrincipal extends JFrame {
 		contentPane.setBackground(new Color(204, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
+		setLocationRelativeTo(null);
 		contentPane.setLayout(null);
 		
 		JButton btnCadastroPessoa = new JButton("Cadastro de pessoa");

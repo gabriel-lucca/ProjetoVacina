@@ -53,6 +53,7 @@ public class TelaConsultarPessoa extends JFrame {
 	private JLabel lblIdadeMinima;
 	private JLabel lblIdadeMaxima;
 	private JButton btnLimparFiltros;
+	private JButton btnGerarPlanilha;
 	/**
 	 * Launch the application.
 	 */
@@ -97,6 +98,7 @@ public class TelaConsultarPessoa extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		setLocationRelativeTo(null);
 
 		scrollPane.setEnabled(false);
 		scrollPane.setBounds(25, 210, 970, 286);
@@ -109,13 +111,15 @@ public class TelaConsultarPessoa extends JFrame {
 				if((Integer) table.getModel().getValueAt(table.getSelectedRow(), 0)>0) {
 					btnAlterar.setEnabled(true);
 					btnExcluir.setEnabled(true);
-					btnLimpar.setVisible(true);
 					btnLimpar.setEnabled(true);
+					btnLimparFiltros.setEnabled(true);
+					btnGerarPlanilha.setEnabled(true);
 				} else {
 					btnAlterar.setEnabled(false);
 					btnExcluir.setEnabled(false);
-					btnLimpar.setVisible(false);
 					btnLimpar.setEnabled(false);
+					btnLimparFiltros.setEnabled(false);
+					btnGerarPlanilha.setEnabled(false);
 				}	
 			}
 		});
@@ -187,10 +191,10 @@ public class TelaConsultarPessoa extends JFrame {
 		lblCidade.setBounds(807, 59, 87, 14);
 		contentPane.add(lblCidade);
 		
-		JButton btnGerarPlanilha = new JButton("Gerar relatório");
-		btnGerarPlanilha.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
+		btnGerarPlanilha = new JButton("Gerar relatório");
+		btnGerarPlanilha.setEnabled(false);
+		btnGerarPlanilha.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
 				JFileChooser jfc = new JFileChooser();
 				jfc.setDialogTitle("Salvar relatoório como...");
 				ArrayList<PessoaVO> list = pController.consultarTodosRelatorio();
@@ -206,17 +210,18 @@ public class TelaConsultarPessoa extends JFrame {
 		btnGerarPlanilha.setBounds(25, 150, 149, 49);
 		contentPane.add(btnGerarPlanilha);
 		
-		btnLimpar = new JButton("Limpar tabela");
-		btnLimpar.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
+		btnLimpar = new JButton("Limpar");
+		btnLimpar.setEnabled(false);
+		btnLimpar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
 				limparTabela();
 				btnLimpar.setEnabled(false);
-				btnLimpar.setVisible(false);
+				btnGerarPlanilha.setEnabled(false);
+				btnAlterar.setEnabled(false);
+				btnExcluir.setEnabled(false);
 			}
 		});
 		btnLimpar.setEnabled(false);
-		btnLimpar.setVisible(false);
 		btnLimpar.setBounds(846, 150, 149, 49);
 		contentPane.add(btnLimpar);
 		
