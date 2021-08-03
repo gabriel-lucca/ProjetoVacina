@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -25,6 +26,8 @@ public class PlanilhaPessoa {
 	 */
 	XSSFWorkbook planilha = new XSSFWorkbook();
 	XSSFSheet aba ;
+	DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+	
 	public String gerarPlanilhaPessoas(String caminhoArquivo, ArrayList<PessoaVO> pessoas) {
 		// Criar a planilha (Workbook)
 		
@@ -68,7 +71,13 @@ public class PlanilhaPessoa {
 			linhaAtual.createCell(2).setCellValue(p.getCpf());
 			linhaAtual.createCell(3).setCellValue(p.getEmail());
 			linhaAtual.createCell(4).setCellValue(p.getTelefone());
-			linhaAtual.createCell(5).setCellValue(java.sql.Date.valueOf(p.getDataNascimento()));
+			
+			DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			String dataNascimentoFormatada = formatador.format(p.getDataNascimento());
+			linhaAtual.createCell(5).setCellValue(dataNascimentoFormatada);
+			
+			
+			
 			linhaAtual.createCell(6).setCellValue(p.getCidade());
 			linhaAtual.createCell(7).setCellValue(p.getEstado());
 			linhaAtual.createCell(8).setCellValue(p.getEndereco());

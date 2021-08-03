@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -67,7 +68,11 @@ public class PlanilhaVacina {
 			linhaAtual.createCell(0).setCellValue(v.getNomeVacina());
 			linhaAtual.createCell(1).setCellValue(v.getNomePesquisadorResponsavel());
 			linhaAtual.createCell(2).setCellValue(v.getPaisOrigem());
-			linhaAtual.createCell(3).setCellValue(java.sql.Date.valueOf(v.getDataInicioPesquisa()));
+			
+			DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			String dataNascimentoFormatada = formatador.format(v.getDataInicioPesquisa());
+			
+			linhaAtual.createCell(3).setCellValue(dataNascimentoFormatada);
 			linhaAtual.createCell(4).setCellValue(v.getQuantidadeDoses());
 			linhaAtual.createCell(5).setCellValue(v.getIntervaloDoses());
 			linhaAtual.createCell(6).setCellValue(v.getIdVacina());
