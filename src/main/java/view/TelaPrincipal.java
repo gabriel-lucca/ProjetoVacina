@@ -41,7 +41,7 @@ public class TelaPrincipal extends JFrame {
 	public TelaPrincipal() {
 		setTitle("Tela principal");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 648, 487);
+		setBounds(100, 100, 625, 416);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(204, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -64,7 +64,7 @@ public class TelaPrincipal extends JFrame {
 		});
 		btnCadastroPessoa.setFont(new Font("Dialog", Font.PLAIN, 15));
 		btnCadastroPessoa.setBackground(Color.CYAN);
-		btnCadastroPessoa.setBounds(83, 108, 281, 76);
+		btnCadastroPessoa.setBounds(75, 65, 281, 76);
 		contentPane.add(btnCadastroPessoa);
 		
 		JButton btnCadastroVacina = new JButton("Cadastro de vacina");
@@ -78,7 +78,7 @@ public class TelaPrincipal extends JFrame {
 		btnCadastroVacina.setForeground(Color.BLACK);
 		btnCadastroVacina.setFont(new Font("Dialog", Font.PLAIN, 15));
 		btnCadastroVacina.setBackground(Color.CYAN);
-		btnCadastroVacina.setBounds(83, 195, 281, 76);
+		btnCadastroVacina.setBounds(75, 152, 281, 76);
 		contentPane.add(btnCadastroVacina);
 		
 		JButton btnAplicacaoVacina = new JButton("Aplica\u00E7\u00E3o Vacina");
@@ -92,7 +92,7 @@ public class TelaPrincipal extends JFrame {
 		btnAplicacaoVacina.setForeground(Color.BLACK);
 		btnAplicacaoVacina.setFont(new Font("Dialog", Font.PLAIN, 15));
 		btnAplicacaoVacina.setBackground(Color.CYAN);
-		btnAplicacaoVacina.setBounds(83, 282, 281, 79);
+		btnAplicacaoVacina.setBounds(75, 239, 281, 79);
 		contentPane.add(btnAplicacaoVacina);
 		
 		JButton btnConsultarVacina = new JButton("Consultar Vacina");
@@ -106,7 +106,7 @@ public class TelaPrincipal extends JFrame {
 		btnConsultarVacina.setForeground(Color.BLACK);
 		btnConsultarVacina.setBackground(Color.CYAN);
 		btnConsultarVacina.setFont(new Font("Dialog", Font.PLAIN, 13));
-		btnConsultarVacina.setBounds(385, 241, 148, 120);
+		btnConsultarVacina.setBounds(377, 198, 148, 120);
 		contentPane.add(btnConsultarVacina);
 		
 		JButton btnConsultarPessoa = new JButton("Consultar pessoa");
@@ -120,7 +120,7 @@ public class TelaPrincipal extends JFrame {
 		btnConsultarPessoa.setBackground(Color.CYAN);
 		btnConsultarPessoa.setForeground(Color.BLACK);
 		btnConsultarPessoa.setFont(new Font("Dialog", Font.PLAIN, 13));
-		btnConsultarPessoa.setBounds(385, 108, 148, 120);
+		btnConsultarPessoa.setBounds(377, 65, 148, 120);
 		contentPane.add(btnConsultarPessoa);
 	}
 }
