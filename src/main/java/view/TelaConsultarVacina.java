@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -313,8 +314,11 @@ public class TelaConsultarVacina extends JFrame {
 			list = vController.consultarTodos();
 		}		
 		for (VacinaVO vac : list) {
+			DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			String dataInicioFormatada = formatador.format(vac.getDataInicioPesquisa());
+			
 			modelo.addRow(new Object[]{vac.getIdVacina(),vac.getNomePesquisadorResponsavel(),vac.getPaisOrigem(),
-					vac.getNomeVacina(),vac.getDataInicioPesquisa(),vac.getQuantidadeDoses(),vac.getIntervaloDoses()});
+					vac.getNomeVacina(),dataInicioFormatada,vac.getQuantidadeDoses(),vac.getIntervaloDoses()});
 		}
 	}
 	private boolean verificarSetabelaTemItemSelecionado() {

@@ -54,6 +54,8 @@ public class TelaConsultarPessoa extends JFrame {
 	private JLabel lblIdadeMaxima;
 	private JButton btnLimparFiltros;
 	private JButton btnGerarPlanilha;
+	
+	DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	/**
 	 * Launch the application.
 	 */
@@ -353,9 +355,16 @@ public class TelaConsultarPessoa extends JFrame {
 		} else {
 			list = pController.consultarTodos();
 		}		
+		
+		
 		for (PessoaVO p : list) {
+			DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			String dataNascimentoFormatada = formatador.format(p.getDataNascimento());
+			
 			modelo.addRow(new Object[] { p.getIdPessoa(), p.getNome(), p.getCpf(), p.getEmail(), p.getTelefone(),
-					p.getDataNascimento(), p.getCidade(), p.getEstado(), p.getEndereco() });
+					dataNascimentoFormatada, p.getCidade(), p.getEstado(), p.getEndereco() });
+					
+					
 		}
 	}
 	private void limparFiltros() {
