@@ -15,6 +15,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.text.DateFormatter;
 import javax.swing.text.MaskFormatter;
 
+import util.Data;
 import controller.ControladoraPessoa;
 import exception.exception_pessoa.AnalisarCamposPessoaException;
 import model.vo.PessoaVO;
@@ -28,6 +29,8 @@ import javax.swing.JComboBox;
 import java.awt.Color;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.ActionEvent;
 
 public class TelaCadastroPessoa extends JFrame {
@@ -145,12 +148,33 @@ public class TelaCadastroPessoa extends JFrame {
 		lblEstado.setBounds(420, 274, 46, 14);
 		contentPane.add(lblEstado);
 		
-	//	MaskFormatter mascaraDtNascimento;
+	//MaskFormatter mascaraDtNascimento;
 		try {
 			mascaraDtNascimento = new MaskFormatter("##/##/####");
 			txtDataNascimento = new JFormattedTextField(mascaraDtNascimento);
+			txtDataNascimento.addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusLost(FocusEvent e) {
+					if(txtDataNascimento.getText().equals("  /  /    ")) {
+						JOptionPane.showMessageDialog(null, "O campo data deve ser preenchido", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+						txtDataNascimento.requestFocus();
+					} else {
+						Data dtClass = new Data();
+						String[] data = txtDataNascimento.getText().toString().split("/");
+						int dia = Integer.parseInt(data[0]);
+						int mes = Integer.parseInt(data[1]);
+						int ano = Integer.parseInt(data[2]);		
+						String resultadoValidData=dtClass.validarData(dia, mes, ano);
+						if(resultadoValidData!=null) {
+							JOptionPane.showMessageDialog(null, resultadoValidData);
+						} else {
+							txtDataNascimento.requestFocus();
+						}
+					}
+				}
+			});
 		} catch (ParseException e1) {
-			
+			System.out.println("Erro: "+e1.getMessage());
 		}
 		txtDataNascimento.setColumns(10);
 		txtDataNascimento.setBounds(200, 218, 75, 29);
