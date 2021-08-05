@@ -37,7 +37,11 @@ import model.dao.VacinaDAO;
 import model.vo.AplicacaoVacinaVO;
 import model.vo.PessoaVO;
 import model.vo.VacinaVO;
+import util.Data;
+
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.ActionEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.CaretEvent;
