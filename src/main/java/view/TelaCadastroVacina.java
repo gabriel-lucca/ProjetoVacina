@@ -11,6 +11,7 @@ import controller.ControladoraVacina;
 import exception.exceptionVacina.AnalisarCamposVacinaException;
 import exception.exceptionVacina.VacinaJaExisteException;
 import model.vo.VacinaVO;
+import util.Data;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -28,6 +29,8 @@ import javax.swing.event.CaretEvent;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JComboBox;
@@ -131,13 +134,34 @@ public class TelaCadastroVacina extends JFrame {
 		lblDataIncioE.setBounds(261, 186, 137, 14);
 		contentPane.add(lblDataIncioE);
 		
-//		MaskFormatter mascaraDataInicio;
+		//MaskFormatter mascaraDataInicio;
 		try {
 			mascaraDataInicio = new MaskFormatter("##/##/####");
 			txtDataInicio = new JFormattedTextField(mascaraDataInicio);
-		} catch (ParseException | NullPointerException npe) {
+			txtDataInicio.addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusLost(FocusEvent e) {
+					if(txtDataInicio.getText().equals("  /  /    ")) {
+						JOptionPane.showMessageDialog(null, "O campo data deve ser preenchido", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+						txtDataInicio.requestFocus();
+					} else {
+						Data dtClass = new Data();
+						String[] data = txtDataInicio.getText().toString().split("/");
+						int dia = Integer.parseInt(data[0]);
+						int mes = Integer.parseInt(data[1]);
+						int ano = Integer.parseInt(data[2]);		
+						String resultadoValidData=dtClass.validarData(dia, mes, ano);
+						if(resultadoValidData!=null) {
+							JOptionPane.showMessageDialog(null, resultadoValidData);
+						} else {
+							txtDataInicio.requestFocus();
+						}
+					}
+				}
+			});
+		} catch (ParseException e1) {
+			System.out.println("Erro: "+e1.getMessage());
 		}
-		
 		txtDataInicio.setColumns(10);
 		txtDataInicio.setBounds(497, 179, 74, 31);
 		contentPane.add(txtDataInicio);
