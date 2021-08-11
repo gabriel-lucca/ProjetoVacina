@@ -1,23 +1,22 @@
 package util;
 
 public class Data {
+	
 	public String validarData(int dia, int mes, int ano) {
-		String mensagem = null ;
-		if(mes>12) {
-			mensagem+="\nO ano não pode possuir mais de 12 meses.";
-		}
+		String mensagem = "" ;
 		
-		if(mes%2!=0&&dia>31 || mes==8&&dia>31) {
-			mensagem+="\nEste mês possui no máximo 31 dias.";
-		}
+		 if(dia>0 && dia<32 && mes>0 && mes<13 && ano>0 && ano<2022 &&
+				 ((mes==1 || mes==3 || mes==5 || mes==7 || mes==8 || mes==10 || mes==12) || ((mes==4 || 
+				 mes==6 || mes==9 || mes==11) && dia<=30) || 
+				 (mes==2 &&(dia<=29 && ano%4==0 && (ano%100!=0 || ano%400==0))|| dia<=28))){
+			  mensagem+="DATA VÁLIDA.";
+		 }else{
+		      mensagem+="DATA INVÁLIDA.";
+		 }
 		
-		if(mes%2==0&&dia>30){
-			if(mes==2&&dia>29) {
-				mensagem+="\nEste mês possui no máximo 29 dias.";
-			} else {
-				mensagem+="\nEste mês possui no máximo 30 dias.";
-			}
-		}
 	return mensagem;
 	}
+
 }
+	
+	
