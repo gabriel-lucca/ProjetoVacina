@@ -114,7 +114,7 @@ public class TelaCadastroVacina extends JFrame {
 		setLocationRelativeTo(null);
 		contentPane.setLayout(null);
 
-		JLabel lblPasDeOrigem = new JLabel("Pais de origem:");
+		JLabel lblPasDeOrigem = new JLabel("PaÃ­s de origem:");
 		lblPasDeOrigem.setFont(new Font("Dialog", Font.BOLD, 13));
 		lblPasDeOrigem.setBounds(26, 104, 175, 18);
 		contentPane.add(lblPasDeOrigem);
@@ -129,7 +129,7 @@ public class TelaCadastroVacina extends JFrame {
 		lblNomeDaVacina.setBounds(26, 142, 175, 14);
 		contentPane.add(lblNomeDaVacina);
 
-		JLabel lblDataIncioE = new JLabel("Data inicio pesquisa:");
+		JLabel lblDataIncioE = new JLabel("Data inÃ­cio pesquisa:");
 		lblDataIncioE.setFont(new Font("Dialog", Font.BOLD, 13));
 		lblDataIncioE.setBounds(261, 186, 137, 14);
 		contentPane.add(lblDataIncioE);
@@ -205,7 +205,7 @@ public class TelaCadastroVacina extends JFrame {
 		btnCadastrar = new JButton("Cadastrar");
 		btnCadastrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (resultadoValidData.equals("DATA VÁLIDA.")) {
+				if (resultadoValidData.equals("DATA VÃ�LIDA.")) {
 
 					try {
 						cadastrar();
@@ -224,7 +224,7 @@ public class TelaCadastroVacina extends JFrame {
 		btnAlterar = new JButton("Alterar");
 		btnAlterar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (resultadoValidData.equals("DATA VÁLIDA.")) {
+				if (resultadoValidData.equals("DATA VÃ�LIDA.")) {
 					try {
 						alterar();
 					} catch (AnalisarCamposVacinaException | VacinaJaExisteException e) {
@@ -248,7 +248,7 @@ public class TelaCadastroVacina extends JFrame {
 
 	}
 
-	// Métodos e funções:
+	// MÃ©todos e funÃ§Ãµes:
 	public void cadastrar() throws AnalisarCamposVacinaException, VacinaJaExisteException {
 		// Instanciar uma nova vacina (de VacinaVO)
 		// Preencher a nova vacina com todos os campos da tela
@@ -330,43 +330,43 @@ public class TelaCadastroVacina extends JFrame {
 	};
 
 	public String[] listarPaises() {
-		String[] listaDePaises = new String[] { "Albânia", "Alemanha", "Andorra", "Angola", "Anguilla", "Antártida",
-				"Antígua e Barbuda", "Antilhas Holandesas", "Arábia Saudita", "Argélia", "Argentina", "Armênia",
-				"Aruba", "Austrália", "Áustria", "Azerbaijão", "Bahamas", "Bahrein", "Bangladesh", "Barbados",
-				"Belarus", "Bélgica", "Belize", "Benin", "Bermudas", "Bolívia", "Bósnia-Herzegóvina", "Botsuana",
-				"Brasil", "Brunei", "Bulgária", "Burkina Fasso", "Burundi", "Butão", "Cabo Verde", "Camarões",
-				"Camboja", "Canadá", "Cazaquistão", "Chade", "Chile", "China", "Chipre", "Cingapura", "Colômbia",
-				"Congo", "Coréia do Norte", "Coréia do Sul", "Costa do Marfim", "Costa Rica", "Croácia (Hrvatska)",
-				"Cuba", "Dinamarca", "Djibuti", "Dominica", "Egito", "El Salvador", "Emirados Árabes Unidos", "Equador",
-				"Eritréia", "Eslováquia", "Eslovênia", "Espanha", "Estados Unidos", "Estônia", "Etiópia", "Fiji",
-				"Filipinas", "Finlândia", "França", "Gabão", "Gâmbia", "Gana", "Geórgia", "Gibraltar",
-				"Grã-Bretanha (Reino Unido, UK)", "Granada", "Grécia", "Groelândia", "Guadalupe",
-				"Guam (Território dos Estados Unidos)", "Guatemala", "Guernsey", "Guiana", "Guiana Francesa", "Guiné",
-				"Guiné Equatorial", "Guiné-Bissau", "Haiti", "Holanda", "Honduras", "Hong Kong", "Hungria", "Iêmen",
-				"Ilha Bouvet (Território da Noruega)", "Ilha do Homem", "Ilha Natal", "Ilha Pitcairn", "Ilha Reunião",
+		String[] listaDePaises = new String[] { "AlbÃ¢nia", "Alemanha", "Andorra", "Angola", "Anguilla", "AntÃ¡rtida",
+				"AntÃ­gua e Barbuda", "Antilhas Holandesas", "ArÃ¡bia Saudita", "ArgÃ©lia", "Argentina", "ArmÃªnia",
+				"Aruba", "AustrÃ¡lia", "Ã�ustria", "AzerbaijÃ£o", "Bahamas", "Bahrein", "Bangladesh", "Barbados",
+				"Belarus", "BÃ©lgica", "Belize", "Benin", "Bermudas", "BolÃ­via", "BÃ³snia-HerzegÃ³vina", "Botsuana",
+				"Brasil", "Brunei", "BulgÃ¡ria", "Burkina Fasso", "Burundi", "ButÃ£o", "Cabo Verde", "CamarÃµes",
+				"Camboja", "CanadÃ¡", "CazaquistÃ£o", "Chade", "Chile", "China", "Chipre", "Cingapura", "ColÃ´mbia",
+				"Congo", "CorÃ©ia do Norte", "CorÃ©ia do Sul", "Costa do Marfim", "Costa Rica", "CroÃ¡cia (Hrvatska)",
+				"Cuba", "Dinamarca", "Djibuti", "Dominica", "Egito", "El Salvador", "Emirados Ã�rabes Unidos", "Equador",
+				"EritrÃ©ia", "EslovÃ¡quia", "EslovÃªnia", "Espanha", "Estados Unidos", "EstÃ´nia", "EtiÃ³pia", "Fiji",
+				"Filipinas", "FinlÃ¢ndia", "FranÃ§a", "GabÃ£o", "GÃ¢mbia", "Gana", "GeÃ³rgia", "Gibraltar",
+				"GrÃ£-Bretanha (Reino Unido, UK)", "Granada", "GrÃ©cia", "GroelÃ¢ndia", "Guadalupe",
+				"Guam (TerritÃ³rio dos Estados Unidos)", "Guatemala", "Guernsey", "Guiana", "Guiana Francesa", "GuinÃ©",
+				"GuinÃ© Equatorial", "GuinÃ©-Bissau", "Haiti", "Holanda", "Honduras", "Hong Kong", "Hungria", "IÃªmen",
+				"Ilha Bouvet (TerritÃ³rio da Noruega)", "Ilha do Homem", "Ilha Natal", "Ilha Pitcairn", "Ilha ReuniÃ£o",
 				"Ilhas Aland", "Ilhas Cayman", "Ilhas Cocos", "Ilhas Comores", "Ilhas Cook", "Ilhas Faroes",
-				"Ilhas Falkland (Malvinas)", "Ilhas Geórgia do Sul e Sandwich do Sul",
-				"Ilhas Heard e McDonald (Território da Austrália)", "Ilhas Marianas do Norte", "Ilhas Marshall",
-				"Ilhas Menores dos Estados Unidos", "Ilhas Norfolk", "Ilhas Seychelles", "Ilhas Solomão",
+				"Ilhas Falkland (Malvinas)", "Ilhas GeÃ³rgia do Sul e Sandwich do Sul",
+				"Ilhas Heard e McDonald (TerritÃ³rio da AustrÃ¡lia)", "Ilhas Marianas do Norte", "Ilhas Marshall",
+				"Ilhas Menores dos Estados Unidos", "Ilhas Norfolk", "Ilhas Seychelles", "Ilhas SolomÃ£o",
 				"Ilhas Svalbard e Jan Mayen", "Ilhas Tokelau", "Ilhas Turks e Caicos", "Ilhas Virgens (Estados Unidos)",
-				"Ilhas Virgens (Inglaterra)", "Ilhas Wallis e Futuna", "Índia", "Indonésia", "Iraque", "Irlanda",
-				"Islândia", "Israel", "Itália", "Jamaica", "Japão", "Jersey", "Jordânia", "Kênia", "Kiribati", "Kuait",
-				"Laos", "Látvia", "Lesoto", "Líbano", "Libéria", "Líbia", "Liechtenstein", "Lituânia", "Luxemburgo",
-				"Macau", "Macedônia (República Yugoslava)", "Madagascar", "Malásia", "Malaui", "Maldivas", "Mali",
-				"Malta", "Marrocos", "Martinica", "Maurício", "Mauritânia", "Mayotte", "México", "Micronésia",
-				"Moçambique", "Moldova", "Mônaco", "Mongólia", "Montenegro", "Montserrat", "Myanma", "Namíbia", "Nauru",
-				"Nepal", "Nicarágua", "Níger", "Nigéria", "Niue", "Noruega", "Nova Caledônia", "Nova Zelândia", "Omã",
-				"Palau", "Panamá", "Papua-Nova Guiné", "Paquistão", "Paraguai", "Peru", "Polinésia Francesa", "Polônia",
-				"Porto Rico", "Portugal", "Qatar", "Quirguistão", "República Centro-Africana",
-				"República Democrática do Congo", "República Dominicana", "República Tcheca", "Romênia", "Ruanda",
-				"Rússia", "Saara Ocidental", "Saint Vincente e Granadinas", "Samoa Americana", "Samoa Ocidental",
-				"San Marino", "Santa Helena", "Santa Lúcia", "São Bartolomeu", "São Cristóvão e Névis", "São Martim",
-				"São Tomé e Príncipe", "Senegal", "Serra Leoa", "Sérvia", "Síria", "Somália", "Sri Lanka",
-				"St. Pierre and Miquelon", "Suazilândia", "Sudão", "Suécia", "Suíça", "Suriname", "Tadjiquistão",
-				"Tailândia", "Taiwan", "Tanzânia", "Territórios do Sul da França", "Territórios Palestinos Ocupados",
-				"Timor Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunísia", "Turcomenistão", "Turquia", "Tuvalu",
-				"Ucrânia", "Uganda", "Uzbequistão", "Vanuatu", "Vaticano", "Venezuela", "Vietnã", "Zâmbia",
-				"Zimbábue" };
+				"Ilhas Virgens (Inglaterra)", "Ilhas Wallis e Futuna", "Ã�ndia", "IndonÃ©sia", "Iraque", "Irlanda",
+				"IslÃ¢ndia", "Israel", "ItÃ¡lia", "Jamaica", "JapÃ£o", "Jersey", "JordÃ¢nia", "KÃªnia", "Kiribati", "Kuait",
+				"Laos", "LÃ¡tvia", "Lesoto", "LÃ­bano", "LibÃ©ria", "LÃ­bia", "Liechtenstein", "LituÃ¢nia", "Luxemburgo",
+				"Macau", "MacedÃ´nia (RepÃºblica Yugoslava)", "Madagascar", "MalÃ¡sia", "Malaui", "Maldivas", "Mali",
+				"Malta", "Marrocos", "Martinica", "MaurÃ­cio", "MauritÃ¢nia", "Mayotte", "MÃ©xico", "MicronÃ©sia",
+				"MoÃ§ambique", "Moldova", "MÃ´naco", "MongÃ³lia", "Montenegro", "Montserrat", "Myanma", "NamÃ­bia", "Nauru",
+				"Nepal", "NicarÃ¡gua", "NÃ­ger", "NigÃ©ria", "Niue", "Noruega", "Nova CaledÃ´nia", "Nova ZelÃ¢ndia", "OmÃ£",
+				"Palau", "PanamÃ¡", "Papua-Nova GuinÃ©", "PaquistÃ£o", "Paraguai", "Peru", "PolinÃ©sia Francesa", "PolÃ´nia",
+				"Porto Rico", "Portugal", "Qatar", "QuirguistÃ£o", "RepÃºblica Centro-Africana",
+				"RepÃºblica DemocrÃ¡tica do Congo", "RepÃºblica Dominicana", "RepÃºblica Tcheca", "RomÃªnia", "Ruanda",
+				"RÃºssia", "Saara Ocidental", "Saint Vincente e Granadinas", "Samoa Americana", "Samoa Ocidental",
+				"San Marino", "Santa Helena", "Santa LÃºcia", "SÃ£o Bartolomeu", "SÃ£o CristÃ³vÃ£o e NÃ©vis", "SÃ£o Martim",
+				"SÃ£o TomÃ© e PrÃ­ncipe", "Senegal", "Serra Leoa", "SÃ©rvia", "SÃ­ria", "SomÃ¡lia", "Sri Lanka",
+				"St. Pierre and Miquelon", "SuazilÃ¢ndia", "SudÃ£o", "SuÃ©cia", "SuÃ­Ã§a", "Suriname", "TadjiquistÃ£o",
+				"TailÃ¢ndia", "Taiwan", "TanzÃ¢nia", "TerritÃ³rios do Sul da FranÃ§a", "TerritÃ³rios Palestinos Ocupados",
+				"Timor Leste", "Togo", "Tonga", "Trinidad and Tobago", "TunÃ­sia", "TurcomenistÃ£o", "Turquia", "Tuvalu",
+				"UcrÃ¢nia", "Uganda", "UzbequistÃ£o", "Vanuatu", "Vaticano", "Venezuela", "VietnÃ£", "ZÃ¢mbia",
+				"ZimbÃ¡bue" };
 
 		return listaDePaises;
 	}
