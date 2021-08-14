@@ -45,7 +45,7 @@ public class PlanilhaPessoa {
 	DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	
 	public String gerarPlanilhaPessoas(String caminhoArquivo, ArrayList<PessoaVO> pessoas) {
-		// Criar a planilha (Workbook) 
+		// Criar a planilha (Workbook)  
 		
 
 		// Criar uma aba (Sheet)
