@@ -7,8 +7,16 @@ import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -20,7 +28,7 @@ public class PlanilhaVacina {
 	/**
 	 * Gera uma planilha Excel (formato .xlsx) a partir de uma lista de vacina
 	 * 
-	 * @param caminhoArquivo onde a planilha serÃ¡ salva
+	 * @param caminhoArquivo onde a planilha serÃƒÂ¡ salva
 	 * @param vacinas       a lista de vacinas
 	 * 
 	 * @return uma mensagem informando ao usuario o que ocorreu
@@ -28,16 +36,17 @@ public class PlanilhaVacina {
 	
 	XSSFWorkbook planilha = new XSSFWorkbook();
 	XSSFSheet aba ;
+	
 	public String gerarPlanilhaVacinas(String caminhoArquivo, List<VacinaVO> vacinas) {
 		// Criar a planilha (Workbook)
 
 		// Criar uma aba (Sheet)
-		aba = planilha.createSheet("Vacinas");
+		aba = planilha.createSheet("RelatÃ³rio das Vacinas"); 
 
 		int linhaAtual = 0;
 
-		// Criar o cabeÃ§alho (header)
-		String[] nomesColunas = { "Nome Vacina", "Nome Pesquisador Responsável", "Pais Origem", "Data Inicio Pesquisa", "Quantidade de Doses", "Intervalo das doses", "ID" };
+		// Criar o cabeÃƒÂ§alho (header)
+		String[] nomesColunas = { "Nome Vacina", "Nome Pesquisador ResponsÃ¡vel", "PaÃ­s Origem", "Data InÃ­cio Pesquisa", "Quantidade de Doses", "Intervalo das doses", "ID" };
 		criarCabecalho(nomesColunas, aba, linhaAtual);
 		linhaAtual++;
 		// Preencher as linhas com as vacinas
@@ -53,9 +62,23 @@ public class PlanilhaVacina {
 		posicaoLinhaAtual++;
 		// Para mudar o estilo:
 		// https://stackoverflow.com/questions/43467253/setting-style-in-apache-poi
+		
+		XSSFFont headerFont = planilha.createFont();
+		headerFont.setBold(true);
+		headerFont.setFontHeightInPoints((short) 20);
+		headerFont.setColor(IndexedColors.BLACK.index);
+		
+		CellStyle headerStyle = planilha.createCellStyle();
+		headerStyle.setFont(headerFont);
+		headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+		headerStyle.setFillForegroundColor(IndexedColors.GOLD.getIndex()); //cor de fundo
+		headerStyle.setAlignment(HorizontalAlignment.CENTER);
+		
 		for (int i = 0; i < nomesColunas.length; i++) {
 			Cell novaCelula = linhaAtual.createCell(i);
 			novaCelula.setCellValue(nomesColunas[i]);
+			novaCelula.setCellStyle(headerStyle);
+			aba.autoSizeColumn(i);
 		}
 	}
 
@@ -63,19 +86,68 @@ public class PlanilhaVacina {
 		for (VacinaVO v : vacinas) {
 			// criar uma nova linha na planilha
 			XSSFRow linhaAtual = aba.createRow(posicaoLinhaAtual);
+			
+			//adicionando bordas
+			XSSFCellStyle style = planilha.createCellStyle(); //criei o CellStyle
+			XSSFCellStyle centro = planilha.createCellStyle(); //criei o CellStyle
+			XSSFFont headerFont = planilha.createFont();
+			style.setVerticalAlignment(VerticalAlignment.CENTER);
+			
+			/* adding heading style */
+			style.setFillForegroundColor(IndexedColors.LEMON_CHIFFON.getIndex()); //cor de fundo
+			style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+			headerFont.setBold(true);
+
+			headerFont.setFontHeightInPoints((short) 14);
+			style.setFont(headerFont);
+			
+			
+			//style.setAlignment(CellStyle.ALIGN_CENTER);
+			//style.setAlignment(HorizontalAlignment.CENTER); //texto centralizado
+			
+            //style.setAlignment(Alignment.CENTER); //texto centralizado
+            //style.setFillForegroundColor(IndexedColors.YELLOW.getIndex()); //cor de fundo
+            style.setBorderBottom(BorderStyle.THIN); //borda de baixo
+            style.setBottomBorderColor(IndexedColors.BLACK.getIndex()); //cor borda baixo
+            style.setBorderLeft(BorderStyle.THIN); //borda da esquerda
+            style.setLeftBorderColor(IndexedColors.BLACK.getIndex()); //cor borda esquerda
+            style.setBorderRight(BorderStyle.THIN); //borda direita
+            style.setRightBorderColor(IndexedColors.BLACK.getIndex()); //cor borda direita
+            style.setBorderTop(BorderStyle.THIN); //borda de cima
+            style.setTopBorderColor(IndexedColors.BLACK.getIndex()); //cor borda cima
+            
+            // texto centralizado data nascimento, estado, id
+            centro.setAlignment(HorizontalAlignment.CENTER);
+            centro.setFillForegroundColor(IndexedColors.LEMON_CHIFFON.getIndex()); //cor de fundo
+            centro.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+			headerFont.setBold(true);
+
+			headerFont.setFontHeightInPoints((short) 14);
+			centro.setFont(headerFont);
+			
+			centro.setBorderBottom(BorderStyle.THIN); //borda de baixo
+			centro.setBottomBorderColor(IndexedColors.BLACK.getIndex()); //cor borda baixo
+			centro.setBorderLeft(BorderStyle.THIN); //borda da esquerda
+			centro.setLeftBorderColor(IndexedColors.BLACK.getIndex()); //cor borda esquerda
+			centro.setBorderRight(BorderStyle.THIN); //borda direita
+			centro.setRightBorderColor(IndexedColors.BLACK.getIndex()); //cor borda direita
+			centro.setBorderTop(BorderStyle.THIN); //borda de cima
+			centro.setTopBorderColor(IndexedColors.BLACK.getIndex()); //cor borda cima
+			
 
 			// Preencher as celulas com os atributos Vacina v
-			linhaAtual.createCell(0).setCellValue(v.getNomeVacina());
-			linhaAtual.createCell(1).setCellValue(v.getNomePesquisadorResponsavel());
-			linhaAtual.createCell(2).setCellValue(v.getPaisOrigem());
+			Cell cell; 
+			cell = linhaAtual.createCell(0); cell.setCellValue(v.getNomeVacina());aba.autoSizeColumn((short) 0);cell.setCellStyle(style);
+			cell = linhaAtual.createCell(1);cell.setCellValue(v.getNomePesquisadorResponsavel());aba.autoSizeColumn((short) 1);cell.setCellStyle(style);
+			cell = linhaAtual.createCell(2);cell.setCellValue(v.getPaisOrigem());aba.autoSizeColumn((short) 2);cell.setCellStyle(centro);
 			
 			DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 			String dataNascimentoFormatada = formatador.format(v.getDataInicioPesquisa());
 			
-			linhaAtual.createCell(3).setCellValue(dataNascimentoFormatada);
-			linhaAtual.createCell(4).setCellValue(v.getQuantidadeDoses());
-			linhaAtual.createCell(5).setCellValue(v.getIntervaloDoses());
-			linhaAtual.createCell(6).setCellValue(v.getIdVacina());
+			cell = linhaAtual.createCell(3);cell.setCellValue(dataNascimentoFormatada);aba.autoSizeColumn((short) 3);cell.setCellStyle(centro);
+			cell = linhaAtual.createCell(4);cell.setCellValue(v.getQuantidadeDoses());aba.autoSizeColumn((short) 4);cell.setCellStyle(centro);
+			cell = linhaAtual.createCell(5);cell.setCellValue(v.getIntervaloDoses());aba.autoSizeColumn((short) 5);cell.setCellStyle(centro);
+			cell = linhaAtual.createCell(6);cell.setCellValue(v.getIdVacina());aba.autoSizeColumn((short) 6);cell.setCellStyle(centro);
 
 			posicaoLinhaAtual++;
 		}
@@ -92,7 +164,7 @@ public class PlanilhaVacina {
 			planilha.write(saida);
 			mensagem = "Planilha gerada com sucesso!";
 		} catch (FileNotFoundException e) {
-			// TODO lançar exceçao de negaçao (para poder capturar as causas no controller
+			// TODO lanÃ§ar exceÃ§ao de negaÃ§ao (para poder capturar as causas no controller
 			// ou tela)
 			mensagem = "Erro ao tentar salvar planilha em: " + caminhoArquivo + extensao;
 			System.out.println("Causa: " + e.getMessage());
