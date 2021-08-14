@@ -60,7 +60,7 @@ public class TelaAplicacaoVacina extends JFrame {
 	private String nome = "";
 	JButton btnVacinar = new JButton("Vacinar");
 	PessoaVO pessoaEncontrada = new PessoaVO();
-	private Object[] opcoes = {"Sim", "Não"};
+	private Object[] opcoes = {"Sim", "NÃ£o"};
 	private Object[] opcoes2 = {"Voltar a tela inicial","Sair"};
 	private int respostaCadastro;
 	private Integer resposta = null;
@@ -95,7 +95,7 @@ public class TelaAplicacaoVacina extends JFrame {
 		contentPane.setLayout(null);
 		setLocationRelativeTo(null);
 
-		JLabel lblCpf = new JLabel("Cpf:");
+		JLabel lblCpf = new JLabel("CPF:");
 		lblCpf.setBounds(77, 54, 46, 14);
 		contentPane.add(lblCpf);
 		
@@ -119,9 +119,8 @@ public class TelaAplicacaoVacina extends JFrame {
 		contentPane.add(txtCpf);
 
 	    btnBuscar = new JButton("Buscar");
-		btnBuscar.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
+		btnBuscar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
 					pessoaEncontrada = pessoaDAO.consultarPorCpf(txtCpf.getText());
 					txtNome.setEnabled(true);
 					txtNome.setText(pessoaEncontrada.getNome());
@@ -155,9 +154,8 @@ public class TelaAplicacaoVacina extends JFrame {
 		contentPane.add(cbxVacina);
 
 		btnVacinar = new JButton("Vacinar");
-		btnVacinar.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
+		btnVacinar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
 				try {
 					cadastrarAplicacao();
 				} catch (AnalisarSePodeAplicarException | AnalisarCamposAplicacaoException e1) {
@@ -225,7 +223,7 @@ public class TelaAplicacaoVacina extends JFrame {
 		avController.cadastrar(aplicacaoVacina);
 		if(avController.validarCampos(aplicacaoVacina)!=null) {		
 			int respostaOpcao2;	
-			respostaOpcao2 = JOptionPane.showOptionDialog(null, "Selecione uma opção" , "Opções", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opcoes2, opcoes2[0]);
+			respostaOpcao2 = JOptionPane.showOptionDialog(null, "Selecione uma opÃ§Ã£o" , "OpÃ§Ãµes", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opcoes2, opcoes2[0]);
 			if(respostaOpcao2==0) {
 				TelaPrincipal telaPrincipal = new TelaPrincipal();
 				telaPrincipal.setVisible(true);
