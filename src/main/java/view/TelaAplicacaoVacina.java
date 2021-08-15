@@ -56,7 +56,7 @@ public class TelaAplicacaoVacina extends JFrame {
 	ControladoraVacina controllerVacina = new ControladoraVacina();
 	PessoaDAO pessoaDAO = new PessoaDAO();
 	JComboBox<String> cbxVacina = new JComboBox();
-	DefaultTableModel modelo = new DefaultTableModel();
+	DefaultTableModel modelo = new DefaultTableModel(); 
 	private String nome = "";
 	JButton btnVacinar = new JButton("Vacinar");
 	PessoaVO pessoaEncontrada = new PessoaVO();

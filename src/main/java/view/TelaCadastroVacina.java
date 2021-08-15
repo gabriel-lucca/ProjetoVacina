@@ -114,7 +114,7 @@ public class TelaCadastroVacina extends JFrame {
 		setLocationRelativeTo(null);
 		contentPane.setLayout(null);
 
-		JLabel lblPasDeOrigem = new JLabel("PaÃ­s de origem:");
+		JLabel lblPasDeOrigem = new JLabel("País de origem:");
 		lblPasDeOrigem.setFont(new Font("Dialog", Font.BOLD, 13));
 		lblPasDeOrigem.setBounds(26, 104, 175, 18);
 		contentPane.add(lblPasDeOrigem);
@@ -129,7 +129,7 @@ public class TelaCadastroVacina extends JFrame {
 		lblNomeDaVacina.setBounds(26, 142, 175, 14);
 		contentPane.add(lblNomeDaVacina);
 
-		JLabel lblDataIncioE = new JLabel("Data inÃ­cio pesquisa:");
+		JLabel lblDataIncioE = new JLabel("Data início pesquisa:");
 		lblDataIncioE.setFont(new Font("Dialog", Font.BOLD, 13));
 		lblDataIncioE.setBounds(261, 186, 137, 14);
 		contentPane.add(lblDataIncioE);
