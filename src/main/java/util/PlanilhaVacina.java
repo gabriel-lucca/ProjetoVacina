@@ -41,7 +41,7 @@ public class PlanilhaVacina {
 		// Criar a planilha (Workbook)
 
 		// Criar uma aba (Sheet)
-		aba = planilha.createSheet("RelatÃ³rio das Vacinas"); 
+		aba = planilha.createSheet("Relatório das Vacinas"); 
 
 		int linhaAtual = 0;
 

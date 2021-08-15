@@ -49,7 +49,7 @@ public class PlanilhaPessoa {
 		
 
 		// Criar uma aba (Sheet)
-		 aba = planilha.createSheet("RelatÃ³rio das Pessoas");   
+		 aba = planilha.createSheet("Relatório das Pessoas");   
 		 
 		int linhaAtual = 0;
 
