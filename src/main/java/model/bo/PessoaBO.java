@@ -20,7 +20,12 @@ public class PessoaBO {
 			
 			//Nao deve repetir celular :
 			if(dao.celularJaExiste(pessoa)) {
-				throw new AnalisarCamposPessoaException("\nCelular já cadastrado.");
+				throw new AnalisarCamposPessoaException("\nCelular já utilizado.");
+			}
+			
+			//Nao deve repetir email :
+			if(dao.emailJaExiste(pessoa)) {
+				throw new AnalisarCamposPessoaException("\nEmail já utilizado.");
 			}
 			
 			dao.cadastrar(pessoa);
