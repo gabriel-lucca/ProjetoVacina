@@ -133,10 +133,10 @@ public class TelaConsultarVacina extends JFrame {
 		table.setBackground(Color.WHITE);
 		scrollPane.setViewportView(table);
 		modelo.addColumn("idVacina");
-		modelo.addColumn("Nome pesquisador responsavel");
-		modelo.addColumn("Pais Origem");
+		modelo.addColumn("Nome pesquisador responsável");
+		modelo.addColumn("País Origem");
 		modelo.addColumn("Nome Vacina");
-		modelo.addColumn("Data inicio pesquisa");
+		modelo.addColumn("Data início pesquisa");
 		modelo.addColumn("Quantidade doses");
 		modelo.addColumn("Intervalo doses");
 		

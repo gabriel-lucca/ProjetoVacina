@@ -130,13 +130,13 @@ public class TelaConsultarPessoa extends JFrame {
 		scrollPane.setViewportView(table);
 		modelo.addColumn("idPessoa");
 		modelo.addColumn("Nome pessoa");
-		modelo.addColumn("Cpf");
+		modelo.addColumn("CPF");
 		modelo.addColumn("Email");
 		modelo.addColumn("Telefone");
 		modelo.addColumn("Data nascimento");
 		modelo.addColumn("Cidade");
 		modelo.addColumn("Estado");
-		modelo.addColumn("Endereco");
+		modelo.addColumn("Endereço");
 		
 		btnAlterar = new JButton("Alterar");
 		btnAlterar.setEnabled(false);

@@ -180,7 +180,7 @@ public class TelaAplicacaoVacina extends JFrame {
 		contentPane.add(scrollPane);
 
 		modelo.addColumn("Dose");
-		modelo.addColumn("Data aplicacao");
+		modelo.addColumn("Data aplicação");
 		
 		table = new JTable(modelo);
 		scrollPane.setViewportView(table);
