@@ -81,7 +81,7 @@ public class TelaPrincipal extends JFrame {
 		btnCadastroVacina.setBounds(75, 152, 281, 76);
 		contentPane.add(btnCadastroVacina);
 		
-		JButton btnAplicacaoVacina = new JButton("Aplica\u00E7\u00E3o Vacina");
+		JButton btnAplicacaoVacina = new JButton("Aplicação Vacina");
 		btnAplicacaoVacina.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {

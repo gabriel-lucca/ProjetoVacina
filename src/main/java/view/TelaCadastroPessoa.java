@@ -98,8 +98,8 @@ public class TelaCadastroPessoa extends JFrame {
 		setLocationRelativeTo(null);
 		contentPane.setLayout(null);
 
-		JLabel lblNome = new JLabel("Nome:");
-		lblNome.setBounds(66, 53, 46, 14);
+		JLabel lblNome = new JLabel("Nome completo:");
+		lblNome.setBounds(66, 53, 122, 14);
 		contentPane.add(lblNome);
 
 		txtNome = new JTextField();
@@ -262,7 +262,7 @@ public class TelaCadastroPessoa extends JFrame {
 		// Chamar o controller para cadastrar
 		controller.cadastrar(novaPessoa);
 		String resultadoValidacao = controller.validarCampos(novaPessoa);
-		if (resultadoValidacao == null) {
+		if (resultadoValidacao != null) {
 			JOptionPane.showMessageDialog(null, "Cadastrado com sucesso");
 		}
 		setVisible(false);
