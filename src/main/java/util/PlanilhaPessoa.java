@@ -54,7 +54,7 @@ public class PlanilhaPessoa {
 		int linhaAtual = 0;
 
 		// Criar o cabeÃƒÂ§alho (header) 		
-		String[] nomesColunas = {"Nome Pessoa", "ID", "CPF", "Email", "Celular", "Data de Nascimento", "Cidade", "Estado", "EndereÃ§o" };
+		String[] nomesColunas = {"Nome Pessoa", "ID", "CPF", "Email", "Celular", "Data de Nascimento", "Cidade", "Estado", "Endereço" };
 		
 
 		criarCabecalho(nomesColunas, aba, linhaAtual);
