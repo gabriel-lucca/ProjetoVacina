@@ -27,6 +27,8 @@ public class ControladoraVacina {
 			mensagem += "\nO nome do pesquisador responsavel deve possuir no mínimo 3 caracteres";
 		} else if (vacina.getNomePesquisadorResponsavel().length() > 100) {
 			mensagem += "\nO nome do pesquisador responsavel não deve possuir mais de 100 caracteres";
+		} else if (!vacina.getNomePesquisadorResponsavel().matches("^([a-zA-Zà-úÀ-Ú]|'|\\s)+$")) {
+			mensagem += "\nNome inválido.";
 		}
 		// paisOrigem:
 		// if(vacina.getPaisOrigem().length() < 3) {
@@ -40,6 +42,8 @@ public class ControladoraVacina {
 			mensagem += "\nO nome da vacina deve possuir no mínimo 3 caracteres";
 		} else if (vacina.getNomeVacina().length() > 50) {
 			mensagem += "\nO nome da vacina nao deve possuir mais de 50 caracteres";
+		} else if (!vacina.getNomeVacina().matches("^([a-zA-Zà-úÀ-Ú]|-|\\s)+$")) {
+			mensagem += "\nNome da Nome da vacina inválida";
 		}
 
 		// Intervalo doses:
@@ -47,7 +51,7 @@ public class ControladoraVacina {
 			mensagem += "\nO Intervalo de doses deve possuir no mínimo 0 dias";
 		} else if (vacina.getIntervaloDoses() > 365) {
 			mensagem += "\nO Intervalo de doses tem um limite de 365 dias";
-		}
+		} 
 
 		return mensagem;
 	}
