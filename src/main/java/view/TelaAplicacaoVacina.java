@@ -60,7 +60,7 @@ public class TelaAplicacaoVacina extends JFrame {
 	DefaultTableModel modelo = new DefaultTableModel(); 
 	private String nome = "";
 	JButton btnVacinar = new JButton("Vacinar");
-	PessoaVO pessoaEncontrada = new PessoaVO();
+	PessoaVO pessoaEncontrada = new PessoaVO(); 
 	private Object[] opcoes = {"Sim", "Não"};
 	private Object[] opcoes2 = {"Voltar a tela inicial","Sair"};
 	private int respostaCadastro;

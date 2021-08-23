@@ -23,7 +23,7 @@ public class AplicacaoVacinaBO {
 	// � permitido selecionar o campo vacinar quando tiver faltando alguma dose;
 	// Uma pessoa n�o pode tomar vacinas diferentes;
 	// Deve-se aplicar apenas quando for cumprido o tempo de intervalo das doses;
-	// N�o deve aplicar acima do limite de doses por pessoa
+	// N�o deve aplicar acima do limite de doses por pessoa 
 	PessoaDAO pDAO = new PessoaDAO();
 	VacinaDAO vDAO = new VacinaDAO();
 	AplicacaoVacinaDAO avDAO = new AplicacaoVacinaDAO();
