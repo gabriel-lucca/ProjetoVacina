@@ -2,6 +2,7 @@ package model.bo;
 
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
 
 import exception.exception_pessoa.AnalisarCamposPessoaException;
 import model.dao.PessoaDAO;
