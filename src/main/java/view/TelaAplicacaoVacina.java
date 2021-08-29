@@ -125,7 +125,7 @@ public class TelaAplicacaoVacina extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 					pessoaEncontrada = pessoaDAO.consultarPorCpf(txtCpf.getText());
 					if (pessoaEncontrada.getIdPessoa() == null) {
-						JOptionPane.showMessageDialog(null, "CPF INVALIDO OU NÃO CADASTRADO");
+						JOptionPane.showMessageDialog(null, "CPF INVÁLIDO.");
 						 
 					}else {
 						txtNome.setEnabled(true);

@@ -23,7 +23,7 @@ public class AplicacaoVacinaBO {
 	// � permitido selecionar o campo vacinar quando tiver faltando alguma dose;
 	// Uma pessoa n�o pode tomar vacinas diferentes;
 	// Deve-se aplicar apenas quando for cumprido o tempo de intervalo das doses;
-	// N�o deve aplicar acima do limite de doses por pessoa 
+	// N�o deve aplicar acima do limite de doses por pessoa
 	PessoaDAO pDAO = new PessoaDAO();
 	VacinaDAO vDAO = new VacinaDAO();
 	AplicacaoVacinaDAO avDAO = new AplicacaoVacinaDAO();
@@ -62,9 +62,12 @@ public class AplicacaoVacinaBO {
 				if (!aplicacao.getVacina().getNomeVacina().equals(aplicacaoVacinaVO.getVacina().getNomeVacina())) {
 					throw new AnalisarSePodeAplicarException(
 							"Você só pode se vacinar com a " + aplicacao.getVacina().getNomeVacina());
-				}
+				} else {
+					
+					if (listaAplicacoes.size() == Integer.parseInt(vVO.getQuantidadeDoses())) {
+						throw new AnalisarSePodeAplicarException("Não foi possível vacinar, este é o limite máximo de doses:"+ vVO.getQuantidadeDoses());
+					}
 
-				if (aplicacao.getVacina().getNomeVacina().equals(aplicacaoVacinaVO.getVacina().getNomeVacina())) {
 					LocalDate dtUltimaAplicacao = aplicacao.getDataAplicacao();
 					LocalDate dtNovaAplicacao = LocalDate.now();
 					String mensagem = null;
