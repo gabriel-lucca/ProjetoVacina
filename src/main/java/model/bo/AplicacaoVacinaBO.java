@@ -99,4 +99,8 @@ public class AplicacaoVacinaBO {
 	public AplicacaoVacinaVO consultarPorId(Integer id) {
 		return avDAO.consultarPorId(id);
 	}
+
+	public ArrayList<AplicacaoVacinaVO> consultarRelatorioAplicacao() {
+		return avDAO.consultarRelatorioAplicacao();
+	}
 }

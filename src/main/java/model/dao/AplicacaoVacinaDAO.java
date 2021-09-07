@@ -49,7 +49,7 @@ public class AplicacaoVacinaDAO {
 			ps.setDate(3, java.sql.Date.valueOf(aplicacaoAlterada.getDataAplicacao()));
 			resposta = ps.executeUpdate() > 0;
 		}catch(SQLException e) {
-			System.out.println("Erro ao alterar aplica��o.\nErro: "+e.getMessage());
+			System.out.println("Erro ao alterar aplicacao.\nErro: "+e.getMessage());
 		}finally {
 			Banco.closeConnection(conn);
 			Banco.closePreparedStatement(ps);
@@ -65,7 +65,7 @@ public class AplicacaoVacinaDAO {
 			ps.setInt(1, id);
 			resposta = ps.executeUpdate()>0;
 		}catch(SQLException e) {
-			System.out.println("Erro ao excluir aplica��o.\nErro: "+e.getMessage());
+			System.out.println("Erro ao excluir aplicacao.\nErro: "+e.getMessage());
 		}finally {
 			Banco.closeConnection(conn);
 			Banco.closePreparedStatement(ps);
@@ -140,4 +140,24 @@ public class AplicacaoVacinaDAO {
 		}
 		return aplicacoesEncontradas;
 	}
+	public ArrayList<AplicacaoVacinaVO> consultarRelatorioAplicacao() {
+		Connection conn = Banco.getConnection();
+		String sql = "select * from aplicacaoVacina ";
+		PreparedStatement ps = Banco.getPreparedStatementWithPk(conn, sql);
+		ArrayList<AplicacaoVacinaVO> aplicacaoVacinas = new ArrayList<AplicacaoVacinaVO>();
+		try {
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				AplicacaoVacinaVO aplicacaoVacina = construirDoResultSet(rs);
+				aplicacaoVacinas.add(aplicacaoVacina);
+			}
+		}catch(SQLException e) {
+			System.out.println("Erro ao buscar aplicacao.\nErro: "+e.getMessage());
+		}finally {
+			Banco.closeConnection(conn);
+			Banco.closePreparedStatement(ps);
+		}
+		return aplicacaoVacinas;
+	}
+	
 }

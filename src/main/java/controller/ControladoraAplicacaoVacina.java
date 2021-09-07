@@ -50,4 +50,8 @@ public class ControladoraAplicacaoVacina {
 	public AplicacaoVacinaVO consultarPorId(Integer id) {
 		return bo.consultarPorId(id);
 	}
+
+	public ArrayList<AplicacaoVacinaVO> consultarRelatorioAplicacao() {
+		return bo.consultarRelatorioAplicacao();
+	}
 }
