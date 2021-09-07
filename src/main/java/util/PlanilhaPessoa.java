@@ -148,7 +148,7 @@ public class PlanilhaPessoa {
 			
 			// Preencher as cÃƒÂ©lulas com os atributos Pessoa p
             Cell cell; 
-            cell = linhaAtual.createCell(0);cell.setCellValue(p.getNome());aba.autoSizeColumn((short) 0);cell.setCellStyle(style);
+            cell = linhaAtual.createCell(0);cell.setCellValue(p.getNome());cell.setCellStyle(style);aba.autoSizeColumn((short) 0);
 			cell = linhaAtual.createCell(1);cell.setCellValue(p.getIdPessoa());cell.setCellStyle(style);aba.autoSizeColumn((short) 1); cell.setCellStyle(centro);
 			cell = linhaAtual.createCell(2);cell.setCellValue(p.getCpf());cell.setCellStyle(style);aba.autoSizeColumn((short) 2);
 			cell = linhaAtual.createCell(3);cell.setCellValue(p.getEmail());cell.setCellStyle(style);aba.autoSizeColumn((short) 3);

@@ -21,15 +21,14 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import model.vo.VacinaVO;
+import model.vo.AplicacaoVacinaVO;
 
-
-public class PlanilhaVacina {
+public class PlanilhaAplicacaoVacina {
 	/**
-	 * Gera uma planilha Excel (formato .xlsx) a partir de uma lista de vacina
+	 * Gera uma planilha Excel (formato .xlsx) a partir de uma lista de aplicacao
 	 * 
-	 * @param caminhoArquivo onde a planilha serÃƒÂ¡ salva
-	 * @param vacinas       a lista de vacinas
+	 * @param caminhoArquivo onde a planilha sera salva
+	 * @param vacinas       a lista de aplicacao vacina
 	 * 
 	 * @return uma mensagem informando ao usuario o que ocorreu
 	 */
@@ -37,20 +36,20 @@ public class PlanilhaVacina {
 	XSSFWorkbook planilha = new XSSFWorkbook();
 	XSSFSheet aba ;
 	
-	public String gerarPlanilhaVacinas(String caminhoArquivo, List<VacinaVO> vacinas) {
+	public String gerarPlanilhaAplicacaoVacina(String caminhoArquivo, List<AplicacaoVacinaVO> aplicacao) {
 		// Criar a planilha (Workbook)
 
 		// Criar uma aba (Sheet)
-		aba = planilha.createSheet("Relatório das Vacinas"); 
+		aba = planilha.createSheet("Relatório da Aplicação Vacina"); 
 
 		int linhaAtual = 0;
 
 		// Criar o cabeÃƒÂ§alho (header)
-		String[] nomesColunas = { "Nome Vacina", "Nome Pesquisador Responsável", "País de Origem", "Data Início Pesquisa", "Quantidade de Doses", "Intervalo das doses", "ID" };
+		String[] nomesColunas = { "Nome", "CPF", "Vacina", "Dose", "Data aplicação","ID Pessoa"};
 		criarCabecalho(nomesColunas, aba, linhaAtual);
 		linhaAtual++;
 		// Preencher as linhas com as vacinas
-		criarLinhasVacinas(vacinas, aba, linhaAtual);
+		criarLinhasAplicacao(aplicacao, aba, linhaAtual);
 
 		// Salvar o arquivo gerado no disco 
 		return salvarNoDisco(planilha, caminhoArquivo, ".xlsx");
@@ -78,12 +77,11 @@ public class PlanilhaVacina {
 			Cell novaCelula = linhaAtual.createCell(i);
 			novaCelula.setCellValue(nomesColunas[i]);
 			novaCelula.setCellStyle(headerStyle);
-			aba.autoSizeColumn(i);
 		}
 	}
 
-	private void criarLinhasVacinas(List<VacinaVO> vacinas, XSSFSheet aba, int posicaoLinhaAtual) {
-		for (VacinaVO v : vacinas) {
+	private void criarLinhasAplicacao( List<AplicacaoVacinaVO> aplicacao, XSSFSheet aba, int posicaoLinhaAtual) {
+		for (AplicacaoVacinaVO a : aplicacao) {
 			// criar uma nova linha na planilha
 			XSSFRow linhaAtual = aba.createRow(posicaoLinhaAtual);
 			
@@ -135,19 +133,19 @@ public class PlanilhaVacina {
 			centro.setTopBorderColor(IndexedColors.BLACK.getIndex()); //cor borda cima
 			
 
-			// Preencher as celulas com os atributos Vacina v
+			// Preencher as celulas com os atributos aplicacaoVacina a
 			Cell cell; 
-			cell = linhaAtual.createCell(0); cell.setCellValue(v.getNomeVacina());cell.setCellStyle(style);aba.autoSizeColumn((short) 0);
-			cell = linhaAtual.createCell(1);cell.setCellValue(v.getNomePesquisadorResponsavel());cell.setCellStyle(style);aba.autoSizeColumn((short) 1);
-			cell = linhaAtual.createCell(2);cell.setCellValue(v.getPaisOrigem());cell.setCellStyle(centro);aba.autoSizeColumn((short) 2);
+			cell = linhaAtual.createCell(0);cell.setCellValue(a.getPessoa().getNome());;cell.setCellStyle(style);aba.autoSizeColumn((short) 0);
+			cell = linhaAtual.createCell(1);cell.setCellValue(a.getPessoa().getCpf());cell.setCellStyle(style);aba.autoSizeColumn((short) 1);
+			cell = linhaAtual.createCell(2);cell.setCellValue(a.getVacina().getNomeVacina());cell.setCellStyle(style);aba.autoSizeColumn((short) 2);
+			cell = linhaAtual.createCell(3);cell.setCellValue(a.getVacina().getQuantidadeDoses());cell.setCellStyle(centro);aba.autoSizeColumn((short) 3);
 			
 			DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-			String dataNascimentoFormatada = formatador.format(v.getDataInicioPesquisa());
+			String dataAplicacao = formatador.format(a.getDataAplicacao());
 			
-			cell = linhaAtual.createCell(3);cell.setCellValue(dataNascimentoFormatada);cell.setCellStyle(centro);aba.autoSizeColumn((short) 3);
-			cell = linhaAtual.createCell(4);cell.setCellValue(v.getQuantidadeDoses());cell.setCellStyle(centro);aba.autoSizeColumn((short) 4);
-			cell = linhaAtual.createCell(5);cell.setCellValue(v.getIntervaloDoses());cell.setCellStyle(centro);aba.autoSizeColumn((short) 5);
-			cell = linhaAtual.createCell(6);cell.setCellValue(v.getIdVacina());cell.setCellStyle(centro);aba.autoSizeColumn((short) 6);
+			cell = linhaAtual.createCell(4);cell.setCellValue(dataAplicacao);cell.setCellStyle(centro);aba.autoSizeColumn((short) 4);
+			cell = linhaAtual.createCell(5);cell.setCellValue(a.getPessoa().getIdPessoa());cell.setCellStyle(centro);aba.autoSizeColumn((short) 5);
+			
 
 			posicaoLinhaAtual++;
 		}
