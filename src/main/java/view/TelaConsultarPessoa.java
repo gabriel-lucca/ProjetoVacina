@@ -174,6 +174,12 @@ public class TelaConsultarPessoa extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {	
 				limparTabela();
 				carregarTabela();
+				btnLimpar.setEnabled(true);
+				btnGerarPlanilha.setEnabled(true);
+				
+				//Nao aparecer quando clica em consultar novamente
+				btnAlterar.setEnabled(false);
+				btnExcluir.setEnabled(false);
 			}
 
 		});
