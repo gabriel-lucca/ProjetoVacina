@@ -1,19 +1,19 @@
- package view;
+package view;
 
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.time.LocalDate;
-import java.time.Period;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -24,12 +24,13 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
 
 import controller.ControladoraAplicacaoVacina;
 import controller.ControladoraVacina;
-import exception.exceptionVacina.AnalisarCamposVacinaException;
 import exception.exception_aplicacao_vacina.AnalisarCamposAplicacaoException;
 import exception.exception_aplicacao_vacina.AnalisarSePodeAplicarException;
 import model.dao.AplicacaoVacinaDAO;
@@ -38,34 +39,33 @@ import model.dao.VacinaDAO;
 import model.vo.AplicacaoVacinaVO;
 import model.vo.PessoaVO;
 import model.vo.VacinaVO;
-import util.Data;
-
-import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.ActionEvent;
-import javax.swing.event.CaretListener;
-import javax.swing.event.CaretEvent;
+import util.PlanilhaAplicacaoVacina;
 
 public class TelaAplicacaoVacina extends JFrame {
 
+	JScrollPane scrollPane = new JScrollPane();
 	private JPanel contentPane;
-	private JTextField txtNome; 
+	private JTextField txtNome;
 	private JTable table;
 	private JTextField txtCpf;
 	ControladoraAplicacaoVacina avController = new ControladoraAplicacaoVacina();
 	ControladoraVacina controllerVacina = new ControladoraVacina();
 	PessoaDAO pessoaDAO = new PessoaDAO();
 	JComboBox<String> cbxVacina = new JComboBox();
-	DefaultTableModel modelo = new DefaultTableModel(); 
+	DefaultTableModel modelo = new DefaultTableModel();
 	private String nome = "";
 	JButton btnVacinar = new JButton("Vacinar");
-	PessoaVO pessoaEncontrada = new PessoaVO(); 
-	private Object[] opcoes = {"Sim", "Não"};
-	private Object[] opcoes2 = {"Voltar a tela inicial","Sair"};
+	VacinaDAO vacina = new VacinaDAO();
+	PessoaVO pessoaEncontrada = new PessoaVO();
+	VacinaVO vacinaEncontrada = new VacinaVO();
+	private Object[] opcoes = { "Sim", "Não" };
+	private Object[] opcoes2 = { "Voltar a tela inicial", "Sair" };
 	private int respostaCadastro;
 	private Integer resposta = null;
 	private JButton btnBuscar;
+	private JButton btnLimpar;
+	private JButton btnGerarPlanilha;
+
 	/**
 	 * Launch the application.
 	 */
@@ -89,7 +89,9 @@ public class TelaAplicacaoVacina extends JFrame {
 		setTitle("Aplica\u00E7\u00E3o Vacina");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 636, 510);
+
 		contentPane = new JPanel();
+
 		contentPane.setBackground(new Color(204, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -99,7 +101,6 @@ public class TelaAplicacaoVacina extends JFrame {
 		JLabel lblCpf = new JLabel("CPF:");
 		lblCpf.setBounds(77, 54, 46, 14);
 		contentPane.add(lblCpf);
-		
 
 		MaskFormatter mascaraCPF;
 		try {
@@ -107,39 +108,41 @@ public class TelaAplicacaoVacina extends JFrame {
 			txtCpf = new JFormattedTextField(mascaraCPF);
 			txtCpf.addCaretListener(new CaretListener() {
 				public void caretUpdate(CaretEvent e) {
-					if(txtCpf.getText().toString().equals("   .   .   -  ")!=true
-							&& txtCpf.getText().toString().length()==14) {
+					if (txtCpf.getText().toString().equals("   .   .   -  ") != true
+							&& txtCpf.getText().toString().length() == 14) {
 						btnBuscar.setEnabled(true);
 					}
 				}
 			});
 		} catch (ParseException e1) {
-			
+
 		}
 		txtCpf.setColumns(10);
 		txtCpf.setBounds(165, 51, 187, 28);
 		contentPane.add(txtCpf);
 
-	    btnBuscar = new JButton("Buscar");
+		btnBuscar = new JButton("Buscar");
+		btnBuscar.setEnabled(false);
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-					pessoaEncontrada = pessoaDAO.consultarPorCpf(txtCpf.getText());
-					if (pessoaEncontrada.getIdPessoa() == null) {
-						JOptionPane.showMessageDialog(null, "CPF INVÁLIDO.");
-						 
-					}else {
-						txtNome.setEnabled(true);
-						txtNome.setText(pessoaEncontrada.getNome());
-						carregarTabela(pessoaEncontrada.getIdPessoa());
-						preencherCbxVacina();
-						btnVacinar.setEnabled(true);
-					}
-						
+				pessoaEncontrada = pessoaDAO.consultarPorCpf(txtCpf.getText());
+				if (pessoaEncontrada.getIdPessoa() == null) {
+					JOptionPane.showMessageDialog(null, "CPF INVÁLIDO.");
+
+				} else {
+					txtNome.setEnabled(true);
+					txtNome.setText(pessoaEncontrada.getNome());
+					carregarTabela(pessoaEncontrada.getIdPessoa());
+					preencherCbxVacina();
+					btnVacinar.setEnabled(true);
+					btnLimpar.setEnabled(true);
+					btnGerarPlanilha.setEnabled(true);
 				}
-			});
+
+			}
+		});
 		btnBuscar.setBounds(419, 50, 99, 29);
 		contentPane.add(btnBuscar);
-		btnBuscar.setEnabled(false);
 
 		JLabel lblNome = new JLabel("Nome:");
 		lblNome.setBounds(77, 115, 46, 14);
@@ -180,20 +183,76 @@ public class TelaAplicacaoVacina extends JFrame {
 		lblHistrico.setBounds(77, 260, 76, 14);
 		contentPane.add(lblHistrico);
 
-		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportBorder(new EmptyBorder(0, 0, 0, 0));
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		scrollPane.setEnabled(false);
 		scrollPane.setBounds(77, 294, 441, 57);
 		contentPane.add(scrollPane);
 
+		table = new JTable(modelo);
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+
+				if (verificarSetabelaTemItemSelecionado()) {
+					btnLimpar.setEnabled(true);
+					btnGerarPlanilha.setEnabled(true);
+				} else {
+					btnLimpar.setEnabled(false);
+					btnGerarPlanilha.setEnabled(false);
+				}
+			}
+		});
+
+		scrollPane.setViewportView(table);
 		modelo.addColumn("Dose");
 		modelo.addColumn("Data da aplicação");
-		
-		table = new JTable(modelo);
-		scrollPane.setViewportView(table);
 
-		
+		btnLimpar = new JButton("Limpar");
+		btnLimpar.setEnabled(false);
+		btnLimpar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				limparTabelaAplicacaoVacina();
+				txtCpf.setText("");
+				txtNome.setText("");
+				cbxVacina.removeAllItems();
+				
+				btnLimpar.setEnabled(false);
+				btnGerarPlanilha.setEnabled(false);
+				btnVacinar.setEnabled(false);
+			}
+		});
+		btnLimpar.setBounds(419, 242, 99, 40);
+		contentPane.add(btnLimpar);
+
+		btnGerarPlanilha = new JButton("Gerar relatório");
+		btnGerarPlanilha.setEnabled(false);
+		btnGerarPlanilha.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JFileChooser jfc = new JFileChooser();
+				jfc.setDialogTitle("Salvar relatório como...");
+				ArrayList<AplicacaoVacinaVO> list = avController.consultarRelatorioAplicacao();
+
+				ArrayList<AplicacaoVacinaVO> lista = new ArrayList<>();
+				for (AplicacaoVacinaVO aplicacao : list) {
+					if (pessoaEncontrada.getIdPessoa() == aplicacao.getPessoa().getIdPessoa()) {
+						lista.add(aplicacao);
+					}
+				}
+
+				int resultado = jfc.showSaveDialog(null);
+				if (resultado == JFileChooser.APPROVE_OPTION) {
+					String caminhoEscolhido = jfc.getSelectedFile().getAbsolutePath();
+					PlanilhaAplicacaoVacina planilha = new PlanilhaAplicacaoVacina();
+					planilha.gerarPlanilhaAplicacaoVacina(caminhoEscolhido, lista);
+					JOptionPane.showMessageDialog(null, "Salvo com sucesso.");
+
+				}
+			}
+		});
+		btnGerarPlanilha.setBounds(264, 376, 143, 51);
+		contentPane.add(btnGerarPlanilha);
+
 	}
 
 	public void consultarPorCpf() {
@@ -211,12 +270,13 @@ public class TelaAplicacaoVacina extends JFrame {
 		VacinaDAO vacina = new VacinaDAO();
 		ArrayList<VacinaVO> buscarTodos = vacina.consultarTodos();
 
-		for (VacinaVO vacinaVO: buscarTodos) {
+		for (VacinaVO vacinaVO : buscarTodos) {
 			cbxVacina.addItem(vacinaVO.getNomeVacina());
 		}
+		
 
 	}
-	
+
 	private void cadastrarAplicacao() throws AnalisarSePodeAplicarException, AnalisarCamposAplicacaoException {
 		AplicacaoVacinaVO aplicacaoVacina = new AplicacaoVacinaVO();
 		aplicacaoVacina.setPessoa(pessoaEncontrada);
@@ -245,37 +305,36 @@ public class TelaAplicacaoVacina extends JFrame {
 			JOptionPane.showMessageDialog(null, "Cadastrado com sucesso");
 		}
 	}
-	public void carregarTabela(Integer id) {	
+
+	public void carregarTabela(Integer id) {
 		AplicacaoVacinaDAO avDAO = new AplicacaoVacinaDAO();
 		ArrayList<AplicacaoVacinaVO> listaAplicacoes = avController.consultarAplicacoes(id);
 		for (AplicacaoVacinaVO apvac : listaAplicacoes) {
-			int i=1;
-		
+			int i = 1;
+
 			DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 			String dataAplicacao = formatador.format(apvac.getDataAplicacao());
-			
-		modelo.addRow(new Object[]{i++, dataAplicacao});
+
+			modelo.addRow(new Object[] { i++, dataAplicacao });
 		}
 	}
-	
+
 	public boolean verificarCamposPreenchidos() {
 		boolean resposta = false;
-		if(pessoaEncontrada!=null && txtNome.getText().toString().length()>0 
-				&& cbxVacina.getSelectedItem().toString().length()>0) {
+		if (pessoaEncontrada != null && txtNome.getText().toString().length() > 0
+				&& cbxVacina.getSelectedItem().toString().length() > 0) {
 			resposta = true;
 		}
 		return resposta;
 	}
+
+	private boolean verificarSetabelaTemItemSelecionado() {
+		boolean resposta = (Integer) table.getModel().getValueAt(table.getSelectedRow(), 0) > 0;
+
+		return resposta;
+	}
+
+	private void limparTabelaAplicacaoVacina() {
+		modelo.setRowCount(0);
+	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
