@@ -110,7 +110,7 @@ public class VacinaDAO  {
 	}
 	public ArrayList<VacinaVO> consultarTodos(){
 		Connection conn = Banco.getConnection();
-		String sql = "select * from vacina";
+		String sql = "select * from vacina order by idVacina asc";
 		PreparedStatement ps = Banco.getPreparedStatementWithPk(conn, sql);
 		ArrayList<VacinaVO> vacinas = new ArrayList<VacinaVO>();
 		try {

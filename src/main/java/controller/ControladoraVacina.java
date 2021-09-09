@@ -43,7 +43,7 @@ public class ControladoraVacina {
 		} else if (vacina.getNomeVacina().length() > 50) {
 			mensagem += "\nO nome da vacina nao deve possuir mais de 50 caracteres";
 		} else if (!vacina.getNomeVacina().matches("^([a-zA-Zà-úÀ-Ú]|-|\\s)+$")) {
-			mensagem += "\nNome da Nome da vacina inválida";
+			mensagem += "\nNome da vacina inválida";
 		}
 
 		// Intervalo doses:
