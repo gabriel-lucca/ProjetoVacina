@@ -160,21 +160,19 @@ public class TelaCadastroPessoa extends JFrame {
 								JOptionPane.INFORMATION_MESSAGE);
 						txtDataNascimento.requestFocus();
 					} else {
-						Data dtClass = new Data();
-						ControladoraPessoa controller = new ControladoraPessoa();
-						String[] data = txtDataNascimento.getText().toString().split("/");
-						int dia = Integer.parseInt(data[0]);
-						int mes = Integer.parseInt(data[1]);
-						int ano = Integer.parseInt(data[2]);
-						resultadoValidData = dtClass.validarData(dia, mes, ano);
+						validarData(txtDataNascimento.getText());
 					}
 				}
+
+				
 			});
 		} catch (ParseException e1) {
 		}
 		txtDataNascimento.setColumns(10);
 		txtDataNascimento.setBounds(200, 218, 75, 29);
 		contentPane.add(txtDataNascimento);
+		
+		
 
 		JLabel lblDataDeNascimento = new JLabel("Data de nascimento:");
 		lblDataDeNascimento.setBounds(66, 225, 136, 14);
@@ -219,6 +217,8 @@ public class TelaCadastroPessoa extends JFrame {
 		txtCpf.setColumns(10);
 		txtCpf.setBounds(200, 92, 347, 29);
 		contentPane.add(txtCpf);
+		
+		
 
 		cbxEstado = new JComboBox();
 		cbxEstado.setModel(new DefaultComboBoxModel(
@@ -230,7 +230,8 @@ public class TelaCadastroPessoa extends JFrame {
 		btnAlterar = new JButton("Alterar");
 		btnAlterar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (resultadoValidData.equals("DATA VÁLIDA.")) {
+				validarData(txtDataNascimento.getText());
+				if (("DATA VÁLIDA.").equals(resultadoValidData)) {
 					try {
 						alterar();
 					} catch (AnalisarCamposPessoaException e) {
@@ -244,6 +245,16 @@ public class TelaCadastroPessoa extends JFrame {
 		btnAlterar.setEnabled(false);
 		btnAlterar.setBounds(234, 380, 148, 46);
 		contentPane.add(btnAlterar);
+	}
+	
+	private void validarData(String string) {
+		Data dtClass = new Data();
+		ControladoraPessoa controller = new ControladoraPessoa();
+		String[] data = string.toString().split("/");
+		int dia = Integer.parseInt(data[0]);
+		int mes = Integer.parseInt(data[1]);
+		int ano = Integer.parseInt(data[2]);
+		resultadoValidData = dtClass.validarData(dia, mes, ano);
 	}
 
 	public void cadastrar() throws AnalisarCamposPessoaException {

@@ -79,7 +79,7 @@ public class TelaConsultarPessoa extends JFrame {
 	public TelaConsultarPessoa() {
 		setTitle("Consulta de pessoas");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 1033, 634);
+		setBounds(100, 100, 1360, 712);
 		contentPane = new JPanel();
 		
 		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
@@ -103,10 +103,13 @@ public class TelaConsultarPessoa extends JFrame {
 		setLocationRelativeTo(null);
 
 		scrollPane.setEnabled(false);
-		scrollPane.setBounds(25, 210, 970, 286);
+		scrollPane.setBounds(12, 210, 1318, 312);
 		contentPane.add(scrollPane);
 		
 		table = new JTable(modelo);
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		
+		
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -127,6 +130,14 @@ public class TelaConsultarPessoa extends JFrame {
 		});
 
 		table.setBackground(Color.WHITE);
+		
+	    // ou
+		//table.getColumnModel().getColumn(0).setWidth(1);
+	    // ou
+		//table.getColumnModel().getColumn(0).setMinWidth(0);
+	    //table.getColumnModel().getColumn(0).setMaxWidth(1);
+	    
+	    
 		scrollPane.setViewportView(table);
 		modelo.addColumn("idPessoa");
 		modelo.addColumn("Nome pessoa");
@@ -153,7 +164,7 @@ public class TelaConsultarPessoa extends JFrame {
 //				carregarTabela();
 			}
 		});
-		btnAlterar.setBounds(289, 512, 210, 56);
+		btnAlterar.setBounds(433, 551, 210, 56);
 		contentPane.add(btnAlterar);
 
 		btnExcluir = new JButton("Excluir");
@@ -166,7 +177,7 @@ public class TelaConsultarPessoa extends JFrame {
 				excluir(idPessoaSelecionada);
 			}
 		});
-		btnExcluir.setBounds(509, 512, 210, 56);
+		btnExcluir.setBounds(653, 551, 210, 56);
 		contentPane.add(btnExcluir);
 
 		JButton btnConsultar = new JButton("Consultar");
@@ -183,20 +194,20 @@ public class TelaConsultarPessoa extends JFrame {
 			}
 
 		});
-		btnConsultar.setBounds(421, 150, 149, 49);
+		btnConsultar.setBounds(549, 150, 149, 49);
 		contentPane.add(btnConsultar);
 		
 		JLabel lblNomePessoa = new JLabel("Nome pessoa");
-		lblNomePessoa.setBounds(25, 59, 129, 14);
+		lblNomePessoa.setBounds(179, 62, 129, 14);
 		contentPane.add(lblNomePessoa);
 		
 		txtNome = new JTextField();
-		txtNome.setBounds(25, 84, 188, 37);
+		txtNome.setBounds(179, 87, 188, 37);
 		contentPane.add(txtNome);
 		txtNome.setColumns(10);
 		
 		JLabel lblCidade = new JLabel("Cidade");
-		lblCidade.setBounds(807, 59, 87, 14);
+		lblCidade.setBounds(961, 62, 87, 14);
 		contentPane.add(lblCidade);
 		
 		btnGerarPlanilha = new JButton("Gerar relatório");
@@ -215,7 +226,7 @@ public class TelaConsultarPessoa extends JFrame {
 				}
 			}
 		});
-		btnGerarPlanilha.setBounds(25, 150, 149, 49);
+		btnGerarPlanilha.setBounds(13, 150, 149, 49);
 		contentPane.add(btnGerarPlanilha);
 		
 		btnLimpar = new JButton("Limpar");
@@ -230,12 +241,12 @@ public class TelaConsultarPessoa extends JFrame {
 			}
 		});
 		btnLimpar.setEnabled(false);
-		btnLimpar.setBounds(846, 150, 149, 49);
+		btnLimpar.setBounds(1180, 147, 149, 49);
 		contentPane.add(btnLimpar);
 		
 		txtCidade = new JTextField();
 		txtCidade.setColumns(10);
-		txtCidade.setBounds(807, 84, 188, 37);
+		txtCidade.setBounds(961, 87, 188, 37);
 		contentPane.add(txtCidade);
 		
 		int limiteIdade = 150;
@@ -248,25 +259,25 @@ public class TelaConsultarPessoa extends JFrame {
 			}
 		}
 		cbIdadeMinima = new JComboBox(idades);
-		cbIdadeMinima.setBounds(434, 84, 149, 37);
+		cbIdadeMinima.setBounds(588, 87, 149, 37);
 		cbIdadeMinima.setEnabled(false);
 		contentPane.add(cbIdadeMinima);
 		
 		cbIdadeMaxima = new JComboBox(idades);
-		cbIdadeMaxima.setBounds(623, 84, 149, 37);
+		cbIdadeMaxima.setBounds(777, 87, 149, 37);
 		cbIdadeMaxima.setEnabled(false);
 		contentPane.add(cbIdadeMaxima);
 		
 		lblIdadeMinima = new JLabel("Idade mínima");
-		lblIdadeMinima.setBounds(434, 59, 149, 14);
+		lblIdadeMinima.setBounds(588, 62, 149, 14);
 		contentPane.add(lblIdadeMinima);
 		
 		lblIdadeMaxima = new JLabel("Idade máxima");
-		lblIdadeMaxima.setBounds(623, 59, 149, 14);
+		lblIdadeMaxima.setBounds(777, 62, 149, 14);
 		contentPane.add(lblIdadeMaxima);
 		
 		lblFiltros = new JLabel("Filtros:");
-		lblFiltros.setBounds(25, 21, 67, 14);
+		lblFiltros.setBounds(179, 24, 67, 14);
 		contentPane.add(lblFiltros);
 		
 		String opcoes[] = {"Selecione uma opção", "Dias", "Mêses", "Anos"};
@@ -285,12 +296,12 @@ public class TelaConsultarPessoa extends JFrame {
 				}
 			}
 		});	
-		cbOpcoesIdade.setBounds(247, 84, 149, 37);
+		cbOpcoesIdade.setBounds(401, 87, 149, 37);
 		cbOpcoesIdade.setVisible(true);
 		contentPane.add(cbOpcoesIdade);
 		
 		JLabel lblOpesDeIdade = new JLabel("Opções para idade");
-		lblOpesDeIdade.setBounds(247, 59, 149, 14);
+		lblOpesDeIdade.setBounds(401, 62, 149, 14);
 		contentPane.add(lblOpesDeIdade);
 		
 		btnLimparFiltros = new JButton("Limpar filtros");
@@ -300,7 +311,7 @@ public class TelaConsultarPessoa extends JFrame {
 				limparFiltros();
 			}
 		});
-		btnLimparFiltros.setBounds(434, 10, 112, 37);
+		btnLimparFiltros.setBounds(588, 13, 112, 37);
 		contentPane.add(btnLimparFiltros);
 		
 	}
@@ -372,6 +383,9 @@ public class TelaConsultarPessoa extends JFrame {
 					
 					
 		}
+		
+		
+		// Ai voce pode escolher
 	}
 	private void limparFiltros() {
 		txtNome.setText("");

@@ -130,10 +130,18 @@ public class TelaAplicacaoVacina extends JFrame {
 					JOptionPane.showMessageDialog(null, "CPF INVÁLIDO.");
 
 				} else {
+					// buscar qual vacina esse cidadãoo tomou
+
 					txtNome.setEnabled(true);
 					txtNome.setText(pessoaEncontrada.getNome());
-					carregarTabela(pessoaEncontrada.getIdPessoa());
+					AplicacaoVacinaVO encontrada = carregarTabela(pessoaEncontrada.getIdPessoa());
 					preencherCbxVacina();
+
+					// setar a vacina que o cidadão tomou lá no combobox
+					if (encontrada.getVacina().getIdVacina() != null) {
+						cbxVacina.setSelectedIndex(encontrada.getVacina().getIdVacina()-1);
+					}
+
 					btnVacinar.setEnabled(true);
 					btnLimpar.setEnabled(true);
 					btnGerarPlanilha.setEnabled(true);
@@ -171,7 +179,7 @@ public class TelaAplicacaoVacina extends JFrame {
 					cadastrarAplicacao();
 				} catch (AnalisarSePodeAplicarException | AnalisarCamposAplicacaoException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage());
-					dispose();
+					//dispose();
 				}
 			}
 		});
@@ -216,7 +224,7 @@ public class TelaAplicacaoVacina extends JFrame {
 				txtCpf.setText("");
 				txtNome.setText("");
 				cbxVacina.removeAllItems();
-				
+
 				btnLimpar.setEnabled(false);
 				btnGerarPlanilha.setEnabled(false);
 				btnVacinar.setEnabled(false);
@@ -273,7 +281,6 @@ public class TelaAplicacaoVacina extends JFrame {
 		for (VacinaVO vacinaVO : buscarTodos) {
 			cbxVacina.addItem(vacinaVO.getNomeVacina());
 		}
-		
 
 	}
 
@@ -306,9 +313,11 @@ public class TelaAplicacaoVacina extends JFrame {
 		}
 	}
 
-	public void carregarTabela(Integer id) {
+	public AplicacaoVacinaVO carregarTabela(Integer id) {
 		AplicacaoVacinaDAO avDAO = new AplicacaoVacinaDAO();
 		ArrayList<AplicacaoVacinaVO> listaAplicacoes = avController.consultarAplicacoes(id);
+		AplicacaoVacinaVO retorno = listaAplicacoes.get(0);
+
 		for (AplicacaoVacinaVO apvac : listaAplicacoes) {
 			int i = 1;
 
@@ -317,6 +326,8 @@ public class TelaAplicacaoVacina extends JFrame {
 
 			modelo.addRow(new Object[] { i++, dataAplicacao });
 		}
+
+		return retorno;
 	}
 
 	public boolean verificarCamposPreenchidos() {

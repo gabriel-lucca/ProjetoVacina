@@ -1,9 +1,26 @@
 package view;
 
+import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.MaskFormatter;
 
@@ -12,32 +29,6 @@ import exception.exceptionVacina.AnalisarCamposVacinaException;
 import exception.exceptionVacina.VacinaJaExisteException;
 import model.vo.VacinaVO;
 import util.Data;
-
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import javax.swing.JFormattedTextField;
-import javax.swing.JButton;
-import java.awt.Color;
-import java.awt.Font;
-import java.text.ParseException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-
-import javax.swing.event.CaretListener;
-import javax.swing.event.CaretEvent;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import javax.swing.JComboBox;
-
-import java.awt.event.MouseMotionAdapter;
-import java.awt.event.InputMethodListener;
-import java.awt.event.InputMethodEvent;
 
 public class TelaCadastroVacina extends JFrame {
 
@@ -146,12 +137,7 @@ public class TelaCadastroVacina extends JFrame {
 								JOptionPane.INFORMATION_MESSAGE);
 						txtDataInicio.requestFocus();
 					} else {
-						Data dtClass = new Data();
-						String[] data = txtDataInicio.getText().toString().split("/");
-						int dia = Integer.parseInt(data[0]);
-						int mes = Integer.parseInt(data[1]);
-						int ano = Integer.parseInt(data[2]);
-						resultadoValidData = dtClass.validarData(dia, mes, ano);
+						validarData(txtDataInicio.getText());
 					}
 				}
 			});
@@ -224,7 +210,8 @@ public class TelaCadastroVacina extends JFrame {
 		btnAlterar = new JButton("Alterar");
 		btnAlterar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (resultadoValidData.equals("DATA VÁLIDA.")) {
+				validarData(txtDataInicio.getText());
+				if (("DATA VÁLIDA.").equals(resultadoValidData)) {
 					try {
 						alterar();
 					} catch (AnalisarCamposVacinaException | VacinaJaExisteException e) {
@@ -246,6 +233,15 @@ public class TelaCadastroVacina extends JFrame {
 		jlAvisoDose.setVisible(false);
 		contentPane.add(jlAvisoDose);
 
+	}
+
+	private void validarData(String string) {
+		Data dtClass = new Data();
+		String[] data = string.toString().split("/");
+		int dia = Integer.parseInt(data[0]);
+		int mes = Integer.parseInt(data[1]);
+		int ano = Integer.parseInt(data[2]);
+		resultadoValidData = dtClass.validarData(dia, mes, ano);
 	}
 
 	// MÃ©todos e funÃ§Ãµes:
