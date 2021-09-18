@@ -58,7 +58,7 @@ public class TelaAplicacaoVacina extends JFrame {
 	VacinaDAO vacina = new VacinaDAO();
 	PessoaVO pessoaEncontrada = new PessoaVO();
 	VacinaVO vacinaEncontrada = new VacinaVO();
-	private Object[] opcoes = { "Sim", "Não" };
+	private Object[] opcoes = { "Sim", "NÃ£o" };
 	private Object[] opcoes2 = { "Voltar a tela inicial", "Sair" };
 	private int respostaCadastro;
 	private Integer resposta = null;
@@ -125,21 +125,23 @@ public class TelaAplicacaoVacina extends JFrame {
 		btnBuscar.setEnabled(false);
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				cbxVacina.removeAllItems();
+				limparTabelaAplicacaoVacina();
 				pessoaEncontrada = pessoaDAO.consultarPorCpf(txtCpf.getText());
 				if (pessoaEncontrada.getIdPessoa() == null) {
-					JOptionPane.showMessageDialog(null, "CPF INVÁLIDO.");
+					JOptionPane.showMessageDialog(null, "CPF INVÁLIDO.");
 
 				} else {
-					// buscar qual vacina esse cidadãoo tomou
+					// buscar qual vacina esse cidadÃ£oo tomou
 
 					txtNome.setEnabled(true);
 					txtNome.setText(pessoaEncontrada.getNome());
 					AplicacaoVacinaVO encontrada = carregarTabela(pessoaEncontrada.getIdPessoa());
-					preencherCbxVacina();
 
+					preencherCbxVacina();
 					// setar a vacina que o cidadão tomou lá no combobox
-					if (encontrada.getVacina().getIdVacina() != null) {
-						cbxVacina.setSelectedIndex(encontrada.getVacina().getIdVacina()-1);
+					if (encontrada != null && encontrada.getVacina().getIdVacina() != null) {
+						cbxVacina.setSelectedIndex(encontrada.getVacina().getIdVacina());
 					}
 
 					btnVacinar.setEnabled(true);
@@ -179,7 +181,7 @@ public class TelaAplicacaoVacina extends JFrame {
 					cadastrarAplicacao();
 				} catch (AnalisarSePodeAplicarException | AnalisarCamposAplicacaoException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage());
-					//dispose();
+					// dispose();
 				}
 			}
 		});
@@ -277,7 +279,7 @@ public class TelaAplicacaoVacina extends JFrame {
 	public void preencherCbxVacina() {
 		VacinaDAO vacina = new VacinaDAO();
 		ArrayList<VacinaVO> buscarTodos = vacina.consultarTodos();
-
+		cbxVacina.addItem("--- Selecione uma vacina ---");
 		for (VacinaVO vacinaVO : buscarTodos) {
 			cbxVacina.addItem(vacinaVO.getNomeVacina());
 		}
@@ -300,7 +302,7 @@ public class TelaAplicacaoVacina extends JFrame {
 		avController.cadastrar(aplicacaoVacina);
 		if (avController.validarCampos(aplicacaoVacina) != null) {
 			int respostaOpcao2;
-			respostaOpcao2 = JOptionPane.showOptionDialog(null, "Selecione uma opÃ§Ã£o", "OpÃ§Ãµes",
+			respostaOpcao2 = JOptionPane.showOptionDialog(null, "Selecione uma opÃÂ§ÃÂ£o", "OpÃÂ§ÃÂµes",
 					JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opcoes2, opcoes2[0]);
 			if (respostaOpcao2 == 0) {
 				TelaPrincipal telaPrincipal = new TelaPrincipal();
@@ -313,22 +315,45 @@ public class TelaAplicacaoVacina extends JFrame {
 		}
 	}
 
+	public void carregarTabela1(Integer id) {
+		AplicacaoVacinaDAO avDAO = new AplicacaoVacinaDAO();
+		ArrayList<AplicacaoVacinaVO> listaAplicacoes = avController.consultarAplicacoes(id);
+		int i = 1;
+		if (listaAplicacoes.size() != 0) {
+			for (AplicacaoVacinaVO apvac : listaAplicacoes) {
+				DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+				String dataAplicacao = formatador.format(apvac.getDataAplicacao());
+				modelo.addRow(new Object[] { i++, dataAplicacao });
+			}
+		} else {
+			modelo.addRow(new Object[] { "---", "------" });
+		}
+	}
+	
 	public AplicacaoVacinaVO carregarTabela(Integer id) {
 		AplicacaoVacinaDAO avDAO = new AplicacaoVacinaDAO();
 		ArrayList<AplicacaoVacinaVO> listaAplicacoes = avController.consultarAplicacoes(id);
-		AplicacaoVacinaVO retorno = listaAplicacoes.get(0);
+		AplicacaoVacinaVO retorno = null;
+		
+		if(listaAplicacoes.size() >= 1) {
+			retorno = listaAplicacoes.get(0);
+			
+			for (AplicacaoVacinaVO apvac : listaAplicacoes) {
+				int i = 1;
 
-		for (AplicacaoVacinaVO apvac : listaAplicacoes) {
-			int i = 1;
+				DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+				String dataAplicacao = formatador.format(apvac.getDataAplicacao());
 
-			DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-			String dataAplicacao = formatador.format(apvac.getDataAplicacao());
-
-			modelo.addRow(new Object[] { i++, dataAplicacao });
+				modelo.addRow(new Object[] { i++, dataAplicacao });
+			}
 		}
+	
+	
 
 		return retorno;
 	}
+
+	
 
 	public boolean verificarCamposPreenchidos() {
 		boolean resposta = false;

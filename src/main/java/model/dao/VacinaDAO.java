@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import model.vo.AplicacaoVacinaVO;
 import model.vo.PessoaVO;
 import model.vo.VacinaVO;
 import seletor.FiltroVacina;
@@ -66,10 +67,18 @@ public class VacinaDAO  {
 		Connection conn = Banco.getConnection();
 		String sql = "delete from vacina where idVacina=?";
 		PreparedStatement ps = Banco.getPreparedStatement(conn, sql);
+		ArrayList<AplicacaoVacinaVO> aplicacoesEncontradas = new ArrayList<AplicacaoVacinaVO>();
+		AplicacaoVacinaDAO avDAO = new AplicacaoVacinaDAO();
+		aplicacoesEncontradas = avDAO.buscarPorVacina(id);
 		boolean resposta = false;
 		try {
 			ps.setInt(1, id);
 			resposta = ps.executeUpdate()>0;
+			if(resposta) {
+				for(int i = 0;i<aplicacoesEncontradas.size();i++) {
+					avDAO.excluir(aplicacoesEncontradas.get(i).getVacina().getIdVacina());
+				}
+			}
 		}catch(SQLException e) {
 			System.out.println("Erro ao excluir vacina.\nErro: "+e.getMessage());
 		}finally {

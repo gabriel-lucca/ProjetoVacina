@@ -27,7 +27,7 @@ public class AplicacaoVacinaDAO {
 				novaAplicacao.setIdAplicacaoVacina(rs.getInt(1));
 			}
 		}catch(SQLException e) {
-			System.out.println("Erro ao cadastrar aplicação vacina.\nErro: "+e.getMessage());
+			System.out.println("Erro ao cadastrar aplicaÃ§Ã£o vacina.\nErro: "+e.getMessage());
 		}finally {
 			Banco.closeConnection(conn);
 			Banco.closePreparedStatement(ps);
@@ -58,7 +58,7 @@ public class AplicacaoVacinaDAO {
 	}
 	public boolean excluir(Integer id) {
 		Connection conn = Banco.getConnection();
-		String sql = "delete from aplicacaoVacina where idAplicacaoVacina=?";
+		String sql = "delete from aplicacaoVacina where idVacina=?";
 		PreparedStatement ps = Banco.getPreparedStatement(conn, sql);
 		boolean resposta = false;
 		try {
@@ -136,7 +136,7 @@ public class AplicacaoVacinaDAO {
 				aplicacoesEncontradas.add(aplicacaoEncontrada);
 			}
 		} catch(SQLException e) {
-			System.out.println("Erro ao buscar aplicações.  \nErro: "+e.getMessage());
+			System.out.println("Erro ao buscar aplicaÃ§Ãµes.  \nErro: "+e.getMessage());
 		}
 		return aplicacoesEncontradas;
 	}
@@ -160,4 +160,25 @@ public class AplicacaoVacinaDAO {
 		return aplicacaoVacinas;
 	}
 	
+	public ArrayList<AplicacaoVacinaVO> buscarPorVacina(int id){
+		Connection conn = Banco.getConnection();
+		String sql = "select * from aplicacaoVacina where idVacina = ?";
+		PreparedStatement ps = Banco.getPreparedStatement(conn, sql);
+		ArrayList<AplicacaoVacinaVO> aplicacoesEncontradas = new ArrayList<AplicacaoVacinaVO>();
+		AplicacaoVacinaVO aplicacaoEncontrada = new AplicacaoVacinaVO();
+		try {
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				aplicacaoEncontrada = construirDoResultSet(rs);
+				aplicacoesEncontradas.add(aplicacaoEncontrada);
+			}
+		}catch(SQLException e) {
+			System.out.println("Erro ao buscar aplicacao por id.\nErro: "+e.getMessage());
+		}finally {
+			Banco.closeConnection(conn);
+			Banco.closePreparedStatement(ps);
+		}
+		return aplicacoesEncontradas;
+	}
 }
