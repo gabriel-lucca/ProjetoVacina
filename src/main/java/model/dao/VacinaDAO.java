@@ -7,15 +7,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import model.vo.AplicacaoVacinaVO;
-import model.vo.PessoaVO;
 import model.vo.VacinaVO;
 import seletor.FiltroVacina;
 
 public class VacinaDAO  {
 	public VacinaVO cadastrar(VacinaVO vacina) {
 		Connection conn = Banco.getConnection();
-		String sql = "insert into vacina(nomePesquisadorResponsavel, paisOrigem, nomeVacina, dtInicioPesquisa, quantidadeDoses, intervaloDoses)"
-				+ "values(?, ?, ?, ?, ?, ?)";
+		String sql = "insert into vacina(nomePesquisadorResponsavel, paisOrigem, nomeVacina, dtInicioPesquisa, quantidadeDoses, intervaloDoses, statusVacina)"
+				+ "values(?, ?, ?, ?, ?, ?, ?)";
 		PreparedStatement ps = Banco.getPreparedStatementWithPk(conn, sql);
 		ResultSet rs = null;
 		try {
@@ -25,6 +24,7 @@ public class VacinaDAO  {
 			ps.setDate(4, java.sql.Date.valueOf(vacina.getDataInicioPesquisa()));
 			ps.setString(5, vacina.getQuantidadeDoses());
 			ps.setInt(6, vacina.getIntervaloDoses());
+			ps.setString(7, vacina.getStatusVacina());
 			ps.execute();
 			rs = ps.getGeneratedKeys();
 			if(rs.next()) {
@@ -42,7 +42,7 @@ public class VacinaDAO  {
 	public boolean alterar(VacinaVO vacina) {
 		Connection conn = Banco.getConnection();
 		String sql = " update vacina "
-				+ " set nomePesquisadorResponsavel=?, paisOrigem=?, nomeVacina=?, dtInicioPesquisa=?, quantidadeDoses=?, intervaloDoses=?"
+				+ " set nomePesquisadorResponsavel=?, paisOrigem=?, nomeVacina=?, dtInicioPesquisa=?, quantidadeDoses=?, intervaloDoses=?, statusVacina=?"
 				+ " where idVacina=?";
 		PreparedStatement ps = Banco.getPreparedStatement(conn, sql);
 		boolean resposta = false;
@@ -53,7 +53,8 @@ public class VacinaDAO  {
 			ps.setDate(4, java.sql.Date.valueOf(vacina.getDataInicioPesquisa()));
 			ps.setString(5, vacina.getQuantidadeDoses());
 			ps.setInt(6, vacina.getIntervaloDoses());
-			ps.setInt(7, vacina.getIdVacina());
+			ps.setString(7, vacina.getStatusVacina());
+			ps.setInt(8, vacina.getIdVacina());
 			resposta = ps.executeUpdate() > 0;
 		}catch(SQLException e) {
 			System.out.println("Erro ao alterar vacina.\nErro: "+e.getMessage());
@@ -96,6 +97,7 @@ public class VacinaDAO  {
 		vacina.setDataInicioPesquisa(rs.getDate("dtInicioPesquisa").toLocalDate());
 		vacina.setQuantidadeDoses(rs.getString("quantidadeDoses"));
 		vacina.setIntervaloDoses(rs.getInt("intervaloDoses"));
+		vacina.setStatusVacina(rs.getString("statusVacina"));
 		return vacina;
 	}
 	public VacinaVO consultarPorId(Integer idVacinaSelecionada) {

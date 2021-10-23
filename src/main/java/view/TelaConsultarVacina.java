@@ -55,7 +55,6 @@ public class TelaConsultarVacina extends JFrame {
 	private JComboBox cbxPais;
 	private JComboBox cbxDoses;
 	private JButton btnAlterar;
-	private JButton btnExcluir;
 	private JButton btnLimpar;
 	private JButton btnLimparFiltros;
 	private JButton btnGerarPlanilha;
@@ -82,7 +81,7 @@ public class TelaConsultarVacina extends JFrame {
 	public TelaConsultarVacina() {
 		setTitle("Consultar Vacinas");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 980, 467);
+		setBounds(100, 100, 1108, 467);
 		contentPane = new JPanel();
 		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
@@ -103,7 +102,7 @@ public class TelaConsultarVacina extends JFrame {
 		setLocationRelativeTo(null);
 
 		scrollPane.setEnabled(false);
-		scrollPane.setBounds(12, 205, 942, 120);
+		scrollPane.setBounds(12, 205, 1070, 120);
 		contentPane.add(scrollPane);
 
 		table = new JTable(modelo);
@@ -113,13 +112,11 @@ public class TelaConsultarVacina extends JFrame {
 
 				if (verificarSetabelaTemItemSelecionado()) {
 					btnAlterar.setEnabled(true);
-					btnExcluir.setEnabled(true);
 					btnLimpar.setEnabled(true);
 					btnLimparFiltros.setEnabled(true);
 					btnGerarPlanilha.setEnabled(true);
 				} else {
 					btnAlterar.setEnabled(false);
-					btnExcluir.setEnabled(false);
 					btnLimpar.setEnabled(false);
 					btnGerarPlanilha.setEnabled(false);
 					btnLimparFiltros.setEnabled(false);
@@ -136,6 +133,7 @@ public class TelaConsultarVacina extends JFrame {
 		modelo.addColumn("Data início pesquisa");
 		modelo.addColumn("Quantidade doses");
 		modelo.addColumn("Intervalo doses");
+		modelo.addColumn("Status da vacina");
 
 		btnAlterar = new JButton("Alterar");
 		btnAlterar.setEnabled(false);
@@ -152,21 +150,8 @@ public class TelaConsultarVacina extends JFrame {
 //				carregarTabela();
 			}
 		});
-		btnAlterar.setBounds(256, 346, 210, 56);
+		btnAlterar.setBounds(441, 350, 210, 56);
 		contentPane.add(btnAlterar);
-
-		btnExcluir = new JButton("Excluir");
-		btnExcluir.setEnabled(false);
-		btnExcluir.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				Integer idVacinaSelecionada = (Integer) table.getModel().getValueAt(table.getSelectedRow(), 0);
-				respostaExclusao = JOptionPane.showOptionDialog(null, "\nDeseja excluir vacina?", "Confirmação",
-						JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opcoes, opcoes[0]);
-				excluir(idVacinaSelecionada);
-			}
-		});
-		btnExcluir.setBounds(476, 346, 210, 56);
-		contentPane.add(btnExcluir);
 
 		JButton btnConsultar = new JButton("Consultar");
 		btnConsultar.addActionListener(new ActionListener() {
@@ -175,37 +160,36 @@ public class TelaConsultarVacina extends JFrame {
 				carregarTabela();
 				btnLimpar.setEnabled(true);
 				btnGerarPlanilha.setEnabled(true);
-				
-				//Nao aparecer quando clica em consultar novamente
+
+				// Nao aparecer quando clica em consultar novamente
 				btnAlterar.setEnabled(false);
-				btnExcluir.setEnabled(false);
 			}
 		});
-		btnConsultar.setBounds(394, 145, 174, 47);
+		btnConsultar.setBounds(459, 145, 174, 47);
 		contentPane.add(btnConsultar);
 
 		JLabel lblNomeVacina = new JLabel("Nome vacina");
-		lblNomeVacina.setBounds(208, 32, 114, 14);
+		lblNomeVacina.setBounds(277, 30, 114, 14);
 		contentPane.add(lblNomeVacina);
 
 		txtNomeVacina = new JTextField();
-		txtNomeVacina.setBounds(208, 50, 139, 35);
+		txtNomeVacina.setBounds(277, 48, 139, 35);
 		contentPane.add(txtNomeVacina);
 		txtNomeVacina.setColumns(10);
 
 		JLabel lblPaisOrigem = new JLabel("País origem");
-		lblPaisOrigem.setBounds(373, 32, 114, 14);
+		lblPaisOrigem.setBounds(442, 30, 114, 14);
 		contentPane.add(lblPaisOrigem);
 
 		cbxPais = new JComboBox();
 		for (int i = 0; i < listarPaises().length; i++) {
 			cbxPais.addItem(listarPaises()[i]);
 		}
-		cbxPais.setBounds(373, 49, 174, 36);
+		cbxPais.setBounds(442, 47, 174, 36);
 		contentPane.add(cbxPais);
 
 		JLabel lblDoses = new JLabel("Doses");
-		lblDoses.setBounds(566, 32, 119, 14);
+		lblDoses.setBounds(635, 30, 119, 14);
 		contentPane.add(lblDoses);
 
 		btnLimpar = new JButton("Limpar");
@@ -216,12 +200,11 @@ public class TelaConsultarVacina extends JFrame {
 				btnLimpar.setEnabled(false);
 				btnGerarPlanilha.setEnabled(false);
 				btnAlterar.setEnabled(false);
-				btnExcluir.setEnabled(false);
 
 			}
 		});
 		btnLimpar.setEnabled(false);
-		btnLimpar.setBounds(805, 145, 149, 47);
+		btnLimpar.setBounds(933, 145, 149, 47);
 		contentPane.add(btnLimpar);
 
 		btnGerarPlanilha = new JButton("Gerar relatório");
@@ -248,10 +231,14 @@ public class TelaConsultarVacina extends JFrame {
 		for (int i = 0; i < listarDoses().length; i++) {
 			cbxDoses.addItem(listarDoses()[i]);
 		}
-		cbxDoses.setBounds(566, 50, 174, 35);
+		cbxDoses.setBounds(635, 48, 174, 35);
 		contentPane.add(cbxDoses);
 
 		btnLimparFiltros = new JButton("Limpar filtros");
+		btnLimparFiltros.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
 		btnLimparFiltros.setEnabled(false);
 		btnLimparFiltros.addMouseListener(new MouseAdapter() {
 			@Override
@@ -261,7 +248,7 @@ public class TelaConsultarVacina extends JFrame {
 			}
 		});
 		btnLimparFiltros.setEnabled(false);
-		btnLimparFiltros.setBounds(805, 50, 139, 35);
+		btnLimparFiltros.setBounds(943, 48, 139, 35);
 		contentPane.add(btnLimparFiltros);
 	}
 
@@ -321,7 +308,8 @@ public class TelaConsultarVacina extends JFrame {
 			String dataInicioFormatada = formatador.format(vac.getDataInicioPesquisa());
 
 			modelo.addRow(new Object[] { vac.getIdVacina(), vac.getNomePesquisadorResponsavel(), vac.getPaisOrigem(),
-					vac.getNomeVacina(), dataInicioFormatada, vac.getQuantidadeDoses(), vac.getIntervaloDoses() });
+					vac.getNomeVacina(), dataInicioFormatada, vac.getQuantidadeDoses(), vac.getIntervaloDoses(),
+					vac.getStatusVacina() });
 		}
 	}
 

@@ -39,6 +39,7 @@ public class TelaCadastroVacina extends JFrame {
 	private JTextField txtDataInicio;
 	private JComboBox cbxDoses;
 	private JComboBox cbxPais;
+	private JComboBox cbxStatus;
 	private JButton btnCadastrar;
 	private JButton btnAlterar;
 	private ControladoraVacina controller = new ControladoraVacina();
@@ -174,6 +175,11 @@ public class TelaCadastroVacina extends JFrame {
 		contentPane.add(txtIntervalo);
 		txtIntervalo.setColumns(10);
 
+		JLabel lblStatus = new JLabel("Status da vacina:");
+		lblStatus.setFont(new Font("Dialog", Font.BOLD, 13));
+		lblStatus.setBounds(261, 328, 224, 14);
+		contentPane.add(lblStatus);
+
 		cbxDoses = new JComboBox();
 		for (int i = 0; i < listarDoses().length; i++) {
 			cbxDoses.addItem(listarDoses()[i]);
@@ -187,6 +193,14 @@ public class TelaCadastroVacina extends JFrame {
 		}
 		cbxPais.setBounds(261, 91, 310, 33);
 		contentPane.add(cbxPais);
+		
+		cbxStatus = new JComboBox();
+		for (int i = 0; i < listarStatus().length; i++) {
+			cbxStatus.addItem(listarStatus()[i]);
+		}
+		cbxStatus.setBounds(497, 320, 74, 33);
+		contentPane.add(cbxStatus);
+
 
 		btnCadastrar = new JButton("Cadastrar");
 		btnCadastrar.addActionListener(new ActionListener() {
@@ -204,7 +218,7 @@ public class TelaCadastroVacina extends JFrame {
 			}
 		});
 		btnCadastrar.setEnabled(false);
-		btnCadastrar.setBounds(418, 334, 153, 47);
+		btnCadastrar.setBounds(418, 364, 153, 47);
 		contentPane.add(btnCadastrar);
 
 		btnAlterar = new JButton("Alterar");
@@ -223,7 +237,7 @@ public class TelaCadastroVacina extends JFrame {
 			}
 		});
 		btnAlterar.setEnabled(false);
-		btnAlterar.setBounds(255, 334, 153, 47);
+		btnAlterar.setBounds(255, 364, 153, 47);
 		contentPane.add(btnAlterar);
 
 		jlAvisoDose = new JLabel("Insira apenas valores inteiros*");
@@ -255,6 +269,7 @@ public class TelaCadastroVacina extends JFrame {
 		novaVacina.setNomeVacina(txtNomeVacina.getText());
 		novaVacina.setPaisOrigem(cbxPais.getSelectedItem().toString());
 		novaVacina.setQuantidadeDoses(cbxDoses.getSelectedItem().toString());
+		novaVacina.setStatusVacina(cbxStatus.getSelectedItem().toString());
 
 		// Chamar o controller para cadastrar
 		controller.cadastrar(novaVacina);
@@ -273,6 +288,7 @@ public class TelaCadastroVacina extends JFrame {
 		vacinaAlterada.setNomeVacina(txtNomeVacina.getText());
 		vacinaAlterada.setPaisOrigem(cbxPais.getSelectedItem().toString());
 		vacinaAlterada.setQuantidadeDoses(cbxDoses.getSelectedItem().toString());
+		vacinaAlterada.setStatusVacina(cbxStatus.getSelectedItem().toString());
 		vacinaAlterada.setIdVacina(controller.consultarPorNome(nomeAntigo).getIdVacina());
 
 		String resultadoValidacao = controller.validarCampos(vacinaAlterada);
@@ -288,6 +304,7 @@ public class TelaCadastroVacina extends JFrame {
 		if (!txtIntervalo.getText().isEmpty() && !txtNomePesquisador.getText().isEmpty()
 				&& !txtNomeVacina.getText().isEmpty() && !txtDataInicio.getText().isEmpty()
 				&& !cbxDoses.getSelectedItem().toString().isEmpty()
+				&& !cbxStatus.getSelectedItem().toString().isEmpty()
 				&& !cbxPais.getSelectedItem().toString().isEmpty()) {
 			resposta = true;
 		}
@@ -304,6 +321,7 @@ public class TelaCadastroVacina extends JFrame {
 		this.txtDataInicio.setText(dataInicioPesquisaFormatada);
 		this.cbxDoses.setSelectedItem(vacina.getQuantidadeDoses());
 		this.cbxPais.setSelectedItem(vacina.getPaisOrigem());
+		this.cbxStatus.setSelectedItem(vacina.getStatusVacina());
 
 		ativaBotao = false;
 		btnAlterar.setEnabled(true);
@@ -316,6 +334,7 @@ public class TelaCadastroVacina extends JFrame {
 		this.txtDataInicio.setText("");
 		this.cbxDoses.setSelectedIndex(0);
 		this.cbxPais.setSelectedIndex(0);
+		this.cbxStatus.setSelectedIndex(0);
 
 	}
 
@@ -323,6 +342,12 @@ public class TelaCadastroVacina extends JFrame {
 		String[] listaDeDoses = new String[] { "1", "2", "3", "4", "5" };
 
 		return listaDeDoses;
+	};
+
+	public String[] listarStatus() {
+		String[] listaDeStatus = new String[] { "Ativado", "Desativado" };
+
+		return listaDeStatus;
 	};
 
 	public String[] listarPaises() {
