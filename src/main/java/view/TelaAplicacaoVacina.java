@@ -217,6 +217,7 @@ public class TelaAplicacaoVacina extends JFrame {
 		scrollPane.setViewportView(table);
 		modelo.addColumn("Dose");
 		modelo.addColumn("Data da aplicação");
+		modelo.addColumn("Status da vacina");
 
 		btnLimpar = new JButton("Limpar");
 		btnLimpar.setEnabled(false);
@@ -332,7 +333,9 @@ public class TelaAplicacaoVacina extends JFrame {
 	
 	public AplicacaoVacinaVO carregarTabela(Integer id) {
 		AplicacaoVacinaDAO avDAO = new AplicacaoVacinaDAO();
+		VacinaVO vacV0 = new VacinaVO();
 		ArrayList<AplicacaoVacinaVO> listaAplicacoes = avController.consultarAplicacoes(id);
+		ArrayList<VacinaVO> listaStatus = controllerVacina.consultarTodos();
 		AplicacaoVacinaVO retorno = null;
 		
 		if(listaAplicacoes.size() >= 1) {
@@ -343,9 +346,13 @@ public class TelaAplicacaoVacina extends JFrame {
 
 				DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 				String dataAplicacao = formatador.format(apvac.getDataAplicacao());
+				String status = vacV0.getStatusVacina();
+				
+				
 
-				modelo.addRow(new Object[] { i++, dataAplicacao });
+				modelo.addRow(new Object[] { i++, dataAplicacao, status});
 			}
+			
 		}
 	
 	
