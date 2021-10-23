@@ -6,9 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import model.vo.AplicacaoVacinaVO;
 import model.vo.PessoaVO;
-import model.vo.VacinaVO;
 import seletor.FiltroPessoa;
 
 public class PessoaDAO {
