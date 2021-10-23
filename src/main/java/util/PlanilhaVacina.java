@@ -46,7 +46,7 @@ public class PlanilhaVacina {
 		int linhaAtual = 0;
 
 		// Criar o cabeÃƒÂ§alho (header)
-		String[] nomesColunas = { "Nome Vacina", "Nome Pesquisador Responsável", "País de Origem", "Data Início Pesquisa", "Quantidade de Doses", "Intervalo das doses", "ID" };
+		String[] nomesColunas = { "Nome Vacina", "Nome Pesquisador Responsável", "País de Origem", "Data Início Pesquisa", "Quantidade de Doses", "Intervalo das doses", "Status da vacina", "ID" };
 		criarCabecalho(nomesColunas, aba, linhaAtual);
 		linhaAtual++;
 		// Preencher as linhas com as vacinas
@@ -147,7 +147,8 @@ public class PlanilhaVacina {
 			cell = linhaAtual.createCell(3);cell.setCellValue(dataNascimentoFormatada);cell.setCellStyle(centro);aba.autoSizeColumn((short) 3);
 			cell = linhaAtual.createCell(4);cell.setCellValue(v.getQuantidadeDoses());cell.setCellStyle(centro);aba.autoSizeColumn((short) 4);
 			cell = linhaAtual.createCell(5);cell.setCellValue(v.getIntervaloDoses());cell.setCellStyle(centro);aba.autoSizeColumn((short) 5);
-			cell = linhaAtual.createCell(6);cell.setCellValue(v.getIdVacina());cell.setCellStyle(centro);aba.autoSizeColumn((short) 6);
+			cell = linhaAtual.createCell(6);cell.setCellValue(v.getStatusVacina());cell.setCellStyle(centro);aba.autoSizeColumn((short) 6);
+			cell = linhaAtual.createCell(7);cell.setCellValue(v.getIdVacina());cell.setCellStyle(centro);aba.autoSizeColumn((short) 7);
 
 			posicaoLinhaAtual++;
 		}
