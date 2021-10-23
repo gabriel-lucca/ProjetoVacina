@@ -21,7 +21,8 @@ create table vacina(
     nomeVacina varchar(50) not null,
     dtInicioPesquisa date not null,
     quantidadeDoses varchar(2) not null,
-    intervaloDoses varchar(3) not null
+    intervaloDoses varchar(3) not null,
+    statusVacina varchar(50) not null
 );
 create table aplicacaoVacina(
 	idAplicacao int not null auto_increment primary key,
@@ -51,12 +52,12 @@ insert into pessoa(nomePessoa, cpf, email, telefone, dtNascimento, cidade, estad
 
 
 
-insert into vacina(nomePesquisadorResponsavel, paisOrigem, nomeVacina, dtInicioPesquisa, quantidadeDoses, intervaloDoses) values("Laboratório Sinovac", "China", "Coronavac", '2020-05-05', 2, 21);
-insert into vacina(nomePesquisadorResponsavel, paisOrigem, nomeVacina, dtInicioPesquisa, quantidadeDoses, intervaloDoses) values("Özlem Türeci", "Alemanha", "Pfizer", '2020-10-10', 2, 90);
-insert into vacina(nomePesquisadorResponsavel, paisOrigem, nomeVacina, dtInicioPesquisa, quantidadeDoses, intervaloDoses) values("Laboratório Aztrazeneca", "Reino Unido", "Oxford", '2020-06-05', 2, 90);
-insert into vacina(nomePesquisadorResponsavel, paisOrigem, nomeVacina, dtInicioPesquisa, quantidadeDoses, intervaloDoses) values("Janssen Pharmaceutical Companies", "Estados Unidos", "Jahssen", '2020-08-05', 1, 0);
-insert into vacina(nomePesquisadorResponsavel, paisOrigem, nomeVacina, dtInicioPesquisa, quantidadeDoses, intervaloDoses) values("Instituto de Pesquisa Gamaleya", "Rússia", "Sputnik V", '2020-09-09', 2, 21);
-insert into vacina(nomePesquisadorResponsavel, paisOrigem, nomeVacina, dtInicioPesquisa, quantidadeDoses, intervaloDoses) values("Bharat Biotech", "Índia", "Covaxin", '2020-11-11', 2, 28);
+insert into vacina(nomePesquisadorResponsavel, paisOrigem, nomeVacina, dtInicioPesquisa, quantidadeDoses, intervaloDoses, statusVacina) values("Laboratório Sinovac", "China", "Coronavac", '2020-05-05', 2, 21, "Ativado");
+insert into vacina(nomePesquisadorResponsavel, paisOrigem, nomeVacina, dtInicioPesquisa, quantidadeDoses, intervaloDoses, statusVacina) values("Ozlem Tureci", "Alemanha", "Pfizer", '2020-10-10', 2, 90, "Ativado");
+insert into vacina(nomePesquisadorResponsavel, paisOrigem, nomeVacina, dtInicioPesquisa, quantidadeDoses, intervaloDoses, statusVacina) values("Laboratório Aztrazeneca", "Reino Unido", "Oxford", '2020-06-05', 2, 90, "Ativado");
+insert into vacina(nomePesquisadorResponsavel, paisOrigem, nomeVacina, dtInicioPesquisa, quantidadeDoses, intervaloDoses, statusVacina) values("Janssen Pharmaceutical Companies", "Estados Unidos", "Jahssen", '2020-08-05', 1, 0, "Ativado");
+insert into vacina(nomePesquisadorResponsavel, paisOrigem, nomeVacina, dtInicioPesquisa, quantidadeDoses, intervaloDoses, statusVacina) values("Instituto de Pesquisa Gamaleya", "Rússia", "Sputnik V", '2020-09-09', 2, 21, "Ativado");
+insert into vacina(nomePesquisadorResponsavel, paisOrigem, nomeVacina, dtInicioPesquisa, quantidadeDoses, intervaloDoses, statusVacina) values("Bharat Biotech", "Índia", "Covaxin", '2020-11-11', 2, 28, "Desativado");
 
 insert into aplicacaoVacina(idPessoa, idVacina, dtAplicacao) values(1, 1, '2021-03-09');
 insert into aplicacaoVacina(idPessoa, idVacina, dtAplicacao) values(1, 1, '2021-04-02');
