@@ -45,7 +45,7 @@ public class PlanilhaAplicacaoVacina {
 		int linhaAtual = 0;
 
 		// Criar o cabeÃƒÂ§alho (header)
-		String[] nomesColunas = { "Nome", "CPF", "Vacina", "Dose", "Data aplicação","ID Pessoa"};
+		String[] nomesColunas = { "Nome", "CPF", "Vacina", "Dose", "Data aplicação", "Status da vacina", "ID Pessoa"};
 		criarCabecalho(nomesColunas, aba, linhaAtual);
 		linhaAtual++;
 		// Preencher as linhas com as vacinas
@@ -144,7 +144,8 @@ public class PlanilhaAplicacaoVacina {
 			String dataAplicacao = formatador.format(a.getDataAplicacao());
 			
 			cell = linhaAtual.createCell(4);cell.setCellValue(dataAplicacao);cell.setCellStyle(centro);aba.autoSizeColumn((short) 4);
-			cell = linhaAtual.createCell(5);cell.setCellValue(a.getPessoa().getIdPessoa());cell.setCellStyle(centro);aba.autoSizeColumn((short) 5);
+			cell = linhaAtual.createCell(5);cell.setCellValue(a.getVacina().getStatusVacina());cell.setCellStyle(centro);aba.autoSizeColumn((short) 5);
+			cell = linhaAtual.createCell(6);cell.setCellValue(a.getPessoa().getIdPessoa());cell.setCellStyle(centro);aba.autoSizeColumn((short) 6);
 			
 
 			posicaoLinhaAtual++;
