@@ -290,7 +290,11 @@ public class TelaAplicacaoVacina extends JFrame {
 	private void cadastrarAplicacao() throws AnalisarSePodeAplicarException, AnalisarCamposAplicacaoException {
 		AplicacaoVacinaVO aplicacaoVacina = new AplicacaoVacinaVO();
 		aplicacaoVacina.setPessoa(pessoaEncontrada);
-		aplicacaoVacina.setVacina(controllerVacina.consultarPorNome(cbxVacina.getSelectedItem().toString()));
+		VacinaVO consultarPorNome = controllerVacina.consultarPorNome(cbxVacina.getSelectedItem().toString());
+		if("Desativado".equals(consultarPorNome.getStatusVacina())) {
+			throw new AnalisarSePodeAplicarException("A vacina " + consultarPorNome.getNomeVacina() + " está desativada.");
+		}
+		aplicacaoVacina.setVacina(consultarPorNome);
 
 		ArrayList<AplicacaoVacinaVO> listaAplicacoes = avController.consultarAplicacoes(pessoaEncontrada.getIdPessoa());
 		// AplicacaoVacinaVO ultimaAPlicacao =
@@ -332,8 +336,6 @@ public class TelaAplicacaoVacina extends JFrame {
 	}
 	
 	public AplicacaoVacinaVO carregarTabela(Integer id) {
-		AplicacaoVacinaDAO avDAO = new AplicacaoVacinaDAO();
-		VacinaVO vacV0 = new VacinaVO();
 		ArrayList<AplicacaoVacinaVO> listaAplicacoes = avController.consultarAplicacoes(id);
 		ArrayList<VacinaVO> listaStatus = controllerVacina.consultarTodos();
 		AplicacaoVacinaVO retorno = null;
@@ -343,20 +345,12 @@ public class TelaAplicacaoVacina extends JFrame {
 			
 			for (AplicacaoVacinaVO apvac : listaAplicacoes) {
 				int i = 1;
-
 				DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 				String dataAplicacao = formatador.format(apvac.getDataAplicacao());
-				String status = vacV0.getStatusVacina();
-				
-				
-
+				String status = apvac.getVacina().getStatusVacina();
 				modelo.addRow(new Object[] { i++, dataAplicacao, status});
 			}
-			
 		}
-	
-	
-
 		return retorno;
 	}
 
