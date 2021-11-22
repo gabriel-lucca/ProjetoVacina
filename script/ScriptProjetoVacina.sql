@@ -65,6 +65,8 @@ insert into aplicacaoVacina(idPessoa, idVacina, dtAplicacao) values(1, 1, '2021-
 insert into aplicacaoVacina(idPessoa, idVacina, dtAplicacao) values(3, 1, '2021-03-09');
 insert into aplicacaoVacina(idPessoa, idVacina, dtAplicacao) values(3, 1, '2021-04-02');
 
+insert into aplicacaoVacina(idPessoa, idVacina, dtAplicacao) values(4, 1, '2021-04-02');
+
 -- Select:
 select * from pessoa;
 select * from vacina;
