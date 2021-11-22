@@ -58,7 +58,7 @@ public class ControladoraPessoa {
 			// mensagem += "\nO email deve conter '@' ";
 			// } else if (!respostaVerificacaoo) {
 			// mensagem += "\nO email deve conter '.' ";
-		} else if (!pessoa.getEmail().matches("^[a-zA-Z0-9._]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
+		} else if (!pessoa.getEmail().matches("^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
 			mensagem += "\nEmail inválido";
 		}
 
