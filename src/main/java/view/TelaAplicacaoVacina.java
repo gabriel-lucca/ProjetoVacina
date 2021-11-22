@@ -129,7 +129,7 @@ public class TelaAplicacaoVacina extends JFrame {
 				limparTabelaAplicacaoVacina();
 				pessoaEncontrada = pessoaDAO.consultarPorCpf(txtCpf.getText());
 				if (pessoaEncontrada.getIdPessoa() == null) {
-					JOptionPane.showMessageDialog(null, "CPF INVÁLIDO.");
+					JOptionPane.showMessageDialog(null, "CPF INVÁLIDO.");
 
 				} else {
 					// buscar qual vacina esse cidadÃ£oo tomou
