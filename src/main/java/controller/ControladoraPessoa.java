@@ -39,7 +39,7 @@ public class ControladoraPessoa {
 			 */
 		} else if (!pessoa.getNome().matches("^([a-zA-Zà-úÀ-Ú]|'|\\s)+$")) {
 			mensagem += "\nNome inválido.";
-		}
+		} 
 
 		/*
 		 * / Email: String email = pessoa.getEmail(); boolean respostaVerificacao =
